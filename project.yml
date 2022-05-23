@@ -3,6 +3,9 @@ description: |
   This project compiles various spancat datasets and their converters into the
   [spaCy format](https://spacy.io/api/data-formats).
 
+vars:
+  spans_key: "sc"
+
 directories:
   - "assets"
   - "configs"
@@ -12,13 +15,32 @@ directories:
   - "metrics"
 
 assets:
-  - dest: "assets/sec_filings"
+  - dest: "assets/sec_filings-train.iob"
+    description: "SEC filings training dataset from Alvarado et al. (ALTA 2015)"
+    url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/SEC-filings/CONLL-format/data/train/FIN5.txt
+  - dest: "assets/sec_filings-test.iob"
+    description: "SEC filings test dataset from Alvarado et al. (ALTA 2015)"
+    url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/SEC-filings/CONLL-format/data/test/FIN3.txt
 
 commands:
   - name: "install"
     help: "Install dependencies"
     script:
       - "pip install --user -r requirements.txt"
+
+  - name: "convert-sec_filings"
+    help: "Convert SEC filings dataset into the spaCy format"
+    script:
+      - >-
+        python -m scripts.convert_to_spans
+        assets/sec_filings-train.iob corpus/
+        --spans-key ${vars.spans_key}
+        --converter auto
+      - >-
+        python -m scripts.convert_to_spans
+        assets/sec_filings-test.iob corpus/
+        --spans-key ${vars.spans_key}
+        --converter auto
 
   - name: "clean"
     help: "Remove intermediary files"
