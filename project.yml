@@ -1,0 +1,26 @@
+title: "Spancat datasets"
+description: |
+  This project compiles various spancat datasets and their converters into the
+  [spaCy format](https://spacy.io/api/data-formats).
+
+directories:
+  - "assets"
+  - "configs"
+  - "corpus"
+  - "scripts"
+  - "training"
+  - "metrics"
+
+commands:
+  - name: "install"
+    help: "Install dependencies"
+    script:
+      - "pip install --user -r requirements.txt"
+
+  - name: "clean"
+    help: "Remove intermediary files"
+    script:
+      - "rm -rf assets/*"
+      - "rm -rf corpus/*"
+      - "rm -rf training/*"
+      - "rm -rf metrics/*"
