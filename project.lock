@@ -1,0 +1,11 @@
+convert-sec_filings:
+  cmd: python -m spacy run convert-sec_filings
+  script:
+    - python -m scripts.convert_to_spans assets/sec_filings-train.iob corpus/ --spans-key
+      sc --converter auto
+    - python -m scripts.convert_to_spans assets/sec_filings-test.iob corpus/ --spans-key
+      sc --converter auto
+  deps: []
+  outs: []
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77
