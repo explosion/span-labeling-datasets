@@ -11,6 +11,9 @@ directories:
   - "training"
   - "metrics"
 
+assets:
+  - dest: "assets/sec_filings"
+
 commands:
   - name: "install"
     help: "Install dependencies"
