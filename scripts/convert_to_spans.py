@@ -76,9 +76,9 @@ def convert_cli(
 def transfer_ents_to_spans(docs: Iterable[Doc], spans_key: str) -> Iterable[Doc]:
     _docs = []
     for doc in docs:
-        if spans_key not in doc.spans:
-            doc.spans[spans_key] = SpanGroup(doc)
-        doc.spans[spans_key].extend(list(doc.ents))
+        spans = [ent for ent in doc.ents]
+        group = SpanGroup(doc, name=spans_key, spans=spans)
+        doc.spans[spans_key] = group
         doc.set_ents([])
         _docs.append(doc)
     return _docs
