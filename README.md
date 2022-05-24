@@ -24,6 +24,7 @@ Commands are only re-run if their inputs have changed.
 | `convert-sec_filings` | Convert SEC filings dataset into the spaCy format |
 | `convert-wnut17` | Convert WNUT17 dataset into the spaCy format |
 | `convert-btc` | Convert BTC dataset into the spaCy format |
+| `convert-anem` | Convert AneM dataset into the spaCy format |
 | `clean` | Remove intermediary files |
 
 ### 🗂 Assets
@@ -40,5 +41,7 @@ in the project directory.
 | `assets/wnut17-dev.iob` | URL | WNUT17 dev dataset for Emerging and Rare Entities Task from Derczynski et al., 2017 |
 | `assets/wnut17-test.iob` | URL | WNUT17 test dataset for Emerging and Rare Entities Task from Derczynski et al., 2017 |
 | `assets/btc-general.iob` | URL | Broad Twitter Corpus (BTC) containing UK general tweets from Derczynski et al., 2016 |
+| `assets/anem-train.iob` | URL | Anatomical Entity Mention (AnEM) training corpus containing abstracts and full-text biomedical papers from Ohta et al. (ACL 2012) |
+| `assets/anem-test.iob` | URL | Anatomical Entity Mention (AnEM) test corpus containing abstracts and full-text biomedical papers from Ohta et al. (ACL 2012) |
 
 <!-- SPACY PROJECT: AUTO-GENERATED DOCS END (do not remove) -->
