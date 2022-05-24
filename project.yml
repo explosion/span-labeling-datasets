@@ -165,6 +165,19 @@ commands:
       - corpus/anem-train.spacy
       - corpus/anem-test.spacy
 
+  - name: "convert-wikigold"
+    help: "Convert the Wikigold dataset into the spaCy format"
+    script:
+      - >-
+        python -m scripts.convert_to_spans
+        assets/wikigold.iob corpus/
+        --spans-key ${vars.spans_key}
+        --converter auto
+    deps:
+      - assets/wikigold.iob
+    outputs:
+      - corpus/wikigold.spacy
+
   - name: "convert-wikineural"
     help: "Convert WikiNeural dataset (de, en, es, nl) into the spaCy format"
     script:

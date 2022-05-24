@@ -150,3 +150,16 @@ convert-wikineural:
       md5: bcb2fb22ed157144d1b6e5e33745462d
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77
+convert-wikigold:
+  cmd: python -m spacy run convert-wikigold
+  script:
+    - python -m scripts.convert_to_spans assets/wikigold.iob corpus/ --spans-key sc
+      --converter auto
+  deps:
+    - path: assets/wikigold.iob
+      md5: 0c1a4f91b9ea70f84ed43f4ff62fdfd5
+  outs:
+    - path: corpus/wikigold.spacy
+      md5: d1f22fdeca30798a7861bff0886c7c2f
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77
