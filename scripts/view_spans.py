@@ -1,7 +1,5 @@
 from pathlib import Path
-from typing import Optional
 
-import spacy
 import typer
 from spacy.tokens import DocBin
 from spacy.util import get_lang_class
