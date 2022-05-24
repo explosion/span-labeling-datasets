@@ -34,3 +34,16 @@ convert-wnut17:
       md5: b304af219b4289a3e9f4885f70e6390f
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77
+convert-btc:
+  cmd: python -m spacy run convert-btc
+  script:
+    - python -m scripts.convert_to_spans assets/btc-general.iob corpus/ --spans-key
+      sc --converter auto
+  deps:
+    - path: assets/btc-general.iob
+      md5: ef21889b4d409e314ae94f832dafeff2
+  outs:
+    - path: corpus/btc-general.spacy
+      md5: 7259410fc6b7fa91ea2c8f9306c5f24e
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77

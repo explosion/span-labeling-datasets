@@ -30,6 +30,9 @@ assets:
   - dest: "assets/wnut17-test.iob"
     description: "WNUT17 test dataset for Emerging and Rare Entities Task from Derczynski et al., 2017"
     url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/WNUT17/CONLL-format/data/test/emerging.test.annotated
+  - dest: "assets/btc-general.iob"
+    description: "Broad Twitter Corpus (BTC) containing UK general tweets from Derczynski et al., 2016"
+    url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/BTC/CONLL-format/data/a.conll
 
 commands:
   - name: "install"
@@ -83,6 +86,19 @@ commands:
       - corpus/wnut17-train.spacy
       - corpus/wnut17-dev.spacy
       - corpus/wnut17-test.spacy
+
+  - name: "convert-btc"
+    help: "Convert BTC dataset into the spaCy format"
+    script:
+      - >-
+        python -m scripts.convert_to_spans
+        assets/btc-general.iob corpus/
+        --spans-key ${vars.spans_key}
+        --converter auto
+    deps:
+      - assets/btc-general.iob
+    outputs:
+      - corpus/btc-general.spacy
 
   - name: "clean"
     help: "Remove intermediary files"
