@@ -23,8 +23,11 @@ def view_spans(
     db = DocBin().from_disk(input_path)
     docs = list(db.get_docs(nlp.vocab))
     msg.info(f"Found {len(docs)} docs in {str(input_path)}")
+    msg.info(f"Showing {display_size} docs")
     for doc in docs[:display_size]:
-        msg.text(doc.spans)
+        msg.divider()
+        msg.text(doc.text)
+        msg.text(doc.spans, color="yellow")
 
 
 if __name__ == "__main__":
