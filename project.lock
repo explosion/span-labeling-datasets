@@ -9,3 +9,28 @@ convert-sec_filings:
   outs: []
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77
+convert-wnut17:
+  cmd: python -m spacy run convert-wnut17
+  script:
+    - python -m scripts.convert_to_spans assets/wnut17-train.iob corpus/ --spans-key
+      sc --converter auto
+    - python -m scripts.convert_to_spans assets/wnut17-dev.iob corpus/ --spans-key
+      sc --converter auto
+    - python -m scripts.convert_to_spans assets/wnut17-test.iob corpus/ --spans-key
+      sc --converter auto
+  deps:
+    - path: assets/wnut17-train.iob
+      md5: ff599150146384cedb2e22a4afa89209
+    - path: assets/wnut17-dev.iob
+      md5: 17054f3b2617398b4742a22da44280f5
+    - path: assets/wnut17-test.iob
+      md5: a4909d46d5c173151c20599a2193f36c
+  outs:
+    - path: corpus/wnut17-train.spacy
+      md5: dd45fa4bc875081618476cc6344c86de
+    - path: corpus/wnut17-dev.spacy
+      md5: cbf5e7a2eb0a6bf61ba93106df3ac927
+    - path: corpus/wnut17-test.spacy
+      md5: b304af219b4289a3e9f4885f70e6390f
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77
