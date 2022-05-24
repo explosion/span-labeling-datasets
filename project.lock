@@ -47,3 +47,22 @@ convert-btc:
       md5: 7259410fc6b7fa91ea2c8f9306c5f24e
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77
+convert-anem:
+  cmd: python -m spacy run convert-anem
+  script:
+    - python -m scripts.convert_to_spans assets/anem-train.iob corpus/ --spans-key
+      sc --converter auto
+    - python -m scripts.convert_to_spans assets/anem-test.iob corpus/ --spans-key
+      sc --converter auto
+  deps:
+    - path: assets/anem-train.iob
+      md5: 2bc9e87a95abb86757804cd5a840a76b
+    - path: assets/anem-test.iob
+      md5: c643213318b859e6f7a6f0aee423a2ed
+  outs:
+    - path: corpus/anem-train.spacy
+      md5: 8646c8506d842f057b7f22f1681e107e
+    - path: corpus/anem-test.spacy
+      md5: e15dfa778af4ba4103442668738aec1e
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77

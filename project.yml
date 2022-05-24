@@ -33,6 +33,12 @@ assets:
   - dest: "assets/btc-general.iob"
     description: "Broad Twitter Corpus (BTC) containing UK general tweets from Derczynski et al., 2016"
     url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/BTC/CONLL-format/data/a.conll
+  - dest: "assets/anem-train.iob"
+    description: "Anatomical Entity Mention (AnEM) training corpus containing abstracts and full-text biomedical papers from Ohta et al. (ACL 2012)"
+    url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/AnEM/CONLL-format/data/AnEM.train
+  - dest: "assets/anem-test.iob"
+    description: "Anatomical Entity Mention (AnEM) test corpus containing abstracts and full-text biomedical papers from Ohta et al. (ACL 2012)"
+    url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/AnEM/CONLL-format/data/AnEM.test
 
 commands:
   - name: "install"
@@ -99,6 +105,26 @@ commands:
       - assets/btc-general.iob
     outputs:
       - corpus/btc-general.spacy
+
+  - name: "convert-anem"
+    help: "Convert AneM dataset into the spaCy format"
+    script:
+      - >-
+        python -m scripts.convert_to_spans
+        assets/anem-train.iob corpus/
+        --spans-key ${vars.spans_key}
+        --converter auto
+      - >-
+        python -m scripts.convert_to_spans
+        assets/anem-test.iob corpus/
+        --spans-key ${vars.spans_key}
+        --converter auto
+    deps:
+      - assets/anem-train.iob
+      - assets/anem-test.iob
+    outputs:
+      - corpus/anem-train.spacy
+      - corpus/anem-test.spacy
 
   - name: "clean"
     help: "Remove intermediary files"
