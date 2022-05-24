@@ -169,64 +169,76 @@ commands:
     help: "Convert WikiNeural dataset (de, en, es, nl) into the spaCy format"
     script:
       # Convert de dataset
+      - python -m scripts.remove_indices assets/de-wikineural-train.iob
       - >-
         python -m scripts.convert_to_spans
         assets/de-wikineural-train.iob corpus/
         --spans-key ${vars.spans_key}
         --converter auto
+      - python -m scripts.remove_indices assets/de-wikineural-dev.iob
       - >-
         python -m scripts.convert_to_spans
         assets/de-wikineural-dev.iob corpus/
         --spans-key ${vars.spans_key}
         --converter auto
-      - >-
-        python -m scripts.convert_to_spans
-        assets/de-wikineural-test.iob corpus/
-        --spans-key ${vars.spans_key}
-        --converter auto
+      # - python -m scripts.remove_indices assets/de-wikineural-test.iob
+      # - >-
+      #   python -m scripts.convert_to_spans
+      #   assets/de-wikineural-test.iob corpus/
+      #   --spans-key ${vars.spans_key}
+      #   --converter auto
       # Convert en dataset
+      - python -m scripts.remove_indices assets/en-wikineural-train.iob
       - >-
         python -m scripts.convert_to_spans
         assets/en-wikineural-train.iob corpus/
         --spans-key ${vars.spans_key}
         --converter auto
+      - python -m scripts.remove_indices assets/en-wikineural-dev.iob
       - >-
         python -m scripts.convert_to_spans
         assets/en-wikineural-dev.iob corpus/
         --spans-key ${vars.spans_key}
         --converter auto
+      - python -m scripts.remove_indices assets/en-wikineural-test.iob
       - >-
         python -m scripts.convert_to_spans
         assets/en-wikineural-test.iob corpus/
         --spans-key ${vars.spans_key}
         --converter auto
       # Convert es dataset
+      - python -m scripts.remove_indices assets/es-wikineural-train.iob
       - >-
         python -m scripts.convert_to_spans
         assets/es-wikineural-train.iob corpus/
         --spans-key ${vars.spans_key}
         --converter auto
+      - python -m scripts.remove_indices assets/es-wikineural-dev.iob
       - >-
         python -m scripts.convert_to_spans
         assets/es-wikineural-dev.iob corpus/
         --spans-key ${vars.spans_key}
         --converter auto
+      - python -m scripts.remove_indices assets/es-wikineural-test.iob
       - >-
         python -m scripts.convert_to_spans
         assets/es-wikineural-test.iob corpus/
         --spans-key ${vars.spans_key}
         --converter auto
       # Convert nl dataset
+      - python -m scripts.remove_indices assets/nl-wikineural-train.iob
       - >-
         python -m scripts.convert_to_spans
         assets/nl-wikineural-train.iob corpus/
         --spans-key ${vars.spans_key}
         --converter auto
+      - python -m scripts.remove_indices assets/nl-wikineural-dev.iob
       - >-
         python -m scripts.convert_to_spans
         assets/nl-wikineural-dev.iob corpus/
         --spans-key ${vars.spans_key}
         --converter auto
+      - python -m scripts.remove_indices assets/nl-wikineural-test.iob
       - >-
         python -m scripts.convert_to_spans
         assets/nl-wikineural-test.iob corpus/
@@ -235,7 +247,7 @@ commands:
     deps:
       - "assets/de-wikineural-train.iob"
       - "assets/de-wikineural-dev.iob"
-      - "assets/de-wikineural-test.iob"
+      # - "assets/de-wikineural-test.iob"
       - "assets/en-wikineural-train.iob"
       - "assets/en-wikineural-dev.iob"
       - "assets/en-wikineural-test.iob"
@@ -248,7 +260,7 @@ commands:
     outputs:
       - "corpus/de-wikineural-train.spacy"
       - "corpus/de-wikineural-dev.spacy"
-      - "corpus/de-wikineural-test.spacy"
+      # - "corpus/de-wikineural-test.spacy"
       - "corpus/en-wikineural-train.spacy"
       - "corpus/en-wikineural-dev.spacy"
       - "corpus/en-wikineural-test.spacy"
