@@ -25,6 +25,8 @@ Commands are only re-run if their inputs have changed.
 | `convert-wnut17` | Convert WNUT17 dataset into the spaCy format |
 | `convert-btc` | Convert BTC dataset into the spaCy format |
 | `convert-anem` | Convert AneM dataset into the spaCy format |
+| `convert-wikigold` | Convert the Wikigold dataset into the spaCy format |
+| `convert-wikineural` | Convert WikiNeural dataset (de, en, es, nl) into the spaCy format |
 | `clean` | Remove intermediary files |
 
 ### 🗂 Assets
@@ -43,5 +45,18 @@ in the project directory.
 | `assets/btc-general.iob` | URL | Broad Twitter Corpus (BTC) containing UK general tweets from Derczynski et al., 2016 |
 | `assets/anem-train.iob` | URL | Anatomical Entity Mention (AnEM) training corpus containing abstracts and full-text biomedical papers from Ohta et al. (ACL 2012) |
 | `assets/anem-test.iob` | URL | Anatomical Entity Mention (AnEM) test corpus containing abstracts and full-text biomedical papers from Ohta et al. (ACL 2012) |
+| `assets/wikigold.iob` | URL | Wikigold dataset containing a manually annotated collection of Wikipedia text by Balasuriya et al. (ACL 2009). |
+| `assets/en-wikineural-train.iob` | URL | WikiNeural (en) training dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/en-wikineural-dev.iob` | URL | WikiNeural (en) dev dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/en-wikineural-test.iob` | URL | WikiNeural (en) test dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/de-wikineural-train.iob` | URL | WikiNeural (de) training dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/de-wikineural-dev.iob` | URL | WikiNeural (de) dev dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/de-wikineural-test.iob` | URL | WikiNeural (de) test dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/es-wikineural-train.iob` | URL | WikiNeural (es) training dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/es-wikineural-dev.iob` | URL | WikiNeural (es) dev dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/es-wikineural-test.iob` | URL | WikiNeural (es) test dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/nl-wikineural-train.iob` | URL | WikiNeural (nl) training dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/nl-wikineural-dev.iob` | URL | WikiNeural (nl) dev dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/nl-wikineural-test.iob` | URL | WikiNeural (nl) test dataset from Tedeschi et al. (EMNLP 2021) |
 
 <!-- SPACY PROJECT: AUTO-GENERATED DOCS END (do not remove) -->
