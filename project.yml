@@ -21,6 +21,15 @@ assets:
   - dest: "assets/sec_filings-test.iob"
     description: "SEC filings test dataset from Alvarado et al. (ALTA 2015)"
     url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/SEC-filings/CONLL-format/data/test/FIN3.txt
+  - dest: "assets/wnut17-train.iob"
+    description: "WNUT17 training dataset for Emerging and Rare Entities Task from Derczynski et al., 2017"
+    url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/WNUT17/CONLL-format/data/train/wnut17train.conll
+  - dest: "assets/wnut17-dev.iob"
+    description: "WNUT17 dev dataset for Emerging and Rare Entities Task from Derczynski et al., 2017"
+    url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/WNUT17/CONLL-format/data/dev/emerging.dev.conll
+  - dest: "assets/wnut17-test.iob"
+    description: "WNUT17 test dataset for Emerging and Rare Entities Task from Derczynski et al., 2017"
+    url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/WNUT17/CONLL-format/data/test/emerging.test.annotated
 
 commands:
   - name: "install"
@@ -41,6 +50,39 @@ commands:
         assets/sec_filings-test.iob corpus/
         --spans-key ${vars.spans_key}
         --converter auto
+    deps:
+      - assets/sec_filings-train.iob
+      - assets/sec_filings-test.iob
+    outputs:
+      - corpus/sec_filings-train.spacy
+      - corpus/sec_filings-test.spacy
+
+  - name: "convert-wnut17"
+    help: "Convert WNUT17 dataset into the spaCy format"
+    script:
+      - >-
+        python -m scripts.convert_to_spans
+        assets/wnut17-train.iob corpus/
+        --spans-key ${vars.spans_key}
+        --converter auto
+      - >-
+        python -m scripts.convert_to_spans
+        assets/wnut17-dev.iob corpus/
+        --spans-key ${vars.spans_key}
+        --converter auto
+      - >-
+        python -m scripts.convert_to_spans
+        assets/wnut17-test.iob corpus/
+        --spans-key ${vars.spans_key}
+        --converter auto
+    deps:
+      - assets/wnut17-train.iob
+      - assets/wnut17-dev.iob
+      - assets/wnut17-test.iob
+    outputs:
+      - corpus/wnut17-train.spacy
+      - corpus/wnut17-dev.spacy
+      - corpus/wnut17-test.spacy
 
   - name: "clean"
     help: "Remove intermediary files"
