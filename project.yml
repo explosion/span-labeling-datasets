@@ -284,6 +284,8 @@ commands:
       - "corpus/nl-wikineural-dev.spacy"
       - "corpus/nl-wikineural-test.spacy"
 
+  - name: "train"
+
   - name: "clean"
     help: "Remove intermediary files"
     script:
