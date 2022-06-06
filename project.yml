@@ -22,6 +22,10 @@ workflows:
     - "convert-anem"
     - "train-anem"
     - "evaluate-anem"
+  sec-filings:
+    - "convert-sec_filings"
+    - "train-sec_filings"
+    - "evaluate-sec_filings"
 
 assets:
   - dest: "assets/sec_filings-train.iob"
@@ -135,6 +139,57 @@ commands:
       - corpus/spancat/sec_filings-test.spacy
       - corpus/ner/sec_filings-train-dev.spacy
       - corpus/ner/sec_filings-test.spacy
+
+  - name: "train-sec_filings"
+    help: "Train an NER and Spancat model for SEC Filings dataset"
+    script:
+      - >-
+        python -m spacy train
+        configs/ner.cfg
+        --output training/sec_filings/ner/
+        --paths.train corpus/ner/sec_filings-train.spacy
+        --paths.dev corpus/ner/sec_filings-train-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      - >-
+        python -m spacy train
+        configs/spancat.cfg
+        --output training/sec_filings/spancat/
+        --paths.train corpus/spancat/sec_filings-train.spacy
+        --paths.dev corpus/spancat/sec_filings-train-dev.spacy
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - corpus/spancat/sec_filings-train.spacy
+      - corpus/spancat/sec_filings-train-dev.spacy
+      - corpus/spancat/sec_filings-test.spacy
+      - corpus/ner/sec_filings-train-dev.spacy
+      - corpus/ner/sec_filings-test.spacy
+    outputs:
+      - training/sec_filings/ner/model-best
+      - training/sec_filings/spancat/model-best
+
+  - name: "evaluate-sec_filings"
+    help: "Evaluate the results for the SEC Filings dataset"
+    script:
+      - "mkdir -p metrics/sec_filings/spancat"
+      - >-
+        python -m spacy evaluate
+        training/sec_filings/spancat/model-best
+        corpus/spancat/sec_filings-test.spacy
+        --output metrics/sec_filings/spancat/scores.json
+      - "mkdir -p metrics/sec_filings/ner"
+      - >-
+        python -m spacy evaluate
+        training/sec_filings/ner/model-best
+        corpus/ner/sec_filings-test.spacy
+        --output metrics/sec_filings/ner/scores.json
+    deps:
+      - training/sec_filings/ner/model-best
+      - training/sec_filings/spancat/model-best
+      - corpus/ner/sec_filings-test.spacy
+      - corpus/spancat/sec_filings-test.spacy
+    outputs:
+      - metrics/sec_filings/ner/scores.json
+      - metrics/sec_filings/spancat/scores.json
 
   - name: "convert-wnut17"
     help: "Convert WNUT17 dataset into the spaCy format"
