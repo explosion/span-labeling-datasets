@@ -315,6 +315,14 @@ commands:
         training/anem/ner/model-best
         corpus/ner/anem-test.spacy
         --output metrics/anem/ner/scores.json
+    deps:
+      - training/anem/ner/model-best
+      - training/anem/spancat/model-best
+      - corpus/ner/anem-test.spacy
+      - corpus/spancat/anem-test.spacy
+    outputs:
+      - metrics/anem/ner/scores.json
+      - metrics/anem/spancat/scores.json
 
   - name: "convert-wikigold"
     help: "Convert the Wikigold dataset into the spaCy format"
