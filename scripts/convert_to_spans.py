@@ -1,8 +1,10 @@
 """Monkey-patched version of the convert command that transfers entities to Doc.spans"""
 
 import itertools
+from pydoc import doc
+import random
 from pathlib import Path
-from typing import Iterable, Optional, Union
+from typing import Iterable, Optional, Union, List, Tuple
 
 import srsly
 import typer
@@ -31,7 +33,10 @@ def convert_cli(
     converter: str = Opt("auto", "--converter", "-c", help=f"Converter: {tuple(CONVERTERS.keys())}"),
     ner_map: Optional[Path] = Opt(None, "--ner-map", "-nm", help="NER tag mapping (as JSON-encoded dict of entity types)", exists=True),
     lang: Optional[str] = Opt(None, "--lang", "-l", help="Language (if tokenizer required)"),
-    concatenate: bool = Opt(None, "--concatenate", "-C", help="Concatenate output to a single file"),
+    use_ents: bool = Opt(False, "--use-ents", "-e", help="Use Doc.ents, don't transfer to Doc.spans"),
+    train_size: Optional[float] = Opt(None, "--train-size", "-sz", help="Size of the training dataset for splitting"),
+    shuffle: bool = Opt(False, "--shuffle", "-sf", help="Shuffle the dataset before splitting"),
+    seed: Optional[int] = Opt(None, "--seed", "-sd", help="Random seed for shuffling the data")
     # fmt: on
 ):
     """
@@ -66,10 +71,13 @@ def convert_cli(
         converter=converter,
         ner_map=ner_map,
         lang=lang,
-        concatenate=concatenate,
         silent=silent,
         msg=msg,
         spans_key=spans_key,
+        use_ents=use_ents,
+        train_size=train_size,
+        shuffle=shuffle,
+        seed=seed,
     )
 
 
@@ -84,6 +92,28 @@ def transfer_ents_to_spans(docs: Iterable[Doc], spans_key: str) -> Iterable[Doc]
     return _docs
 
 
+def _save_docs_to_disk(
+    docs: Iterable[Doc],
+    output_dir: Union[str, Path],
+    input_loc: Path,
+    is_dev: bool,
+    msg: Printer,
+):
+    db = DocBin(docs=docs, store_user_data=True)
+    len_docs = len(db)
+    data = db.to_bytes()  # type: ignore[assignment]
+
+    if is_dev:
+        filename = input_loc.stem + "-dev" + input_loc.suffix
+    else:
+        filename = input_loc.parts[-1]
+
+    output_file = Path(output_dir) / filename
+    output_file = output_file.with_suffix(f".{FILE_TYPE}")
+    _write_docs_to_file(data, output_file, FILE_TYPE)
+    msg.good(f"Generated output file ({len_docs} documents): {output_file}")
+
+
 def convert(
     input_path: Path,
     output_dir: Union[str, Path],
@@ -96,16 +126,18 @@ def convert(
     converter: str = "auto",
     ner_map: Optional[Path] = None,
     lang: Optional[str] = None,
-    concatenate: bool = False,
     silent: bool = True,
     msg: Optional[Printer] = None,
     spans_key: str = "sc",
+    use_ents: bool = False,
+    train_size: Optional[float] = None,
+    shuffle: bool = True,
+    seed: Optional[int] = None,
 ) -> None:
     input_path = Path(input_path)
     if not msg:
         msg = Printer(no_print=silent)
     ner_map = srsly.read_json(ner_map) if ner_map is not None else None
-    doc_files = []
     for input_loc in walk_directory(input_path, converter):
         with input_loc.open("r", encoding="utf-8") as infile:
             input_data = infile.read()
@@ -122,27 +154,32 @@ def convert(
             no_print=silent,
             ner_map=ner_map,
         )
+        docs = list(docs)
         # Monkeypatched version converting docs to spans
-        docs = transfer_ents_to_spans(docs, spans_key)
-        doc_files.append((input_loc, docs))
-    if concatenate:
-        all_docs = itertools.chain.from_iterable([docs for _, docs in doc_files])
-        doc_files = [(input_path, all_docs)]
-    for input_loc, docs in doc_files:
-        db = DocBin(docs=docs, store_user_data=True)
-        len_docs = len(db)
-        data = db.to_bytes()  # type: ignore[assignment]
-        if output_dir == "-":
-            _print_docs_to_stdout(data, FILE_TYPE)
+        if not use_ents:
+            msg.info("Transferring entities to doc.spans")
+            docs = transfer_ents_to_spans(docs, spans_key)
+
+        if train_size:
+            msg.info(f"Splitting files with train_size {train_size}")
+            if shuffle:
+                if seed:
+                    msg.info(f"Using random seed {seed}")
+                    random.seed(seed)
+                msg.info("Shuffling the documents before splitting")
+                random.shuffle(docs)
+            num_training = int(train_size * len(docs))
+            train_docs = docs[:num_training]
+            dev_docs = docs[num_training:]
+            msg.text(
+                f"Dataset has been split with train size={len(train_docs)} "
+                f"and dev size={len(dev_docs)}"
+            )
+
+            _save_docs_to_disk(train_docs, output_dir, input_loc, is_dev=False, msg=msg)
+            _save_docs_to_disk(dev_docs, output_dir, input_loc, is_dev=True, msg=msg)
         else:
-            if input_loc != input_path:
-                subpath = input_loc.relative_to(input_path)
-                output_file = Path(output_dir) / subpath.with_suffix(f".{FILE_TYPE}")
-            else:
-                output_file = Path(output_dir) / input_loc.parts[-1]
-                output_file = output_file.with_suffix(f".{FILE_TYPE}")
-            _write_docs_to_file(data, output_file, FILE_TYPE)
-            msg.good(f"Generated output file ({len_docs} documents): {output_file}")
+            _save_docs_to_disk(docs, output_dir, input_loc, is_dev=False, msg=msg)
 
 
 if __name__ == "__main__":
