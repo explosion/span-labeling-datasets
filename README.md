@@ -22,6 +22,8 @@ Commands are only re-run if their inputs have changed.
 | --- | --- |
 | `install` | Install dependencies |
 | `convert-sec_filings` | Convert SEC filings dataset into the spaCy format |
+| `train-sec_filings` | Train an NER and Spancat model for SEC Filings dataset |
+| `evaluate-sec_filings` | Evaluate the results for the SEC Filings dataset |
 | `convert-wnut17` | Convert WNUT17 dataset into the spaCy format |
 | `convert-btc` | Convert BTC dataset into the spaCy format |
 | `convert-anem` | Convert AneM dataset into the spaCy format |
@@ -41,6 +43,7 @@ inputs have changed.
 | Workflow | Steps |
 | --- | --- |
 | `anem` | `convert-anem` &rarr; `train-anem` &rarr; `evaluate-anem` |
+| `sec-filings` | `convert-sec_filings` &rarr; `train-sec_filings` &rarr; `evaluate-sec_filings` |
 
 ### 🗂 Assets
 
