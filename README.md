@@ -25,9 +25,22 @@ Commands are only re-run if their inputs have changed.
 | `convert-wnut17` | Convert WNUT17 dataset into the spaCy format |
 | `convert-btc` | Convert BTC dataset into the spaCy format |
 | `convert-anem` | Convert AneM dataset into the spaCy format |
+| `train-anem` | Train an NER and Spancat model for AnEM |
+| `evaluate-anem` | Evaluate AnEM dataset |
 | `convert-wikigold` | Convert the Wikigold dataset into the spaCy format |
 | `convert-wikineural` | Convert WikiNeural dataset (de, en, es, nl) into the spaCy format |
 | `clean` | Remove intermediary files |
+
+### ⏭ Workflows
+
+The following workflows are defined by the project. They
+can be executed using [`spacy project run [name]`](https://spacy.io/api/cli#project-run)
+and will run the specified commands in order. Commands are only re-run if their
+inputs have changed.
+
+| Workflow | Steps |
+| --- | --- |
+| `anem` | `convert-anem` &rarr; `train-anem` &rarr; `evaluate-anem` |
 
 ### 🗂 Assets
 
