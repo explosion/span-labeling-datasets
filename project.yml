@@ -90,37 +90,37 @@ commands:
     script:
       - >-
         python -m scripts.convert_to_spans
-        assets/sec_filings-train.iob corpus/
+        assets/sec_filings-train.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
       - >-
         python -m scripts.convert_to_spans
-        assets/sec_filings-test.iob corpus/
+        assets/sec_filings-test.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
     deps:
       - assets/sec_filings-train.iob
       - assets/sec_filings-test.iob
     outputs:
-      - corpus/sec_filings-train.spacy
-      - corpus/sec_filings-test.spacy
+      - corpus/spancat/sec_filings-train.spacy
+      - corpus/spancat/sec_filings-test.spacy
 
   - name: "convert-wnut17"
     help: "Convert WNUT17 dataset into the spaCy format"
     script:
       - >-
         python -m scripts.convert_to_spans
-        assets/wnut17-train.iob corpus/
+        assets/wnut17-train.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
       - >-
         python -m scripts.convert_to_spans
-        assets/wnut17-dev.iob corpus/
+        assets/wnut17-dev.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
       - >-
         python -m scripts.convert_to_spans
-        assets/wnut17-test.iob corpus/
+        assets/wnut17-test.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
     deps:
@@ -128,55 +128,55 @@ commands:
       - assets/wnut17-dev.iob
       - assets/wnut17-test.iob
     outputs:
-      - corpus/wnut17-train.spacy
-      - corpus/wnut17-dev.spacy
-      - corpus/wnut17-test.spacy
+      - corpus/spancat/wnut17-train.spacy
+      - corpus/spancat/wnut17-dev.spacy
+      - corpus/spancat/wnut17-test.spacy
 
   - name: "convert-btc"
     help: "Convert BTC dataset into the spaCy format"
     script:
       - >-
         python -m scripts.convert_to_spans
-        assets/btc-general.iob corpus/
+        assets/btc-general.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
     deps:
       - assets/btc-general.iob
     outputs:
-      - corpus/btc-general.spacy
+      - corpus/spancat/btc-general.spacy
 
   - name: "convert-anem"
     help: "Convert AneM dataset into the spaCy format"
     script:
       - >-
         python -m scripts.convert_to_spans
-        assets/anem-train.iob corpus/
+        assets/anem-train.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
       - >-
         python -m scripts.convert_to_spans
-        assets/anem-test.iob corpus/
+        assets/anem-test.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
     deps:
       - assets/anem-train.iob
       - assets/anem-test.iob
     outputs:
-      - corpus/anem-train.spacy
-      - corpus/anem-test.spacy
+      - corpus/spancat/anem-train.spacy
+      - corpus/spancat/anem-test.spacy
 
   - name: "convert-wikigold"
     help: "Convert the Wikigold dataset into the spaCy format"
     script:
       - >-
         python -m scripts.convert_to_spans
-        assets/wikigold.iob corpus/
+        assets/wikigold.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
     deps:
       - assets/wikigold.iob
     outputs:
-      - corpus/wikigold.spacy
+      - corpus/spancat/wikigold.spacy
 
   - name: "convert-wikineural"
     help: "Convert WikiNeural dataset (de, en, es, nl) into the spaCy format"
@@ -185,76 +185,76 @@ commands:
       - python -m scripts.remove_indices assets/de-wikineural-train.iob
       - >-
         python -m scripts.convert_to_spans
-        assets/de-wikineural-train.iob corpus/
+        assets/de-wikineural-train.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
       - python -m scripts.remove_indices assets/de-wikineural-dev.iob
       - >-
         python -m scripts.convert_to_spans
-        assets/de-wikineural-dev.iob corpus/
+        assets/de-wikineural-dev.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
       # - python -m scripts.remove_indices assets/de-wikineural-test.iob
       # - >-
       #   python -m scripts.convert_to_spans
-      #   assets/de-wikineural-test.iob corpus/
+      #   assets/de-wikineural-test.iob corpus/spancat/
       #   --spans-key ${vars.spans_key}
       #   --converter auto
       # Convert en dataset
       - python -m scripts.remove_indices assets/en-wikineural-train.iob
       - >-
         python -m scripts.convert_to_spans
-        assets/en-wikineural-train.iob corpus/
+        assets/en-wikineural-train.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
       - python -m scripts.remove_indices assets/en-wikineural-dev.iob
       - >-
         python -m scripts.convert_to_spans
-        assets/en-wikineural-dev.iob corpus/
+        assets/en-wikineural-dev.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
       - python -m scripts.remove_indices assets/en-wikineural-test.iob
       - >-
         python -m scripts.convert_to_spans
-        assets/en-wikineural-test.iob corpus/
+        assets/en-wikineural-test.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
       # Convert es dataset
       - python -m scripts.remove_indices assets/es-wikineural-train.iob
       - >-
         python -m scripts.convert_to_spans
-        assets/es-wikineural-train.iob corpus/
+        assets/es-wikineural-train.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
       - python -m scripts.remove_indices assets/es-wikineural-dev.iob
       - >-
         python -m scripts.convert_to_spans
-        assets/es-wikineural-dev.iob corpus/
+        assets/es-wikineural-dev.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
       - python -m scripts.remove_indices assets/es-wikineural-test.iob
       - >-
         python -m scripts.convert_to_spans
-        assets/es-wikineural-test.iob corpus/
+        assets/es-wikineural-test.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
       # Convert nl dataset
       - python -m scripts.remove_indices assets/nl-wikineural-train.iob
       - >-
         python -m scripts.convert_to_spans
-        assets/nl-wikineural-train.iob corpus/
+        assets/nl-wikineural-train.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
       - python -m scripts.remove_indices assets/nl-wikineural-dev.iob
       - >-
         python -m scripts.convert_to_spans
-        assets/nl-wikineural-dev.iob corpus/
+        assets/nl-wikineural-dev.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
       - python -m scripts.remove_indices assets/nl-wikineural-test.iob
       - >-
         python -m scripts.convert_to_spans
-        assets/nl-wikineural-test.iob corpus/
+        assets/nl-wikineural-test.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
     deps:
@@ -271,25 +271,28 @@ commands:
       - "assets/nl-wikineural-dev.iob"
       - "assets/nl-wikineural-test.iob"
     outputs:
-      - "corpus/de-wikineural-train.spacy"
-      - "corpus/de-wikineural-dev.spacy"
-      # - "corpus/de-wikineural-test.spacy"
-      - "corpus/en-wikineural-train.spacy"
-      - "corpus/en-wikineural-dev.spacy"
-      - "corpus/en-wikineural-test.spacy"
-      - "corpus/es-wikineural-train.spacy"
-      - "corpus/es-wikineural-dev.spacy"
-      - "corpus/es-wikineural-test.spacy"
-      - "corpus/nl-wikineural-train.spacy"
-      - "corpus/nl-wikineural-dev.spacy"
-      - "corpus/nl-wikineural-test.spacy"
+      - "corpus/spancat/de-wikineural-train.spacy"
+      - "corpus/spancat/de-wikineural-dev.spacy"
+      # - "corpus/spancat/de-wikineural-test.spacy"
+      - "corpus/spancat/en-wikineural-train.spacy"
+      - "corpus/spancat/en-wikineural-dev.spacy"
+      - "corpus/spancat/en-wikineural-test.spacy"
+      - "corpus/spancat/es-wikineural-train.spacy"
+      - "corpus/spancat/es-wikineural-dev.spacy"
+      - "corpus/spancat/es-wikineural-test.spacy"
+      - "corpus/spancat/nl-wikineural-train.spacy"
+      - "corpus/spancat/nl-wikineural-dev.spacy"
+      - "corpus/spancat/nl-wikineural-test.spacy"
 
-  - name: "train"
+  - name: "train-ner-anem"
+    help: "Train an NER model for AnEM"
+    script:
+      - ""
 
   - name: "clean"
     help: "Remove intermediary files"
     script:
       - "rm -rf assets/*"
-      - "rm -rf corpus/*"
+      - "rm -rf corpus/spancat/*"
       - "rm -rf training/*"
       - "rm -rf metrics/*"
