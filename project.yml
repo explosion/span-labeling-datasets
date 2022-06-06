@@ -86,6 +86,7 @@ commands:
     help: "Install dependencies"
     script:
       - "pip install --user -r requirements.txt"
+      - "python -m spacy download en_core_web_lg"
 
   - name: "convert-sec_filings"
     help: "Convert SEC filings dataset into the spaCy format"
@@ -155,6 +156,9 @@ commands:
         assets/anem-train.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
+        --train-size 0.8
+        --seed 42
+        --shuffle
       - >-
         python -m scripts.convert_to_spans
         assets/anem-test.iob corpus/spancat/
@@ -162,20 +166,27 @@ commands:
         --converter auto
       # NER conversion doc.ents
       - >-
-        python -m spacy convert
+        python -m scripts.convert_to_spans
         assets/anem-train.iob corpus/ner/
+        --use-ents
         --converter auto
+        --train-size 0.8
+        --seed 42
+        --shuffle
       - >-
-        python -m spacy convert
+        python -m scripts.convert_to_spans
         assets/anem-test.iob corpus/ner/
+        --use-ents
         --converter auto
     deps:
       - assets/anem-train.iob
       - assets/anem-test.iob
     outputs:
       - corpus/ner/anem-train.spacy
+      - corpus/ner/anem-train-dev.spacy
       - corpus/ner/anem-test.spacy
       - corpus/spancat/anem-train.spacy
+      - corpus/spancat/anem-train-dev.spacy
       - corpus/spancat/anem-test.spacy
 
   - name: "convert-wikigold"
@@ -297,10 +308,15 @@ commands:
       - "corpus/spancat/nl-wikineural-dev.spacy"
       - "corpus/spancat/nl-wikineural-test.spacy"
 
-  - name: "train-ner-anem"
-    help: "Train an NER model for AnEM"
+  - name: "train-anem"
+    help: "Train an NER and Spancat model for AnEM"
     script:
-      - ""
+      - >-
+        python -m spacy train
+        configs/ner.cfg
+        --output training/ner/anem/
+        --paths.train corpus/ner/anem-train.spacy
+        --paths.dev corpus/ner/anem-train-dev.spacy
 
   - name: "clean"
     help: "Remove intermediary files"
