@@ -1,12 +1,30 @@
 convert-sec_filings:
   cmd: python -m spacy run convert-sec_filings
   script:
-    - python -m scripts.convert_to_spans assets/sec_filings-train.iob corpus/ --spans-key
-      sc --converter auto
-    - python -m scripts.convert_to_spans assets/sec_filings-test.iob corpus/ --spans-key
-      sc --converter auto
-  deps: []
-  outs: []
+    - python -m scripts.convert_to_spans assets/sec_filings-train.iob corpus/spancat/
+      --spans-key sc --converter auto --train-size 0.8 --seed 42 --shuffle
+    - python -m scripts.convert_to_spans assets/sec_filings-test.iob corpus/spancat/
+      --spans-key sc --converter auto
+    - python -m scripts.convert_to_spans assets/sec_filings-train.iob corpus/ner/
+      --use-ents --converter auto --train-size 0.8 --seed 42 --shuffle
+    - python -m scripts.convert_to_spans assets/sec_filings-test.iob corpus/ner/ --use-ents
+      --spans-key sc --converter auto
+  deps:
+    - path: assets/sec_filings-train.iob
+      md5: d224f6c7f55626a2e9d249fb06e5227b
+    - path: assets/sec_filings-test.iob
+      md5: bbdac162ceaeb500a900def34515847c
+  outs:
+    - path: corpus/spancat/sec_filings-train.spacy
+      md5: 20153237ebc700014963f9b0bd8ee6ce
+    - path: corpus/spancat/sec_filings-train-dev.spacy
+      md5: 09d506663cdbb59ccb74787b95ca6125
+    - path: corpus/spancat/sec_filings-test.spacy
+      md5: 575318b3f4f3be891744ed694283d479
+    - path: corpus/ner/sec_filings-train-dev.spacy
+      md5: c51ce48b46d25fa2c1d98b8e8fef32e3
+    - path: corpus/ner/sec_filings-test.spacy
+      md5: 3e6bb5306f2071443668aac315b54191
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77
 convert-wnut17:
@@ -173,5 +191,57 @@ convert-wikigold:
   outs:
     - path: corpus/wikigold.spacy
       md5: d1f22fdeca30798a7861bff0886c7c2f
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77
+train-sec_filings:
+  cmd: python -m spacy run train-sec_filings
+  script:
+    - python -m spacy train configs/ner.cfg --output training/sec_filings/ner/ --paths.train
+      corpus/ner/sec_filings-train.spacy --paths.dev corpus/ner/sec_filings-train-dev.spacy
+      --gpu-id 0
+    - python -m spacy train configs/spancat.cfg --output training/sec_filings/spancat/
+      --paths.train corpus/spancat/sec_filings-train.spacy --paths.dev corpus/spancat/sec_filings-train-dev.spacy
+      --gpu-id 0
+  deps:
+    - path: corpus/spancat/sec_filings-train.spacy
+      md5: 20153237ebc700014963f9b0bd8ee6ce
+    - path: corpus/spancat/sec_filings-train-dev.spacy
+      md5: 09d506663cdbb59ccb74787b95ca6125
+    - path: corpus/spancat/sec_filings-test.spacy
+      md5: 575318b3f4f3be891744ed694283d479
+    - path: corpus/ner/sec_filings-train-dev.spacy
+      md5: c51ce48b46d25fa2c1d98b8e8fef32e3
+    - path: corpus/ner/sec_filings-test.spacy
+      md5: 3e6bb5306f2071443668aac315b54191
+  outs:
+    - path: training/sec_filings/ner/model-best
+      md5: d3ba5c997d0890b15b5873cec9da5e00
+    - path: training/sec_filings/spancat/model-best
+      md5: b540a1d86b7de58f4a0459e53d7f9b8f
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77
+evaluate-sec_filings:
+  cmd: python -m spacy run evaluate-sec_filings
+  script:
+    - mkdir -p metrics/sec_filings/spancat
+    - python -m spacy evaluate training/sec_filings/spancat/model-best corpus/spancat/sec_filings-test.spacy
+      --output metrics/sec_filings/spancat/scores.json
+    - mkdir -p metrics/sec_filings/ner
+    - python -m spacy evaluate training/sec_filings/ner/model-best corpus/ner/sec_filings-test.spacy
+      --output metrics/sec_filings/ner/scores.json
+  deps:
+    - path: training/sec_filings/ner/model-best
+      md5: d3ba5c997d0890b15b5873cec9da5e00
+    - path: training/sec_filings/spancat/model-best
+      md5: b540a1d86b7de58f4a0459e53d7f9b8f
+    - path: corpus/ner/sec_filings-test.spacy
+      md5: 3e6bb5306f2071443668aac315b54191
+    - path: corpus/spancat/sec_filings-test.spacy
+      md5: 575318b3f4f3be891744ed694283d479
+  outs:
+    - path: metrics/sec_filings/ner/scores.json
+      md5: 79747710cba156913c09c83b552a1fb8
+    - path: metrics/sec_filings/spancat/scores.json
+      md5: 827763662e7f408752468b92f1989748
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77
