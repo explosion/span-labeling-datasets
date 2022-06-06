@@ -10,6 +10,8 @@ directories:
   - "assets"
   - "configs"
   - "corpus"
+  - "corpus/spancat"
+  - "corpus/ner"
   - "scripts"
   - "training"
   - "metrics"
@@ -158,10 +160,21 @@ commands:
         assets/anem-test.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
+      # NER conversion doc.ents
+      - >-
+        python -m spacy convert
+        assets/anem-train.iob corpus/ner/
+        --converter auto
+      - >-
+        python -m spacy convert
+        assets/anem-test.iob corpus/ner/
+        --converter auto
     deps:
       - assets/anem-train.iob
       - assets/anem-test.iob
     outputs:
+      - corpus/ner/anem-train.spacy
+      - corpus/ner/anem-test.spacy
       - corpus/spancat/anem-train.spacy
       - corpus/spancat/anem-test.spacy
 
