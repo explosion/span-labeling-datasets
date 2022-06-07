@@ -6,9 +6,8 @@ from typing import Iterable, Optional, Union
 
 import srsly
 import typer
-from spacy.cli.convert import CONVERTERS
-from spacy.cli.convert import _write_docs_to_file, walk_directory
-from spacy.cli.convert import verify_cli_args, _get_converter
+from spacy.cli.convert import CONVERTERS, _get_converter, _write_docs_to_file
+from spacy.cli.convert import verify_cli_args, walk_directory
 from spacy.tokens import Doc, DocBin, SpanGroup
 from wasabi import Printer
 
