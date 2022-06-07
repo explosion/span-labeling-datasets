@@ -36,6 +36,10 @@ workflows:
     - "convert-wikineural-spans"
     - "train-wikineural"
     - "evaluate-wikineural"
+  toxic-spans:
+    - "convert-toxic-spans"
+    - "train-toxic-spans"
+    - "evaluate-toxic-spans"
 
 assets:
   - dest: "assets/sec_filings-train.iob"
@@ -110,6 +114,53 @@ commands:
     help: "Install dependencies"
     script:
       - "python -m spacy download en_core_web_lg"
+
+  - name: "convert-toxic-spans"
+    help: "Convert Toxic Spans dataset into the spaCy format"
+    script:
+      - >-
+        python -m scripts.toxic_spans 
+        assets/toxic_spans.csv corpus/spancat/
+        --spans-key ${vars.spans_key}
+        --shuffle
+        --seed 42
+    deps:
+      - assets/toxic_spans.csv
+    outputs:
+      - corpus/spancat/toxic-spans-train.spacy
+      - corpus/spancat/toxic-spans-dev.spacy
+      - corpus/spancat/toxic-spans-test.spacy
+
+  - name: "train-toxic-spans"
+    help: "Train ner and spancat models for the Toxic Spans dataset"
+    script:
+      - >-
+        python -m spacy train
+        configs/ner.cfg
+        --output training/toxic-spans/spancat/
+        --paths.train corpus/spancat/toxic-spans-train.spacy
+        --paths.dev corpus/spancat/toxic-spans-dev.spacy
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - corpus/spancat/toxic-spans-train.spacy
+      - corpus/spancat/toxic-spans-dev.spacy
+    outputs:
+      - training/toxic-spans/spancat/model-best
+
+  - name: "evaluate-toxic-spans"
+    help: "Evaluate models for the Toxic Spans dataset"
+    script:
+      - "mkdir -p metrics/toxic-spans/spancat"
+      - >-
+        python -m spacy evaluate
+        training/toxic-spans/spancat/model-best
+        corpus/spancat/toxic-spans-test.spacy
+        --output metrics/toxic-spans/spancat/scores.json
+    deps:
+      - training/toxic-spans/spancat/model-best
+      - corpus/spancat/toxic-spans-test.spacy
+    outputs:
+      - metrics/toxic-spans/spancat/scores.json
 
   - name: "convert-sec_filings"
     help: "Convert SEC filings dataset into the spaCy format"
