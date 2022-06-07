@@ -21,6 +21,9 @@ Commands are only re-run if their inputs have changed.
 | Command | Description |
 | --- | --- |
 | `install` | Install dependencies |
+| `convert-toxic-spans` | Convert Toxic Spans dataset into the spaCy format |
+| `train-toxic-spans` | Train ner and spancat models for the Toxic Spans dataset |
+| `evaluate-toxic-spans` | Evaluate models for the Toxic Spans dataset |
 | `convert-sec_filings` | Convert SEC filings dataset into the spaCy format |
 | `train-sec_filings` | Train an NER and Spancat model for SEC Filings dataset |
 | `evaluate-sec_filings` | Evaluate the results for the SEC Filings dataset |
@@ -52,6 +55,7 @@ inputs have changed.
 | `sec-filings` | `convert-sec_filings` &rarr; `train-sec_filings` &rarr; `evaluate-sec_filings` |
 | `wnut17` | `convert-wnut17` &rarr; `train-wnut17` &rarr; `evaluate-wnut17` |
 | `wikineural` | `clean-wikineural` &rarr; `convert-wikineural-ents` &rarr; `convert-wikineural-spans` &rarr; `train-wikineural` &rarr; `evaluate-wikineural` |
+| `toxic-spans` | `convert-toxic-spans` &rarr; `train-toxic-spans` &rarr; `evaluate-toxic-spans` |
 
 ### 🗂 Assets
 
@@ -82,5 +86,6 @@ in the project directory.
 | `assets/nl-wikineural-train.iob` | URL | WikiNeural (nl) training dataset from Tedeschi et al. (EMNLP 2021) |
 | `assets/nl-wikineural-dev.iob` | URL | WikiNeural (nl) dev dataset from Tedeschi et al. (EMNLP 2021) |
 | `assets/nl-wikineural-test.iob` | URL | WikiNeural (nl) test dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/toxic_spans.csv` | URL | Toxic Spans dataset from Pavlopoulos et al. (ACL 2022) |
 
 <!-- SPACY PROJECT: AUTO-GENERATED DOCS END (do not remove) -->
