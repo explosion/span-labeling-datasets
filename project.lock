@@ -308,3 +308,167 @@ evaluate-wnut17:
       md5: b275938669c8436569643ef3254e896f
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77
+clean-wikineural:
+  cmd: python -m spacy run clean-wikineural
+  script:
+    - python -m scripts.remove_indices assets/de-wikineural-train.iob
+    - python -m scripts.remove_indices assets/de-wikineural-dev.iob
+    - python -m scripts.remove_indices assets/en-wikineural-train.iob
+    - python -m scripts.remove_indices assets/en-wikineural-dev.iob
+    - python -m scripts.remove_indices assets/en-wikineural-test.iob
+    - python -m scripts.remove_indices assets/es-wikineural-train.iob
+    - python -m scripts.remove_indices assets/es-wikineural-dev.iob
+    - python -m scripts.remove_indices assets/es-wikineural-test.iob
+    - python -m scripts.remove_indices assets/nl-wikineural-train.iob
+    - python -m scripts.remove_indices assets/nl-wikineural-dev.iob
+    - python -m scripts.remove_indices assets/nl-wikineural-test.iob
+  deps: []
+  outs: []
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77
+convert-wikineural-ents:
+  cmd: python -m spacy run convert-wikineural-ents
+  script:
+    - python -m scripts.convert_to_spans assets/de-wikineural-train.iob corpus/ner/
+      --use-ents
+    - python -m scripts.convert_to_spans assets/de-wikineural-dev.iob corpus/ner/
+      --use-ents
+    - python -m scripts.convert_to_spans assets/en-wikineural-train.iob corpus/ner/
+      --use-ents
+    - python -m scripts.convert_to_spans assets/en-wikineural-dev.iob corpus/ner/
+      --use-ents
+    - python -m scripts.convert_to_spans assets/en-wikineural-test.iob corpus/ner/
+      --use-ents
+    - python -m scripts.convert_to_spans assets/es-wikineural-train.iob corpus/ner/
+      --use-ents
+    - python -m scripts.convert_to_spans assets/es-wikineural-dev.iob corpus/ner/
+      --use-ents
+    - python -m scripts.convert_to_spans assets/es-wikineural-test.iob corpus/ner/
+      --use-ents
+    - python -m scripts.convert_to_spans assets/nl-wikineural-train.iob corpus/ner/
+      --use-ents
+    - python -m scripts.convert_to_spans assets/nl-wikineural-dev.iob corpus/ner/
+      --use-ents
+    - python -m scripts.convert_to_spans assets/nl-wikineural-test.iob corpus/ner/
+      --use-ents
+  deps:
+    - path: assets/de-wikineural-train.iob
+      md5: c8775e662d925ded5279efacea5ede63
+    - path: assets/de-wikineural-dev.iob
+      md5: 3162f80129bff1c1f024fadff2474acc
+    - path: assets/en-wikineural-train.iob
+      md5: b3250ee3e135812baf2b08b508ccb34f
+    - path: assets/en-wikineural-dev.iob
+      md5: 959ab97f19e05581400c318508835dce
+    - path: assets/en-wikineural-test.iob
+      md5: c6fb16c5cb900d8d738378753a296cd7
+    - path: assets/es-wikineural-train.iob
+      md5: ddbb3c2c94813b493d03399ece1e01a9
+    - path: assets/es-wikineural-dev.iob
+      md5: 51811fad5020e2dd03e86aba0355b631
+    - path: assets/es-wikineural-test.iob
+      md5: 8032965742f73942f351fc29d109bc82
+    - path: assets/nl-wikineural-train.iob
+      md5: 41ccd33917288beb4f70cc76130b27fd
+    - path: assets/nl-wikineural-dev.iob
+      md5: cda255c9793c0032e7fd1b22470bec25
+    - path: assets/nl-wikineural-test.iob
+      md5: 8e74b4660d91d4eda9db2bc8bca67256
+  outs:
+    - path: corpus/ner/de-wikineural-train.spacy
+      md5: f86f0b5062de275abb2abb4173d151d7
+    - path: corpus/ner/de-wikineural-dev.spacy
+      md5: 834685c40240aadb129347bda3132b90
+    - path: corpus/ner/en-wikineural-train.spacy
+      md5: b882274872c84db1fafced05a8cd08a4
+    - path: corpus/ner/en-wikineural-dev.spacy
+      md5: e2280eb88b325121ef7225872ad604e4
+    - path: corpus/ner/en-wikineural-test.spacy
+      md5: f9891343a1ad0f15fca61c33915226ca
+    - path: corpus/ner/es-wikineural-train.spacy
+      md5: ed6691b0ad758b05115e94d7f7b5ad3d
+    - path: corpus/ner/es-wikineural-dev.spacy
+      md5: 987fe21c4f4200a38421128bf8dbf520
+    - path: corpus/ner/es-wikineural-test.spacy
+      md5: 7076f1926a9ac934da057740999320f7
+    - path: corpus/ner/nl-wikineural-train.spacy
+      md5: c3768d6be1b79c31198103f866ee893b
+    - path: corpus/ner/nl-wikineural-dev.spacy
+      md5: 2bb5c8e0e89d58dc46353f7bb4c791e0
+    - path: corpus/ner/nl-wikineural-test.spacy
+      md5: 9b908ae0e75e3dbd7179ddf8f47ef478
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77
+convert-wikineural-spans:
+  cmd: python -m spacy run convert-wikineural-spans
+  script:
+    - python -m scripts.convert_to_spans assets/de-wikineural-train.iob corpus/spancat/
+      --spans-key sc --converter auto
+    - python -m scripts.convert_to_spans assets/de-wikineural-dev.iob corpus/spancat/
+      --spans-key sc --converter auto
+    - python -m scripts.convert_to_spans assets/en-wikineural-train.iob corpus/spancat/
+      --spans-key sc --converter auto
+    - python -m scripts.convert_to_spans assets/en-wikineural-dev.iob corpus/spancat/
+      --spans-key sc --converter auto
+    - python -m scripts.convert_to_spans assets/en-wikineural-test.iob corpus/spancat/
+      --spans-key sc --converter auto
+    - python -m scripts.convert_to_spans assets/es-wikineural-train.iob corpus/spancat/
+      --spans-key sc --converter auto
+    - python -m scripts.convert_to_spans assets/es-wikineural-dev.iob corpus/spancat/
+      --spans-key sc --converter auto
+    - python -m scripts.convert_to_spans assets/es-wikineural-test.iob corpus/spancat/
+      --spans-key sc --converter auto
+    - python -m scripts.convert_to_spans assets/nl-wikineural-train.iob corpus/spancat/
+      --spans-key sc --converter auto
+    - python -m scripts.convert_to_spans assets/nl-wikineural-dev.iob corpus/spancat/
+      --spans-key sc --converter auto
+    - python -m scripts.convert_to_spans assets/nl-wikineural-test.iob corpus/spancat/
+      --spans-key sc --converter auto
+  deps:
+    - path: assets/de-wikineural-train.iob
+      md5: c8775e662d925ded5279efacea5ede63
+    - path: assets/de-wikineural-dev.iob
+      md5: 3162f80129bff1c1f024fadff2474acc
+    - path: assets/en-wikineural-train.iob
+      md5: b3250ee3e135812baf2b08b508ccb34f
+    - path: assets/en-wikineural-dev.iob
+      md5: 959ab97f19e05581400c318508835dce
+    - path: assets/en-wikineural-test.iob
+      md5: c6fb16c5cb900d8d738378753a296cd7
+    - path: assets/es-wikineural-train.iob
+      md5: ddbb3c2c94813b493d03399ece1e01a9
+    - path: assets/es-wikineural-dev.iob
+      md5: 51811fad5020e2dd03e86aba0355b631
+    - path: assets/es-wikineural-test.iob
+      md5: 8032965742f73942f351fc29d109bc82
+    - path: assets/nl-wikineural-train.iob
+      md5: 41ccd33917288beb4f70cc76130b27fd
+    - path: assets/nl-wikineural-dev.iob
+      md5: cda255c9793c0032e7fd1b22470bec25
+    - path: assets/nl-wikineural-test.iob
+      md5: 8e74b4660d91d4eda9db2bc8bca67256
+  outs:
+    - path: corpus/spancat/de-wikineural-train.spacy
+      md5: cda1c00e307c09687ae4201a445c3395
+    - path: corpus/spancat/de-wikineural-dev.spacy
+      md5: 2ef1e503029c7cecde57e4f5c58c369e
+    - path: corpus/spancat/en-wikineural-train.spacy
+      md5: 311cd5d2c857cf5f6c477c4c3ffbd8d6
+    - path: corpus/spancat/en-wikineural-dev.spacy
+      md5: 55c333bca6e29c44ca7279e742f07e99
+    - path: corpus/spancat/en-wikineural-test.spacy
+      md5: 5c9ec598859ce7175cb6e5f77116e499
+    - path: corpus/spancat/es-wikineural-train.spacy
+      md5: 5fc9c04be24ec98dc1d045f600463bce
+    - path: corpus/spancat/es-wikineural-dev.spacy
+      md5: fa4e4d8f768e520cc2bfb0e2016d91c0
+    - path: corpus/spancat/es-wikineural-test.spacy
+      md5: 8ec83ba37c71811554170cbb6353a17e
+    - path: corpus/spancat/nl-wikineural-train.spacy
+      md5: fe31357dca3eb8d55590d65cbb1e8fde
+    - path: corpus/spancat/nl-wikineural-dev.spacy
+      md5: 36f7edaab7980ecef75ac02affa25cd3
+    - path: corpus/spancat/nl-wikineural-test.spacy
+      md5: bcb2fb22ed157144d1b6e5e33745462d
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77

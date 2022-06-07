@@ -422,6 +422,30 @@ commands:
       - python -m scripts.remove_indices assets/nl-wikineural-train.iob
       - python -m scripts.remove_indices assets/nl-wikineural-dev.iob
       - python -m scripts.remove_indices assets/nl-wikineural-test.iob
+    deps:
+      - assets/de-wikineural-train.iob
+      - assets/de-wikineural-dev.iob
+      - assets/en-wikineural-train.iob
+      - assets/en-wikineural-dev.iob
+      - assets/en-wikineural-test.iob
+      - assets/es-wikineural-train.iob
+      - assets/es-wikineural-dev.iob
+      - assets/es-wikineural-test.iob
+      - assets/nl-wikineural-train.iob
+      - assets/nl-wikineural-dev.iob
+      - assets/nl-wikineural-test.iob
+    outputs:
+      - assets/de-wikineural-train.iob
+      - assets/de-wikineural-dev.iob
+      - assets/en-wikineural-train.iob
+      - assets/en-wikineural-dev.iob
+      - assets/en-wikineural-test.iob
+      - assets/es-wikineural-train.iob
+      - assets/es-wikineural-dev.iob
+      - assets/es-wikineural-test.iob
+      - assets/nl-wikineural-train.iob
+      - assets/nl-wikineural-dev.iob
+      - assets/nl-wikineural-test.iob
 
   - name: "convert-wikineural-spans"
     help: "Convert WikiNeural dataset (de, en, es, nl) into the spaCy format"
