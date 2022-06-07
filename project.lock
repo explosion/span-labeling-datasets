@@ -322,8 +322,52 @@ clean-wikineural:
     - python -m scripts.remove_indices assets/nl-wikineural-train.iob
     - python -m scripts.remove_indices assets/nl-wikineural-dev.iob
     - python -m scripts.remove_indices assets/nl-wikineural-test.iob
-  deps: []
-  outs: []
+  deps:
+    - path: assets/de-wikineural-train.iob
+      md5: c8775e662d925ded5279efacea5ede63
+    - path: assets/de-wikineural-dev.iob
+      md5: 3162f80129bff1c1f024fadff2474acc
+    - path: assets/en-wikineural-train.iob
+      md5: b3250ee3e135812baf2b08b508ccb34f
+    - path: assets/en-wikineural-dev.iob
+      md5: 959ab97f19e05581400c318508835dce
+    - path: assets/en-wikineural-test.iob
+      md5: c6fb16c5cb900d8d738378753a296cd7
+    - path: assets/es-wikineural-train.iob
+      md5: ddbb3c2c94813b493d03399ece1e01a9
+    - path: assets/es-wikineural-dev.iob
+      md5: 51811fad5020e2dd03e86aba0355b631
+    - path: assets/es-wikineural-test.iob
+      md5: 8032965742f73942f351fc29d109bc82
+    - path: assets/nl-wikineural-train.iob
+      md5: 41ccd33917288beb4f70cc76130b27fd
+    - path: assets/nl-wikineural-dev.iob
+      md5: cda255c9793c0032e7fd1b22470bec25
+    - path: assets/nl-wikineural-test.iob
+      md5: 8e74b4660d91d4eda9db2bc8bca67256
+  outs:
+    - path: assets/de-wikineural-train.iob
+      md5: c8775e662d925ded5279efacea5ede63
+    - path: assets/de-wikineural-dev.iob
+      md5: 3162f80129bff1c1f024fadff2474acc
+    - path: assets/en-wikineural-train.iob
+      md5: b3250ee3e135812baf2b08b508ccb34f
+    - path: assets/en-wikineural-dev.iob
+      md5: 959ab97f19e05581400c318508835dce
+    - path: assets/en-wikineural-test.iob
+      md5: c6fb16c5cb900d8d738378753a296cd7
+    - path: assets/es-wikineural-train.iob
+      md5: ddbb3c2c94813b493d03399ece1e01a9
+    - path: assets/es-wikineural-dev.iob
+      md5: 51811fad5020e2dd03e86aba0355b631
+    - path: assets/es-wikineural-test.iob
+      md5: 8032965742f73942f351fc29d109bc82
+    - path: assets/nl-wikineural-train.iob
+      md5: 41ccd33917288beb4f70cc76130b27fd
+    - path: assets/nl-wikineural-dev.iob
+      md5: cda255c9793c0032e7fd1b22470bec25
+    - path: assets/nl-wikineural-test.iob
+      md5: 8e74b4660d91d4eda9db2bc8bca67256
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77
 convert-wikineural-ents:
@@ -470,5 +514,116 @@ convert-wikineural-spans:
       md5: 36f7edaab7980ecef75ac02affa25cd3
     - path: corpus/spancat/nl-wikineural-test.spacy
       md5: bcb2fb22ed157144d1b6e5e33745462d
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77
+train-wikineural:
+  cmd: python -m spacy run train-wikineural
+  script:
+    - python -m spacy download de_core_news_lg
+    - python -m spacy train configs/ner.cfg --output training/de-wikineural/ner/ --paths.vectors
+      de_core_news_lg --nlp.lang de --paths.train corpus/ner/de-wikineural-train.spacy
+      --paths.dev corpus/ner/de-wikineural-dev.spacy --gpu-id 0
+    - python -m spacy train configs/spancat.cfg --output training/de-wikineural/spancat/
+      --paths.vectors de_core_news_lg --nlp.lang de --paths.train corpus/spancat/de-wikineural-train.spacy
+      --paths.dev corpus/spancat/de-wikineural-dev.spacy --gpu-id 0
+    - python -m spacy train configs/ner.cfg --output training/en-wikineural/ner/ --paths.train
+      corpus/ner/en-wikineural-train.spacy --paths.dev corpus/ner/en-wikineural-dev.spacy
+      --gpu-id 0
+    - python -m spacy train configs/spancat.cfg --output training/en-wikineural/spancat/
+      --paths.train corpus/spancat/en-wikineural-train.spacy --paths.dev corpus/spancat/en-wikineural-dev.spacy
+      --gpu-id 0
+    - python -m spacy download es_core_news_lg
+    - python -m spacy train configs/ner.cfg --output training/es-wikineural/ner/ --paths.vectors
+      es_core_news_lg --nlp.lang es --paths.train corpus/ner/es-wikineural-train.spacy
+      --paths.dev corpus/ner/es-wikineural-dev.spacy --gpu-id 0
+    - python -m spacy train configs/spancat.cfg --output training/es-wikineural/spancat/
+      --paths.vectors es_core_news_lg --nlp.lang es --paths.train corpus/spancat/es-wikineural-train.spacy
+      --paths.dev corpus/spancat/es-wikineural-dev.spacy --gpu-id 0
+    - python -m spacy download nl_core_news_lg
+    - python -m spacy train configs/ner.cfg --output training/nl-wikineural/ner/ --paths.vectors
+      nl_core_news_lg --nlp.lang nl --paths.train corpus/ner/nl-wikineural-train.spacy
+      --paths.dev corpus/ner/nl-wikineural-dev.spacy --gpu-id 0
+    - python -m spacy train configs/spancat.cfg --output training/nl-wikineural/spancat/
+      --paths.vectors nl_core_news_lg --nlp.lang nl --paths.train corpus/spancat/nl-wikineural-train.spacy
+      --paths.dev corpus/spancat/nl-wikineural-dev.spacy --gpu-id 0
+  deps: []
+  outs:
+    - path: training/de-wikineural/ner/model-best
+      md5: db34bf625b38915cb25db753d6cd957a
+    - path: training/en-wikineural/ner/model-best
+      md5: cf6e1663641e6d7618ab270e44d54a40
+    - path: training/es-wikineural/ner/model-best
+      md5: c7d3764f36c1cf55f0093da8eb11c755
+    - path: training/nl-wikineural/ner/model-best
+      md5: 3564abcece9fcb950593234735696373
+    - path: training/de-wikineural/spancat/model-best
+      md5: 3c7e280892462b10d94301e477ee9b16
+    - path: training/en-wikineural/spancat/model-best
+      md5: 7a04c56543ac17442b979dfda8bd09f6
+    - path: training/es-wikineural/spancat/model-best
+      md5: 0bdbf90642bf9372aa8aad35cb1c559e
+    - path: training/nl-wikineural/spancat/model-best
+      md5: aa53a809293c03b4ef584a7fb1774f79
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77
+evaluate-wikineural:
+  cmd: python -m spacy run evaluate-wikineural
+  script:
+    - mkdir -p metrics/en-wikineural/spancat
+    - python -m spacy evaluate training/en-wikineural/spancat/model-best corpus/spancat/en-wikineural-test.spacy
+      --output metrics/en-wikineural/spancat/scores.json
+    - mkdir -p metrics/en-wikineural/ner
+    - python -m spacy evaluate training/en-wikineural/ner/model-best corpus/ner/en-wikineural-test.spacy
+      --output metrics/en-wikineural/ner/scores.json
+    - mkdir -p metrics/es-wikineural/spancat
+    - python -m spacy evaluate training/es-wikineural/spancat/model-best corpus/spancat/es-wikineural-test.spacy
+      --output metrics/es-wikineural/spancat/scores.json
+    - mkdir -p metrics/es-wikineural/ner
+    - python -m spacy evaluate training/es-wikineural/ner/model-best corpus/ner/es-wikineural-test.spacy
+      --output metrics/es-wikineural/ner/scores.json
+    - mkdir -p metrics/nl-wikineural/spancat
+    - python -m spacy evaluate training/nl-wikineural/spancat/model-best corpus/spancat/nl-wikineural-test.spacy
+      --output metrics/nl-wikineural/spancat/scores.json
+    - mkdir -p metrics/nl-wikineural/ner
+    - python -m spacy evaluate training/nl-wikineural/ner/model-best corpus/ner/nl-wikineural-test.spacy
+      --output metrics/nl-wikineural/ner/scores.json
+  deps:
+    - path: training/en-wikineural/ner/model-best
+      md5: cf6e1663641e6d7618ab270e44d54a40
+    - path: training/es-wikineural/ner/model-best
+      md5: c7d3764f36c1cf55f0093da8eb11c755
+    - path: training/nl-wikineural/ner/model-best
+      md5: 3564abcece9fcb950593234735696373
+    - path: training/en-wikineural/spancat/model-best
+      md5: 7a04c56543ac17442b979dfda8bd09f6
+    - path: training/es-wikineural/spancat/model-best
+      md5: 0bdbf90642bf9372aa8aad35cb1c559e
+    - path: training/nl-wikineural/spancat/model-best
+      md5: aa53a809293c03b4ef584a7fb1774f79
+    - path: corpus/ner/en-wikineural-test.spacy
+      md5: f9891343a1ad0f15fca61c33915226ca
+    - path: corpus/ner/es-wikineural-test.spacy
+      md5: 7076f1926a9ac934da057740999320f7
+    - path: corpus/ner/nl-wikineural-test.spacy
+      md5: 9b908ae0e75e3dbd7179ddf8f47ef478
+    - path: corpus/spancat/en-wikineural-test.spacy
+      md5: 5c9ec598859ce7175cb6e5f77116e499
+    - path: corpus/spancat/es-wikineural-test.spacy
+      md5: 8ec83ba37c71811554170cbb6353a17e
+    - path: corpus/spancat/nl-wikineural-test.spacy
+      md5: bcb2fb22ed157144d1b6e5e33745462d
+  outs:
+    - path: metrics/en-wikineural/ner/scores.json
+      md5: 2d8cb0040602ed77fedfddb465116ce4
+    - path: metrics/es-wikineural/ner/scores.json
+      md5: 1d6e777d83a18af50946d21775f5744e
+    - path: metrics/nl-wikineural/ner/scores.json
+      md5: f1569054dbec62a13b314d22fc2f270f
+    - path: metrics/en-wikineural/spancat/scores.json
+      md5: 624a7080b676af88d295f534503b27a0
+    - path: metrics/es-wikineural/spancat/scores.json
+      md5: 199cf5cec17482f2841fd04b2fa688e2
+    - path: metrics/nl-wikineural/spancat/scores.json
+      md5: 13355649085dd04e3f377329856e92a5
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77
