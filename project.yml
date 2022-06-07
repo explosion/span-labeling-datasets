@@ -407,7 +407,7 @@ commands:
     outputs:
       - corpus/spancat/wikigold.spacy
 
-  - name: "convert-wikineural"
+  - name: "convert-wikineural-spans"
     help: "Convert WikiNeural dataset (de, en, es, nl) into the spaCy format"
     script:
       # Convert de dataset
@@ -512,6 +512,188 @@ commands:
       - "corpus/spancat/nl-wikineural-train.spacy"
       - "corpus/spancat/nl-wikineural-dev.spacy"
       - "corpus/spancat/nl-wikineural-test.spacy"
+
+  - name: "convert-wikineural-ents"
+    help: "Convert WikiNeural dataset (de, en, es, nl) into the spaCy format"
+    script:
+      # Convert de dataset
+      - python -m scripts.remove_indices assets/de-wikineural-train.iob
+      - >-
+        python -m scripts.convert_to_spans
+        assets/de-wikineural-train.iob corpus/ner/
+        --use-ents
+      - python -m scripts.remove_indices assets/de-wikineural-dev.iob
+      - >-
+        python -m scripts.convert_to_spans
+        assets/de-wikineural-dev.iob corpus/ner/
+        --use-ents
+      # - python -m scripts.remove_indices assets/de-wikineural-test.iob
+      # - >-
+      #   python -m scripts.convert_to_spans
+      #   assets/de-wikineural-test.iob corpus/spancat/
+      #   --converter auto
+      # Convert en dataset
+      - python -m scripts.remove_indices assets/en-wikineural-train.iob
+      - >-
+        python -m scripts.convert_to_spans
+        assets/en-wikineural-train.iob corpus/ner/
+        --use-ents
+      - python -m scripts.remove_indices assets/en-wikineural-dev.iob
+      - >-
+        python -m scripts.convert_to_spans
+        assets/en-wikineural-dev.iob corpus/ner/
+        --use-ents
+      - python -m scripts.remove_indices assets/en-wikineural-test.iob
+      - >-
+        python -m scripts.convert_to_spans
+        assets/en-wikineural-test.iob corpus/ner/
+        --use-ents
+      # Convert es dataset
+      - python -m scripts.remove_indices assets/es-wikineural-train.iob
+      - >-
+        python -m scripts.convert_to_spans
+        assets/es-wikineural-train.iob corpus/ner/
+        --use-ents
+      - python -m scripts.remove_indices assets/es-wikineural-dev.iob
+      - >-
+        python -m scripts.convert_to_spans
+        assets/es-wikineural-dev.iob corpus/ner/
+        --use-ents
+      - python -m scripts.remove_indices assets/es-wikineural-test.iob
+      - >-
+        python -m scripts.convert_to_spans
+        assets/es-wikineural-test.iob corpus/ner/
+        --use-ents
+      # Convert nl dataset
+      - python -m scripts.remove_indices assets/nl-wikineural-train.iob
+      - >-
+        python -m scripts.convert_to_spans
+        assets/nl-wikineural-train.iob corpus/ner/
+        --use-ents
+      - python -m scripts.remove_indices assets/nl-wikineural-dev.iob
+      - >-
+        python -m scripts.convert_to_spans
+        assets/nl-wikineural-dev.iob corpus/ner/
+        --use-ents
+      - python -m scripts.remove_indices assets/nl-wikineural-test.iob
+      - >-
+        python -m scripts.convert_to_spans
+        assets/nl-wikineural-test.iob corpus/ner/
+        --use-ents
+    deps:
+      - "assets/de-wikineural-train.iob"
+      - "assets/de-wikineural-dev.iob"
+      # - "assets/de-wikineural-test.iob"
+      - "assets/en-wikineural-train.iob"
+      - "assets/en-wikineural-dev.iob"
+      - "assets/en-wikineural-test.iob"
+      - "assets/es-wikineural-train.iob"
+      - "assets/es-wikineural-dev.iob"
+      - "assets/es-wikineural-test.iob"
+      - "assets/nl-wikineural-train.iob"
+      - "assets/nl-wikineural-dev.iob"
+      - "assets/nl-wikineural-test.iob"
+    outputs:
+      - "corpus/ner/de-wikineural-train.spacy"
+      - "corpus/ner/de-wikineural-dev.spacy"
+      # - "corpus/spancat/de-wikineural-test.spacy"
+      - "corpus/ner/en-wikineural-train.spacy"
+      - "corpus/ner/en-wikineural-dev.spacy"
+      - "corpus/ner/en-wikineural-test.spacy"
+      - "corpus/ner/es-wikineural-train.spacy"
+      - "corpus/ner/es-wikineural-dev.spacy"
+      - "corpus/ner/es-wikineural-test.spacy"
+      - "corpus/ner/nl-wikineural-train.spacy"
+      - "corpus/ner/nl-wikineural-dev.spacy"
+      - "corpus/ner/nl-wikineural-test.spacy"
+
+  - name: "train-wikineural"
+    help: "Train an ner and spancat model for Wikineural datasets"
+    script:
+      # Train de dataset
+      - python -m spacy download de_core_news_lg
+      - >-
+        python -m spacy train
+        configs/ner.cfg
+        --output training/de-wikineural/ner/
+        --paths.vectors de_core_news_lg
+        --nlp.lang de
+        --paths.train corpus/ner/de-wikineural-train.spacy
+        --paths.dev corpus/ner/de-wikineural-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      - >-
+        python -m spacy train
+        configs/spancat.cfg
+        --output training/de-wikineural/spancat/
+        --paths.vectors de_core_news_lg
+        --nlp.lang de
+        --paths.train corpus/spancat/de-wikineural-train.spacy
+        --paths.dev corpus/spancat/de-wikineural-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      # Train en dataset
+      - >-
+        python -m spacy train
+        configs/ner.cfg
+        --output training/en-wikineural/ner/
+        --paths.train corpus/ner/en-wikineural-train.spacy
+        --paths.dev corpus/ner/en-wikineural-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      - >-
+        python -m spacy train
+        configs/spancat.cfg
+        --output training/en-wikineural/spancat/
+        --paths.train corpus/spancat/en-wikineural-train.spacy
+        --paths.dev corpus/spancat/en-wikineural-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      # Train es dataset
+      - python -m spacy download es_core_news_lg
+      - >-
+        python -m spacy train
+        configs/ner.cfg
+        --output training/es-wikineural/ner/
+        --paths.vectors es_core_news_lg
+        --nlp.lang es
+        --paths.train corpus/ner/es-wikineural-train.spacy
+        --paths.dev corpus/ner/es-wikineural-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      - >-
+        python -m spacy train
+        configs/spancat.cfg
+        --output training/es-wikineural/spancat/
+        --paths.vectors es_core_news_lg
+        --nlp.lang es
+        --paths.train corpus/spancat/es-wikineural-train.spacy
+        --paths.dev corpus/spancat/es-wikineural-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      # Train nl dataset
+      - python -m spacy download nl_core_news_lg
+      - >-
+        python -m spacy train
+        configs/ner.cfg
+        --output training/nl-wikineural/ner/
+        --paths.vectors nl_core_news_lg
+        --nlp.lang nl
+        --paths.train corpus/ner/nl-wikineural-train.spacy
+        --paths.dev corpus/ner/nl-wikineural-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      - >-
+        python -m spacy train
+        configs/spancat.cfg
+        --output training/nl-wikineural/spancat/
+        --paths.vectors nl_core_news_lg
+        --nlp.lang nl
+        --paths.train corpus/spancat/nl-wikineural-train.spacy
+        --paths.dev corpus/spancat/nl-wikineural-dev.spacy
+        --gpu-id ${vars.gpu_id}
+    outputs:
+      - training/de-wikineural/ner/model-best
+      - training/en-wikineural/ner/model-best
+      - training/es-wikineural/ner/model-best
+      - training/nl-wikineural/ner/model-best
+      - training/de-wikineural/spancat/model-best
+      - training/en-wikineural/spancat/model-best
+      - training/es-wikineural/spancat/model-best
+      - training/nl-wikineural/spancat/model-best
 
   - name: "clean"
     help: "Remove intermediary files"
