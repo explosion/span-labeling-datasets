@@ -1,18 +1,15 @@
 """Monkey-patched version of the convert command that transfers entities to Doc.spans"""
 
-import itertools
-from pydoc import doc
 import random
 from pathlib import Path
-from typing import Iterable, Optional, Union, List, Tuple
+from typing import Iterable, Optional, Union
 
 import srsly
 import typer
-from spacy.cli.convert import CONVERTERS, _print_docs_to_stdout
+from spacy.cli.convert import CONVERTERS
 from spacy.cli.convert import _write_docs_to_file, walk_directory
 from spacy.cli.convert import verify_cli_args, _get_converter
 from spacy.tokens import Doc, DocBin, SpanGroup
-from spacy.training.gold_io import docs_to_json
 from wasabi import Printer
 
 FILE_TYPE = "spacy"
