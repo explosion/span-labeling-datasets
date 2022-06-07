@@ -25,6 +25,8 @@ Commands are only re-run if their inputs have changed.
 | `train-sec_filings` | Train an NER and Spancat model for SEC Filings dataset |
 | `evaluate-sec_filings` | Evaluate the results for the SEC Filings dataset |
 | `convert-wnut17` | Convert WNUT17 dataset into the spaCy format |
+| `train-wnut17` | Train an ner and spancat model for WNUT17 |
+| `evaluate-wnut17` | Evaluate the results for the WNUT17 dataset |
 | `convert-btc` | Convert BTC dataset into the spaCy format |
 | `convert-anem` | Convert AneM dataset into the spaCy format |
 | `train-anem` | Train an NER and Spancat model for AnEM |
@@ -44,6 +46,7 @@ inputs have changed.
 | --- | --- |
 | `anem` | `convert-anem` &rarr; `train-anem` &rarr; `evaluate-anem` |
 | `sec-filings` | `convert-sec_filings` &rarr; `train-sec_filings` &rarr; `evaluate-sec_filings` |
+| `wnut17` | `convert-wnut17` &rarr; `train-wnut17` &rarr; `evaluate-wnut17` |
 
 ### 🗂 Assets
 

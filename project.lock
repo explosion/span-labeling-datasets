@@ -30,12 +30,15 @@ convert-sec_filings:
 convert-wnut17:
   cmd: python -m spacy run convert-wnut17
   script:
-    - python -m scripts.convert_to_spans assets/wnut17-train.iob corpus/ --spans-key
-      sc --converter auto
-    - python -m scripts.convert_to_spans assets/wnut17-dev.iob corpus/ --spans-key
-      sc --converter auto
-    - python -m scripts.convert_to_spans assets/wnut17-test.iob corpus/ --spans-key
-      sc --converter auto
+    - python -m scripts.convert_to_spans assets/wnut17-train.iob corpus/spancat/ --spans-key
+      sc
+    - python -m scripts.convert_to_spans assets/wnut17-dev.iob corpus/spancat/ --spans-key
+      sc
+    - python -m scripts.convert_to_spans assets/wnut17-test.iob corpus/spancat/ --spans-key
+      sc
+    - python -m scripts.convert_to_spans assets/wnut17-train.iob corpus/ner/ --use-ents
+    - python -m scripts.convert_to_spans assets/wnut17-dev.iob corpus/ner/ --use-ents
+    - python -m scripts.convert_to_spans assets/wnut17-test.iob corpus/ner/ --use-ents
   deps:
     - path: assets/wnut17-train.iob
       md5: ff599150146384cedb2e22a4afa89209
@@ -44,11 +47,17 @@ convert-wnut17:
     - path: assets/wnut17-test.iob
       md5: a4909d46d5c173151c20599a2193f36c
   outs:
-    - path: corpus/wnut17-train.spacy
+    - path: corpus/ner/wnut17-train.spacy
+      md5: a19d2e9c5d8339bf76703624bc209362
+    - path: corpus/ner/wnut17-dev.spacy
+      md5: 7770eca0c2d979f0d7096d8a00fb6fb9
+    - path: corpus/ner/wnut17-test.spacy
+      md5: 1ef6584f7606628871abab21f3ec7d6b
+    - path: corpus/spancat/wnut17-train.spacy
       md5: dd45fa4bc875081618476cc6344c86de
-    - path: corpus/wnut17-dev.spacy
+    - path: corpus/spancat/wnut17-dev.spacy
       md5: cbf5e7a2eb0a6bf61ba93106df3ac927
-    - path: corpus/wnut17-test.spacy
+    - path: corpus/spancat/wnut17-test.spacy
       md5: b304af219b4289a3e9f4885f70e6390f
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77

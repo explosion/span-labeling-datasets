@@ -26,6 +26,10 @@ workflows:
     - "convert-sec_filings"
     - "train-sec_filings"
     - "evaluate-sec_filings"
+  wnut17:
+    - "convert-wnut17"
+    - "train-wnut17"
+    - "evaluate-wnut17"
 
 assets:
   - dest: "assets/sec_filings-train.iob"
@@ -161,6 +165,7 @@ commands:
       - corpus/spancat/sec_filings-train.spacy
       - corpus/spancat/sec_filings-train-dev.spacy
       - corpus/spancat/sec_filings-test.spacy
+      - corpus/ner/sec_filings-train.spacy
       - corpus/ner/sec_filings-train-dev.spacy
       - corpus/ner/sec_filings-test.spacy
     outputs:
@@ -198,25 +203,90 @@ commands:
         python -m scripts.convert_to_spans
         assets/wnut17-train.iob corpus/spancat/
         --spans-key ${vars.spans_key}
-        --converter auto
       - >-
         python -m scripts.convert_to_spans
         assets/wnut17-dev.iob corpus/spancat/
         --spans-key ${vars.spans_key}
-        --converter auto
       - >-
         python -m scripts.convert_to_spans
         assets/wnut17-test.iob corpus/spancat/
         --spans-key ${vars.spans_key}
-        --converter auto
+      # NER
+      - >-
+        python -m scripts.convert_to_spans
+        assets/wnut17-train.iob corpus/ner/
+        --use-ents
+      - >-
+        python -m scripts.convert_to_spans
+        assets/wnut17-dev.iob corpus/ner/
+        --use-ents
+      - >-
+        python -m scripts.convert_to_spans
+        assets/wnut17-test.iob corpus/ner/
+        --use-ents
     deps:
       - assets/wnut17-train.iob
       - assets/wnut17-dev.iob
       - assets/wnut17-test.iob
     outputs:
+      - corpus/ner/wnut17-train.spacy
+      - corpus/ner/wnut17-dev.spacy
+      - corpus/ner/wnut17-test.spacy
       - corpus/spancat/wnut17-train.spacy
       - corpus/spancat/wnut17-dev.spacy
       - corpus/spancat/wnut17-test.spacy
+
+  - name: "train-wnut17"
+    help: "Train an ner and spancat model for WNUT17"
+    script:
+      - >-
+        python -m spacy train
+        configs/ner.cfg
+        --output training/wnut17/ner/
+        --paths.train corpus/ner/wnut17-train.spacy
+        --paths.dev corpus/ner/wnut17-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      - >-
+        python -m spacy train
+        configs/spancat.cfg
+        --output training/wnut17/spancat/
+        --paths.train corpus/spancat/wnut17-train.spacy
+        --paths.dev corpus/spancat/wnut17-dev.spacy
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - corpus/spancat/wnut17-train.spacy
+      - corpus/spancat/wnut17-dev.spacy
+      - corpus/spancat/wnut17-test.spacy
+      - corpus/ner/wnut17-train.spacy
+      - corpus/ner/wnut17-dev.spacy
+      - corpus/ner/wnut17-test.spacy
+    outputs:
+      - training/wnut17/ner/model-best
+      - training/wnut17/spancat/model-best
+
+  - name: "evaluate-wnut17"
+    help: "Evaluate the results for the WNUT17 dataset"
+    script:
+      - "mkdir -p metrics/wnut17/spancat"
+      - >-
+        python -m spacy evaluate
+        training/wnut17/spancat/model-best
+        corpus/spancat/wnut17-test.spacy
+        --output metrics/wnut17/spancat/scores.json
+      - "mkdir -p metrics/wnut17/ner"
+      - >-
+        python -m spacy evaluate
+        training/wnut17/ner/model-best
+        corpus/ner/wnut17-test.spacy
+        --output metrics/wnut17/ner/scores.json
+    deps:
+      - training/wnut17/ner/model-best
+      - training/wnut17/spancat/model-best
+      - corpus/ner/wnut17-test.spacy
+      - corpus/spancat/wnut17-test.spacy
+    outputs:
+      - metrics/wnut17/ner/scores.json
+      - metrics/wnut17/spancat/scores.json
 
   - name: "convert-btc"
     help: "Convert BTC dataset into the spaCy format"
