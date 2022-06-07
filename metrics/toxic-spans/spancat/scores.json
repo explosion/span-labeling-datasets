@@ -1,0 +1,37 @@
+{
+  "token_acc":1.0,
+  "token_p":1.0,
+  "token_r":1.0,
+  "token_f":1.0,
+  "spans_sc_p":0.6435100548,
+  "spans_sc_r":0.5945945946,
+  "spans_sc_f":0.6180860404,
+  "spans_sc_per_type":{
+    "insult":{
+      "p":0.6458715596,
+      "r":0.7473460722,
+      "f":0.6929133858
+    },
+    "profane/obscene":{
+      "p":0.0,
+      "r":0.0,
+      "f":0.0
+    },
+    "other toxicity":{
+      "p":0.0,
+      "r":0.0,
+      "f":0.0
+    },
+    "identity based attack":{
+      "p":0.0,
+      "r":0.0,
+      "f":0.0
+    },
+    "threat":{
+      "p":0.0,
+      "r":0.0,
+      "f":0.0
+    }
+  },
+  "speed":17154.456729257
+}

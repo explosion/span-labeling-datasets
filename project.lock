@@ -627,3 +627,78 @@ evaluate-wikineural:
       md5: 13355649085dd04e3f377329856e92a5
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77
+convert-toxic-spans:
+  cmd: python -m spacy run convert-toxic-spans
+  script:
+    - python -m scripts.toxic_spans  assets/toxic_spans.csv corpus/spancat/ --spans-key
+      sc --shuffle --seed 42
+    - python -m scripts.toxic_spans  assets/toxic_spans.csv corpus/ner/ --use-ents
+      --shuffle --seed 42
+  deps:
+    - path: assets/toxic_spans.csv
+      md5: f924dc4e2735535260af4266b1d647a6
+  outs:
+    - path: corpus/spancat/toxic-spans-train.spacy
+      md5: e58371abda4c8e6813770c1793c6fbbd
+    - path: corpus/spancat/toxic-spans-dev.spacy
+      md5: f36c3faac9c6c6f848dd9a8fe13d1762
+    - path: corpus/spancat/toxic-spans-test.spacy
+      md5: 9e07ab17de257d9c214cfed877ab9e30
+    - path: corpus/ner/toxic-spans-train.spacy
+      md5: 07d4a52719d487a72197c2671345f9ac
+    - path: corpus/ner/toxic-spans-dev.spacy
+      md5: 19d282cb068bbb70274ccc47c0623c65
+    - path: corpus/ner/toxic-spans-test.spacy
+      md5: 0f963b3469ea99ee55aef454fd4ef90d
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77
+train-toxic-spans:
+  cmd: python -m spacy run train-toxic-spans
+  script:
+    - python -m spacy train configs/ner.cfg --output training/toxic-spans/ner/ --paths.train
+      corpus/ner/toxic-spans-train.spacy --paths.dev corpus/ner/toxic-spans-dev.spacy
+      --gpu-id 0
+    - python -m spacy train configs/spancat.cfg --output training/toxic-spans/spancat/
+      --paths.train corpus/spancat/toxic-spans-train.spacy --paths.dev corpus/spancat/toxic-spans-dev.spacy
+      --gpu-id 0
+  deps:
+    - path: corpus/spancat/toxic-spans-train.spacy
+      md5: e58371abda4c8e6813770c1793c6fbbd
+    - path: corpus/spancat/toxic-spans-dev.spacy
+      md5: f36c3faac9c6c6f848dd9a8fe13d1762
+    - path: corpus/ner/toxic-spans-train.spacy
+      md5: 07d4a52719d487a72197c2671345f9ac
+    - path: corpus/ner/toxic-spans-dev.spacy
+      md5: 19d282cb068bbb70274ccc47c0623c65
+  outs:
+    - path: training/toxic-spans/spancat/model-best
+      md5: 09aa3cf45d730409273cdb7eba550b9f
+    - path: training/toxic-spans/ner/model-best
+      md5: 2ecae7d4ba32bdd8f9f8d00b1ff81e11
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77
+evaluate-toxic-spans:
+  cmd: python -m spacy run evaluate-toxic-spans
+  script:
+    - mkdir -p metrics/toxic-spans/ner
+    - python -m spacy evaluate training/toxic-spans/ner/model-best corpus/ner/toxic-spans-test.spacy
+      --output metrics/toxic-spans/ner/scores.json
+    - mkdir -p metrics/toxic-spans/spancat
+    - python -m spacy evaluate training/toxic-spans/spancat/model-best corpus/spancat/toxic-spans-test.spacy
+      --output metrics/toxic-spans/spancat/scores.json
+  deps:
+    - path: training/toxic-spans/spancat/model-best
+      md5: 09aa3cf45d730409273cdb7eba550b9f
+    - path: corpus/spancat/toxic-spans-test.spacy
+      md5: 9e07ab17de257d9c214cfed877ab9e30
+    - path: training/toxic-spans/ner/model-best
+      md5: 2ecae7d4ba32bdd8f9f8d00b1ff81e11
+    - path: corpus/ner/toxic-spans-test.spacy
+      md5: 0f963b3469ea99ee55aef454fd4ef90d
+  outs:
+    - path: metrics/toxic-spans/ner/scores.json
+      md5: 00b4de44ccfe378d79a652c95052ac0c
+    - path: metrics/toxic-spans/spancat/scores.json
+      md5: a0f4f6fb955112ceac19e569bc597dc2
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77
