@@ -124,12 +124,21 @@ commands:
         --spans-key ${vars.spans_key}
         --shuffle
         --seed 42
+      - >-
+        python -m scripts.toxic_spans 
+        assets/toxic_spans.csv corpus/ner/
+        --use-ents
+        --shuffle
+        --seed 42
     deps:
       - assets/toxic_spans.csv
     outputs:
       - corpus/spancat/toxic-spans-train.spacy
       - corpus/spancat/toxic-spans-dev.spacy
       - corpus/spancat/toxic-spans-test.spacy
+      - corpus/ner/toxic-spans-train.spacy
+      - corpus/ner/toxic-spans-dev.spacy
+      - corpus/ner/toxic-spans-test.spacy
 
   - name: "train-toxic-spans"
     help: "Train ner and spancat models for the Toxic Spans dataset"
@@ -137,6 +146,13 @@ commands:
       - >-
         python -m spacy train
         configs/ner.cfg
+        --output training/toxic-spans/ner/
+        --paths.train corpus/ner/toxic-spans-train.spacy
+        --paths.dev corpus/ner/toxic-spans-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      - >-
+        python -m spacy train
+        configs/spancat.cfg
         --output training/toxic-spans/spancat/
         --paths.train corpus/spancat/toxic-spans-train.spacy
         --paths.dev corpus/spancat/toxic-spans-dev.spacy
@@ -144,12 +160,21 @@ commands:
     deps:
       - corpus/spancat/toxic-spans-train.spacy
       - corpus/spancat/toxic-spans-dev.spacy
+      - corpus/ner/toxic-spans-train.spacy
+      - corpus/ner/toxic-spans-dev.spacy
     outputs:
       - training/toxic-spans/spancat/model-best
+      - training/toxic-spans/ner/model-best
 
   - name: "evaluate-toxic-spans"
     help: "Evaluate models for the Toxic Spans dataset"
     script:
+      - "mkdir -p metrics/toxic-spans/ner"
+      - >-
+        python -m spacy evaluate
+        training/toxic-spans/ner/model-best
+        corpus/ner/toxic-spans-test.spacy
+        --output metrics/toxic-spans/ner/scores.json
       - "mkdir -p metrics/toxic-spans/spancat"
       - >-
         python -m spacy evaluate
@@ -159,7 +184,10 @@ commands:
     deps:
       - training/toxic-spans/spancat/model-best
       - corpus/spancat/toxic-spans-test.spacy
+      - training/toxic-spans/ner/model-best
+      - corpus/ner/toxic-spans-test.spacy
     outputs:
+      - metrics/toxic-spans/ner/scores.json
       - metrics/toxic-spans/spancat/scores.json
 
   - name: "convert-sec_filings"

@@ -56,7 +56,12 @@ def convert_toxic_spans(
                 span = doc.char_span(start, end, label=label, alignment_mode="expand")
                 spans.append(span)
             if use_ents:
-                doc.set_ents(spans)
+                try:
+                    doc.set_ents(spans)
+                except ValueError:
+                    # FIXME: There are 12 spans that overlap, but are mostly due to annotation errors
+                    # Will find a way to include them (or remove them altogether)
+                    pass
             else:
                 group = SpanGroup(doc, name=spans_key, spans=spans)
                 doc.spans[spans_key] = group
