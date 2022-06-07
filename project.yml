@@ -30,6 +30,11 @@ workflows:
     - "convert-wnut17"
     - "train-wnut17"
     - "evaluate-wnut17"
+  wikineural:
+    - "convert-wikineural-ents"
+    - "convert-wikineural-spans"
+    - "train-wikineural"
+    - "evaluate-wikineural"
 
 assets:
   - dest: "assets/sec_filings-train.iob"
@@ -688,6 +693,71 @@ commands:
       - training/en-wikineural/spancat/model-best
       - training/es-wikineural/spancat/model-best
       - training/nl-wikineural/spancat/model-best
+
+  - name: "evaluate-wikineural"
+    help: "Evaluate the results for the Wikineural datasets"
+    script:
+      # FIXME: There seems to be something wrong in the ConLL
+      # dataset for the 'de' test set, so I can't evaluate it yet
+      # Evaluate en dataset
+      - "mkdir -p metrics/en-wikineural/spancat"
+      - >-
+        python -m spacy evaluate
+        training/en-wikineural/spancat/model-best
+        corpus/spancat/en-wikineural-test.spacy
+        --output metrics/en-wikineural/spancat/scores.json
+      - "mkdir -p metrics/en-wikineural/ner"
+      - >-
+        python -m spacy evaluate
+        training/en-wikineural/ner/model-best
+        corpus/ner/en-wikineural-test.spacy
+        --output metrics/en-wikineural/ner/scores.json
+      # Evaluate es dataset
+      - "mkdir -p metrics/es-wikineural/spancat"
+      - >-
+        python -m spacy evaluate
+        training/es-wikineural/spancat/model-best
+        corpus/spancat/es-wikineural-test.spacy
+        --output metrics/es-wikineural/spancat/scores.json
+      - "mkdir -p metrics/es-wikineural/ner"
+      - >-
+        python -m spacy evaluate
+        training/es-wikineural/ner/model-best
+        corpus/ner/es-wikineural-test.spacy
+        --output metrics/es-wikineural/ner/scores.json
+      # Evaluate nl dataset
+      - "mkdir -p metrics/nl-wikineural/spancat"
+      - >-
+        python -m spacy evaluate
+        training/nl-wikineural/spancat/model-best
+        corpus/spancat/nl-wikineural-test.spacy
+        --output metrics/nl-wikineural/spancat/scores.json
+      - "mkdir -p metrics/nl-wikineural/ner"
+      - >-
+        python -m spacy evaluate
+        training/nl-wikineural/ner/model-best
+        corpus/ner/nl-wikineural-test.spacy
+        --output metrics/nl-wikineural/ner/scores.json
+    deps:
+      - training/en-wikineural/ner/model-best
+      - training/es-wikineural/ner/model-best
+      - training/nl-wikineural/ner/model-best
+      - training/en-wikineural/spancat/model-best
+      - training/es-wikineural/spancat/model-best
+      - training/nl-wikineural/spancat/model-best
+      - corpus/ner/en-wikineural-test.spacy
+      - corpus/ner/es-wikineural-test.spacy
+      - corpus/ner/nl-wikineural-test.spacy
+      - corpus/spancat/en-wikineural-test.spacy
+      - corpus/spancat/es-wikineural-test.spacy
+      - corpus/spancat/nl-wikineural-test.spacy
+    outputs:
+      - metrics/en-wikineural/ner/scores.json
+      - metrics/es-wikineural/ner/scores.json
+      - metrics/nl-wikineural/ner/scores.json
+      - metrics/en-wikineural/spancat/scores.json
+      - metrics/es-wikineural/spancat/scores.json
+      - metrics/nl-wikineural/spancat/scores.json
 
   - name: "clean"
     help: "Remove intermediary files"
