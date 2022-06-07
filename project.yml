@@ -109,7 +109,6 @@ commands:
   - name: "install"
     help: "Install dependencies"
     script:
-      - "pip install --user -r requirements.txt"
       - "python -m spacy download en_core_web_lg"
 
   - name: "convert-sec_filings"
