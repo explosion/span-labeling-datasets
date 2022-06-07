@@ -32,7 +32,11 @@ Commands are only re-run if their inputs have changed.
 | `train-anem` | Train an NER and Spancat model for AnEM |
 | `evaluate-anem` | Evaluate AnEM dataset |
 | `convert-wikigold` | Convert the Wikigold dataset into the spaCy format |
-| `convert-wikineural` | Convert WikiNeural dataset (de, en, es, nl) into the spaCy format |
+| `clean-wikineural` | Remove unnecessary indices from wikineural data |
+| `convert-wikineural-spans` | Convert WikiNeural dataset (de, en, es, nl) into the spaCy format |
+| `convert-wikineural-ents` | Convert WikiNeural dataset (de, en, es, nl) into the spaCy format |
+| `train-wikineural` | Train an ner and spancat model for Wikineural datasets |
+| `evaluate-wikineural` | Evaluate the results for the Wikineural datasets |
 | `clean` | Remove intermediary files |
 
 ### ⏭ Workflows
@@ -47,6 +51,7 @@ inputs have changed.
 | `anem` | `convert-anem` &rarr; `train-anem` &rarr; `evaluate-anem` |
 | `sec-filings` | `convert-sec_filings` &rarr; `train-sec_filings` &rarr; `evaluate-sec_filings` |
 | `wnut17` | `convert-wnut17` &rarr; `train-wnut17` &rarr; `evaluate-wnut17` |
+| `wikineural` | `clean-wikineural` &rarr; `convert-wikineural-ents` &rarr; `convert-wikineural-spans` &rarr; `train-wikineural` &rarr; `evaluate-wikineural` |
 
 ### 🗂 Assets
 
