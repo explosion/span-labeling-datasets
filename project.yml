@@ -101,6 +101,9 @@ assets:
   - dest: "assets/nl-wikineural-test.iob"
     description: "WikiNeural (nl) test dataset from Tedeschi et al. (EMNLP 2021)"
     url: https://github.com/Babelscape/wikineural/blob/master/data/conll/nl/test.conllu
+  - dest: "assets/toxic_spans.csv"
+    description: "Toxic Spans dataset from Pavlopoulos et al. (ACL 2022)"
+    url: https://github.com/ipavlopoulos/toxic_spans/blob/master/ACL2022/data/toxic_spans.csv
 
 commands:
   - name: "install"
