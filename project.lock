@@ -254,3 +254,57 @@ evaluate-sec_filings:
       md5: 827763662e7f408752468b92f1989748
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77
+train-wnut17:
+  cmd: python -m spacy run train-wnut17
+  script:
+    - python -m spacy train configs/ner.cfg --output training/wnut17/ner/ --paths.train
+      corpus/ner/wnut17-train.spacy --paths.dev corpus/ner/wnut17-dev.spacy --gpu-id
+      0
+    - python -m spacy train configs/spancat.cfg --output training/wnut17/spancat/
+      --paths.train corpus/spancat/wnut17-train.spacy --paths.dev corpus/spancat/wnut17-dev.spacy
+      --gpu-id 0
+  deps:
+    - path: corpus/spancat/wnut17-train.spacy
+      md5: dd45fa4bc875081618476cc6344c86de
+    - path: corpus/spancat/wnut17-dev.spacy
+      md5: cbf5e7a2eb0a6bf61ba93106df3ac927
+    - path: corpus/spancat/wnut17-test.spacy
+      md5: b304af219b4289a3e9f4885f70e6390f
+    - path: corpus/ner/wnut17-train.spacy
+      md5: a19d2e9c5d8339bf76703624bc209362
+    - path: corpus/ner/wnut17-dev.spacy
+      md5: 7770eca0c2d979f0d7096d8a00fb6fb9
+    - path: corpus/ner/wnut17-test.spacy
+      md5: 1ef6584f7606628871abab21f3ec7d6b
+  outs:
+    - path: training/wnut17/ner/model-best
+      md5: 4957c3024f9b528386b47752136500dc
+    - path: training/wnut17/spancat/model-best
+      md5: 451ec61d32c11d02e06aed86ad016c62
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77
+evaluate-wnut17:
+  cmd: python -m spacy run evaluate-wnut17
+  script:
+    - mkdir -p metrics/wnut17/spancat
+    - python -m spacy evaluate training/wnut17/spancat/model-best corpus/spancat/wnut17-test.spacy
+      --output metrics/wnut17/spancat/scores.json
+    - mkdir -p metrics/wnut17/ner
+    - python -m spacy evaluate training/wnut17/ner/model-best corpus/ner/wnut17-test.spacy
+      --output metrics/wnut17/ner/scores.json
+  deps:
+    - path: training/wnut17/ner/model-best
+      md5: 4957c3024f9b528386b47752136500dc
+    - path: training/wnut17/spancat/model-best
+      md5: 451ec61d32c11d02e06aed86ad016c62
+    - path: corpus/ner/wnut17-test.spacy
+      md5: 1ef6584f7606628871abab21f3ec7d6b
+    - path: corpus/spancat/wnut17-test.spacy
+      md5: b304af219b4289a3e9f4885f70e6390f
+  outs:
+    - path: metrics/wnut17/ner/scores.json
+      md5: 0ce02e24ebfc1e501c64e7f648790b02
+    - path: metrics/wnut17/spancat/scores.json
+      md5: b275938669c8436569643ef3254e896f
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77
