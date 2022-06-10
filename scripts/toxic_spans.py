@@ -4,9 +4,9 @@ import random
 from pathlib import Path
 from typing import Optional
 
-import typer
 import spacy
-from spacy.tokens import SpanGroup, Doc, DocBin
+import typer
+from spacy.tokens import Doc, DocBin, SpanGroup
 from wasabi import msg
 
 Arg = typer.Argument
