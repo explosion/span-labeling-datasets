@@ -109,11 +109,14 @@ assets:
     description: "Toxic Spans dataset from Pavlopoulos et al. (ACL 2022)"
     url: https://github.com/ipavlopoulos/toxic_spans/blob/master/ACL2022/data/toxic_spans.csv
   - dest: "assets/pdnc/"
-    description: "All datasets for the PDNC dataset"
+    description: "Raw text data for the PDNC dataset"
     git:
       repo: "https://github.com/Priya22/pdnc-lrec2022"
       branch: "master"
       path: "data"
+  - dest: "assets/pdnc/list_of_novels.txt"
+    description: "Novel list for the PDNC dataset as reference"
+    url: https://github.com/Priya22/pdnc-lrec2022/blob/master/ListOfNovels.txt
 
 commands:
   - name: "install"
