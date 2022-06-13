@@ -716,10 +716,10 @@ convert-pdnc:
       md5: dff27d3064a94af6c227c0b7556799c2
   outs:
     - path: corpus/spancat/pdnc-train.spacy
-      md5: null
+      md5: 6cc872dca9061c326a61de1296456deb
     - path: corpus/spancat/pdnc-dev.spacy
-      md5: null
+      md5: ea408d3b12c7ba19b641a13a916aa182
     - path: corpus/spancat/pdnc-test.spacy
-      md5: null
+      md5: deeb6ed4732480ca5fedb5aef211cbab
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77
