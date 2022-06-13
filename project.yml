@@ -40,6 +40,10 @@ workflows:
     - "convert-toxic-spans"
     - "train-toxic-spans"
     - "evaluate-toxic-spans"
+  pdnc:
+    - "convert-pdnc"
+    - "train-pdnc"
+    - "evaluate-pdnc"
 
 assets:
   - dest: "assets/sec_filings-train.iob"
@@ -123,6 +127,78 @@ commands:
     help: "Install dependencies"
     script:
       - "python -m spacy download en_core_web_lg"
+
+  - name: "convert-pdnc"
+    help: "Convert the PDNC dataset into the spaCy format"
+    script:
+      - >-
+        python -m scripts.pdnc 
+        assets/pdnc corpus/spancat/
+        --spans-key ${vars.spans_key}
+        --shuffle
+        --seed 42
+      - >-
+        python -m scripts.pdnc 
+        assets/pdnc corpus/ner/
+        --use-ents
+        --shuffle
+        --seed 42
+    deps:
+      - assets/pdnc
+    outputs:
+      - corpus/spancat/pdnc-train.spacy
+      - corpus/spancat/pdnc-dev.spacy
+      - corpus/spancat/pdnc-test.spacy
+
+  - name: "train-pdnc"
+    help: "Train ner and spancat models for the PDNC dataset"
+    script:
+      - >-
+        python -m spacy train
+        configs/ner.cfg
+        --output training/pdnc/ner/
+        --paths.train corpus/ner/pdnc-train.spacy
+        --paths.dev corpus/ner/pdnc-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      - >-
+        python -m spacy train
+        configs/spancat.cfg
+        --output training/pdnc/spancat/
+        --paths.train corpus/spancat/pdnc-train.spacy
+        --paths.dev corpus/spancat/pdnc-dev.spacy
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - corpus/spancat/pdnc-train.spacy
+      - corpus/spancat/pdnc-dev.spacy
+      - corpus/ner/pdnc-train.spacy
+      - corpus/ner/pdnc-dev.spacy
+    outputs:
+      - training/pdnc/spancat/model-best
+      - training/pdnc/ner/model-best
+
+  - name: "evaluate-pdnc"
+    help: "Evaluate models for the PDNC dataset"
+    script:
+      - "mkdir -p metrics/pdnc/ner"
+      - >-
+        python -m spacy evaluate
+        training/pdnc/ner/model-best
+        corpus/ner/pdnc-test.spacy
+        --output metrics/pdnc/ner/scores.json
+      - "mkdir -p metrics/pdnc/spancat"
+      - >-
+        python -m spacy evaluate
+        training/pdnc/spancat/model-best
+        corpus/spancat/pdnc-test.spacy
+        --output metrics/pdnc/spancat/scores.json
+    deps:
+      - training/pdnc/spancat/model-best
+      - corpus/spancat/pdnc-test.spacy
+      - training/pdnc/ner/model-best
+      - corpus/ner/pdnc-test.spacy
+    outputs:
+      - metrics/pdnc/ner/scores.json
+      - metrics/pdnc/spancat/scores.json
 
   - name: "convert-toxic-spans"
     help: "Convert Toxic Spans dataset into the spaCy format"

@@ -21,6 +21,9 @@ Commands are only re-run if their inputs have changed.
 | Command | Description |
 | --- | --- |
 | `install` | Install dependencies |
+| `convert-pdnc` | Convert the PDNC dataset into the spaCy format |
+| `train-pdnc` | Train ner and spancat models for the PDNC dataset |
+| `evaluate-pdnc` | Evaluate models for the PDNC dataset |
 | `convert-toxic-spans` | Convert Toxic Spans dataset into the spaCy format |
 | `train-toxic-spans` | Train ner and spancat models for the Toxic Spans dataset |
 | `evaluate-toxic-spans` | Evaluate models for the Toxic Spans dataset |
@@ -56,6 +59,7 @@ inputs have changed.
 | `wnut17` | `convert-wnut17` &rarr; `train-wnut17` &rarr; `evaluate-wnut17` |
 | `wikineural` | `clean-wikineural` &rarr; `convert-wikineural-ents` &rarr; `convert-wikineural-spans` &rarr; `train-wikineural` &rarr; `evaluate-wikineural` |
 | `toxic-spans` | `convert-toxic-spans` &rarr; `train-toxic-spans` &rarr; `evaluate-toxic-spans` |
+| `pdnc` | `convert-pdnc` &rarr; `train-pdnc` &rarr; `evaluate-pdnc` |
 
 ### 🗂 Assets
 
@@ -87,5 +91,7 @@ in the project directory.
 | `assets/nl-wikineural-dev.iob` | URL | WikiNeural (nl) dev dataset from Tedeschi et al. (EMNLP 2021) |
 | `assets/nl-wikineural-test.iob` | URL | WikiNeural (nl) test dataset from Tedeschi et al. (EMNLP 2021) |
 | `assets/toxic_spans.csv` | URL | Toxic Spans dataset from Pavlopoulos et al. (ACL 2022) |
+| `assets/pdnc/` | Git | Raw text data for the PDNC dataset |
+| `assets/pdnc/list_of_novels.txt` | URL | Novel list for the PDNC dataset as reference |
 
 <!-- SPACY PROJECT: AUTO-GENERATED DOCS END (do not remove) -->
