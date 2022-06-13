@@ -702,3 +702,24 @@ evaluate-toxic-spans:
       md5: a0f4f6fb955112ceac19e569bc597dc2
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77
+convert-pdnc:
+  cmd: python -m spacy run convert-pdnc
+  script:
+    - python -m scripts.pdnc  assets/pdnc corpus/spancat/ assets/pdnc/list_of_novels.txt
+      --spans-key sc --shuffle --seed 42
+    - python -m scripts.pdnc  assets/pdnc corpus/ner/ assets/pdnc/list_of_novels.txt
+      --use-ents --shuffle --seed 42
+  deps:
+    - path: assets/pdnc
+      md5: dba66c2bdc78ef7cc9d5970d7196f694
+    - path: assets/pdnc/list_of_novels.txt
+      md5: dff27d3064a94af6c227c0b7556799c2
+  outs:
+    - path: corpus/spancat/pdnc-train.spacy
+      md5: null
+    - path: corpus/spancat/pdnc-dev.spacy
+      md5: null
+    - path: corpus/spancat/pdnc-test.spacy
+      md5: null
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77

@@ -14,7 +14,7 @@ from wasabi import msg
 Arg = typer.Argument
 Opt = typer.Option
 
-ID = "pndc"
+ID = "pdnc"
 TRAIN_SIZE = 0.8
 DEV_SIZE = 0.1
 TEST_SIZE = 0.1
