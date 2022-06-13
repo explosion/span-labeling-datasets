@@ -134,17 +134,20 @@ commands:
       - >-
         python -m scripts.pdnc 
         assets/pdnc corpus/spancat/
+        assets/pdnc/list_of_novels.txt
         --spans-key ${vars.spans_key}
         --shuffle
         --seed 42
       - >-
         python -m scripts.pdnc 
         assets/pdnc corpus/ner/
+        assets/pdnc/list_of_novels.txt
         --use-ents
         --shuffle
         --seed 42
     deps:
       - assets/pdnc
+      - assets/pdnc/list_of_novels.txt
     outputs:
       - corpus/spancat/pdnc-train.spacy
       - corpus/spancat/pdnc-dev.spacy
