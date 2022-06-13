@@ -163,6 +163,7 @@ commands:
         --paths.train corpus/ner/pdnc-train.spacy
         --paths.dev corpus/ner/pdnc-dev.spacy
         --gpu-id ${vars.gpu_id}
+        --nlp.batch_size 1
       - >-
         python -m spacy train
         configs/spancat.cfg
@@ -170,6 +171,7 @@ commands:
         --paths.train corpus/spancat/pdnc-train.spacy
         --paths.dev corpus/spancat/pdnc-dev.spacy
         --gpu-id ${vars.gpu_id}
+        --nlp.batch_size 1
     deps:
       - corpus/spancat/pdnc-train.spacy
       - corpus/spancat/pdnc-dev.spacy
