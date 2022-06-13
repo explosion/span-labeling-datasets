@@ -37,6 +37,7 @@ def create_doc_from_novel(
     spans_key: str = "sc",
 ) -> Doc:
     nlp = spacy.blank("en")
+    nlp.add_pipe("sentencizer")
 
     # Process text
     text_path = input_dir / name / "text.txt"
@@ -105,6 +106,13 @@ def main(
         docs.append(doc)
 
     msg.info(f"Processed {len(docs)} docs")
+
+    if shuffle:
+        msg.info("Shufling docs before splitting")
+        if seed:
+            msg.info(f"Using random seed '{seed}'")
+            random.seed(seed)
+        random.shuffle(docs)
 
     # Separate training and test
     train_dev_size = int(len(docs) * (TRAIN_SIZE + DEV_SIZE))
