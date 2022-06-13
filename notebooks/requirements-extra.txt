@@ -1,0 +1,4 @@
+altair
+matplotlib
+jupyterlab
+pandas
