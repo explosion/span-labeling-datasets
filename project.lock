@@ -233,25 +233,25 @@ evaluate-sec_filings:
   cmd: python -m spacy run evaluate-sec_filings
   script:
     - mkdir -p metrics/sec_filings/spancat
-    - python -m spacy evaluate training/sec_filings/spancat/model-best corpus/spancat/sec_filings-test.spacy
+    - python -m spacy evaluate training/sec_filings/spancat/model-best corpus/spancat/sec_filings-train-dev.spacy
       --output metrics/sec_filings/spancat/scores.json
     - mkdir -p metrics/sec_filings/ner
-    - python -m spacy evaluate training/sec_filings/ner/model-best corpus/ner/sec_filings-test.spacy
+    - python -m spacy evaluate training/sec_filings/ner/model-best corpus/ner/sec_filings-train-dev.spacy
       --output metrics/sec_filings/ner/scores.json
   deps:
     - path: training/sec_filings/ner/model-best
       md5: d3ba5c997d0890b15b5873cec9da5e00
     - path: training/sec_filings/spancat/model-best
       md5: b540a1d86b7de58f4a0459e53d7f9b8f
-    - path: corpus/ner/sec_filings-test.spacy
-      md5: 3e6bb5306f2071443668aac315b54191
-    - path: corpus/spancat/sec_filings-test.spacy
-      md5: 575318b3f4f3be891744ed694283d479
+    - path: corpus/ner/sec_filings-train-dev.spacy
+      md5: c51ce48b46d25fa2c1d98b8e8fef32e3
+    - path: corpus/spancat/sec_filings-train-dev.spacy
+      md5: 09d506663cdbb59ccb74787b95ca6125
   outs:
     - path: metrics/sec_filings/ner/scores.json
-      md5: 79747710cba156913c09c83b552a1fb8
+      md5: c6436068680bb771cfb679a3b7d0f98f
     - path: metrics/sec_filings/spancat/scores.json
-      md5: 827763662e7f408752468b92f1989748
+      md5: 7d4969a3bbbda12fd0c398f575ab7a77
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77
 train-wnut17:
@@ -287,25 +287,25 @@ evaluate-wnut17:
   cmd: python -m spacy run evaluate-wnut17
   script:
     - mkdir -p metrics/wnut17/spancat
-    - python -m spacy evaluate training/wnut17/spancat/model-best corpus/spancat/wnut17-test.spacy
-      --output metrics/wnut17/spancat/scores.json
+    - python -m spacy evaluate training/wnut17/spancat/model-best corpus/spancat/wnut17-dev.spacy
+      --output metrics/wnut17/spancat/scores.json --gpu-id 0
     - mkdir -p metrics/wnut17/ner
-    - python -m spacy evaluate training/wnut17/ner/model-best corpus/ner/wnut17-test.spacy
-      --output metrics/wnut17/ner/scores.json
+    - python -m spacy evaluate training/wnut17/ner/model-best corpus/ner/wnut17-dev.spacy
+      --output metrics/wnut17/ner/scores.json --gpu-id 0
   deps:
     - path: training/wnut17/ner/model-best
       md5: 4957c3024f9b528386b47752136500dc
     - path: training/wnut17/spancat/model-best
       md5: 451ec61d32c11d02e06aed86ad016c62
-    - path: corpus/ner/wnut17-test.spacy
-      md5: 1ef6584f7606628871abab21f3ec7d6b
-    - path: corpus/spancat/wnut17-test.spacy
-      md5: b304af219b4289a3e9f4885f70e6390f
+    - path: corpus/ner/wnut17-dev.spacy
+      md5: 7770eca0c2d979f0d7096d8a00fb6fb9
+    - path: corpus/spancat/wnut17-dev.spacy
+      md5: cbf5e7a2eb0a6bf61ba93106df3ac927
   outs:
     - path: metrics/wnut17/ner/scores.json
-      md5: 0ce02e24ebfc1e501c64e7f648790b02
+      md5: 51610d3a522fc5a47f69f5f955a8caa2
     - path: metrics/wnut17/spancat/scores.json
-      md5: b275938669c8436569643ef3254e896f
+      md5: a920e20d2219338ed1cfd2506ea91dc4
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77
 clean-wikineural:
@@ -570,22 +570,22 @@ evaluate-wikineural:
   cmd: python -m spacy run evaluate-wikineural
   script:
     - mkdir -p metrics/en-wikineural/spancat
-    - python -m spacy evaluate training/en-wikineural/spancat/model-best corpus/spancat/en-wikineural-test.spacy
+    - python -m spacy evaluate training/en-wikineural/spancat/model-best corpus/spancat/en-wikineural-dev.spacy
       --output metrics/en-wikineural/spancat/scores.json
     - mkdir -p metrics/en-wikineural/ner
-    - python -m spacy evaluate training/en-wikineural/ner/model-best corpus/ner/en-wikineural-test.spacy
+    - python -m spacy evaluate training/en-wikineural/ner/model-best corpus/ner/en-wikineural-dev.spacy
       --output metrics/en-wikineural/ner/scores.json
     - mkdir -p metrics/es-wikineural/spancat
-    - python -m spacy evaluate training/es-wikineural/spancat/model-best corpus/spancat/es-wikineural-test.spacy
+    - python -m spacy evaluate training/es-wikineural/spancat/model-best corpus/spancat/es-wikineural-dev.spacy
       --output metrics/es-wikineural/spancat/scores.json
     - mkdir -p metrics/es-wikineural/ner
-    - python -m spacy evaluate training/es-wikineural/ner/model-best corpus/ner/es-wikineural-test.spacy
+    - python -m spacy evaluate training/es-wikineural/ner/model-best corpus/ner/es-wikineural-dev.spacy
       --output metrics/es-wikineural/ner/scores.json
     - mkdir -p metrics/nl-wikineural/spancat
-    - python -m spacy evaluate training/nl-wikineural/spancat/model-best corpus/spancat/nl-wikineural-test.spacy
+    - python -m spacy evaluate training/nl-wikineural/spancat/model-best corpus/spancat/nl-wikineural-dev.spacy
       --output metrics/nl-wikineural/spancat/scores.json
     - mkdir -p metrics/nl-wikineural/ner
-    - python -m spacy evaluate training/nl-wikineural/ner/model-best corpus/ner/nl-wikineural-test.spacy
+    - python -m spacy evaluate training/nl-wikineural/ner/model-best corpus/ner/nl-wikineural-dev.spacy
       --output metrics/nl-wikineural/ner/scores.json
   deps:
     - path: training/en-wikineural/ner/model-best
@@ -600,31 +600,31 @@ evaluate-wikineural:
       md5: 0bdbf90642bf9372aa8aad35cb1c559e
     - path: training/nl-wikineural/spancat/model-best
       md5: aa53a809293c03b4ef584a7fb1774f79
-    - path: corpus/ner/en-wikineural-test.spacy
-      md5: f9891343a1ad0f15fca61c33915226ca
-    - path: corpus/ner/es-wikineural-test.spacy
-      md5: 7076f1926a9ac934da057740999320f7
-    - path: corpus/ner/nl-wikineural-test.spacy
-      md5: 9b908ae0e75e3dbd7179ddf8f47ef478
-    - path: corpus/spancat/en-wikineural-test.spacy
-      md5: 5c9ec598859ce7175cb6e5f77116e499
-    - path: corpus/spancat/es-wikineural-test.spacy
-      md5: 8ec83ba37c71811554170cbb6353a17e
-    - path: corpus/spancat/nl-wikineural-test.spacy
-      md5: bcb2fb22ed157144d1b6e5e33745462d
+    - path: corpus/ner/en-wikineural-dev.spacy
+      md5: e2280eb88b325121ef7225872ad604e4
+    - path: corpus/ner/es-wikineural-dev.spacy
+      md5: 987fe21c4f4200a38421128bf8dbf520
+    - path: corpus/ner/nl-wikineural-dev.spacy
+      md5: 2bb5c8e0e89d58dc46353f7bb4c791e0
+    - path: corpus/spancat/en-wikineural-dev.spacy
+      md5: 55c333bca6e29c44ca7279e742f07e99
+    - path: corpus/spancat/es-wikineural-dev.spacy
+      md5: fa4e4d8f768e520cc2bfb0e2016d91c0
+    - path: corpus/spancat/nl-wikineural-dev.spacy
+      md5: 36f7edaab7980ecef75ac02affa25cd3
   outs:
     - path: metrics/en-wikineural/ner/scores.json
-      md5: 2d8cb0040602ed77fedfddb465116ce4
+      md5: bd8efee8ccea6d1cdcb12b43f1eda4e6
     - path: metrics/es-wikineural/ner/scores.json
-      md5: 1d6e777d83a18af50946d21775f5744e
+      md5: fed582c544526eefa813761c2ae3b5d5
     - path: metrics/nl-wikineural/ner/scores.json
-      md5: f1569054dbec62a13b314d22fc2f270f
+      md5: 6544cddf3d1314f9cf6a834b0f12f49d
     - path: metrics/en-wikineural/spancat/scores.json
-      md5: 624a7080b676af88d295f534503b27a0
+      md5: 980208c058b743b064d0514befadab06
     - path: metrics/es-wikineural/spancat/scores.json
-      md5: 199cf5cec17482f2841fd04b2fa688e2
+      md5: 2dbd9bcb25f9860fa3211d2f7f29a6d2
     - path: metrics/nl-wikineural/spancat/scores.json
-      md5: 13355649085dd04e3f377329856e92a5
+      md5: 4e2763e1ef4b88b619b6aa40584e3bca
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77
 convert-toxic-spans:
@@ -681,24 +681,24 @@ evaluate-toxic-spans:
   cmd: python -m spacy run evaluate-toxic-spans
   script:
     - mkdir -p metrics/toxic-spans/ner
-    - python -m spacy evaluate training/toxic-spans/ner/model-best corpus/ner/toxic-spans-test.spacy
-      --output metrics/toxic-spans/ner/scores.json
+    - python -m spacy evaluate training/toxic-spans/ner/model-best corpus/ner/toxic-spans-dev.spacy
+      --output metrics/toxic-spans/ner/scores.json --gpu-id 0
     - mkdir -p metrics/toxic-spans/spancat
-    - python -m spacy evaluate training/toxic-spans/spancat/model-best corpus/spancat/toxic-spans-test.spacy
-      --output metrics/toxic-spans/spancat/scores.json
+    - python -m spacy evaluate training/toxic-spans/spancat/model-best corpus/spancat/toxic-spans-dev.spacy
+      --output metrics/toxic-spans/spancat/scores.json --gpu-id 0
   deps:
     - path: training/toxic-spans/spancat/model-best
       md5: 09aa3cf45d730409273cdb7eba550b9f
-    - path: corpus/spancat/toxic-spans-test.spacy
-      md5: 9e07ab17de257d9c214cfed877ab9e30
+    - path: corpus/spancat/toxic-spans-dev.spacy
+      md5: f36c3faac9c6c6f848dd9a8fe13d1762
     - path: training/toxic-spans/ner/model-best
       md5: 2ecae7d4ba32bdd8f9f8d00b1ff81e11
-    - path: corpus/ner/toxic-spans-test.spacy
-      md5: 0f963b3469ea99ee55aef454fd4ef90d
+    - path: corpus/ner/toxic-spans-dev.spacy
+      md5: 19d282cb068bbb70274ccc47c0623c65
   outs:
     - path: metrics/toxic-spans/ner/scores.json
-      md5: 00b4de44ccfe378d79a652c95052ac0c
+      md5: 59ca19a7d616df25e20807463e19682e
     - path: metrics/toxic-spans/spancat/scores.json
-      md5: a0f4f6fb955112ceac19e569bc597dc2
+      md5: 83b7f6039a5acbacab1667fc4382d771
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77

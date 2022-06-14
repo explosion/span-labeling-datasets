@@ -175,12 +175,14 @@ commands:
         training/toxic-spans/ner/model-best
         corpus/ner/toxic-spans-dev.spacy
         --output metrics/toxic-spans/ner/scores.json
+        --gpu-id ${vars.gpu_id}
       - "mkdir -p metrics/toxic-spans/spancat"
       - >-
         python -m spacy evaluate
         training/toxic-spans/spancat/model-best
         corpus/spancat/toxic-spans-dev.spacy
         --output metrics/toxic-spans/spancat/scores.json
+        --gpu-id ${vars.gpu_id}
     deps:
       - training/toxic-spans/spancat/model-best
       - corpus/spancat/toxic-spans-dev.spacy
@@ -356,12 +358,14 @@ commands:
         training/wnut17/spancat/model-best
         corpus/spancat/wnut17-dev.spacy
         --output metrics/wnut17/spancat/scores.json
+        --gpu-id ${vars.gpu_id}
       - "mkdir -p metrics/wnut17/ner"
       - >-
         python -m spacy evaluate
         training/wnut17/ner/model-best
         corpus/ner/wnut17-dev.spacy
         --output metrics/wnut17/ner/scores.json
+        --gpu-id ${vars.gpu_id}
     deps:
       - training/wnut17/ner/model-best
       - training/wnut17/spancat/model-best
@@ -460,11 +464,13 @@ commands:
         training/anem/spancat/model-best
         corpus/spancat/anem-train-dev.spacy
         --output metrics/anem/spancat/scores.json
+        --gpu-id ${vars.gpu_id}
       - "mkdir -p metrics/anem/ner"
       - >-
         python -m spacy evaluate
         training/anem/ner/model-best
         corpus/ner/anem-train-dev.spacy
+        --gpu-id ${vars.gpu_id}
         --output metrics/anem/ner/scores.json
     deps:
       - training/anem/ner/model-best
@@ -805,12 +811,14 @@ commands:
         python -m spacy evaluate
         training/en-wikineural/spancat/model-best
         corpus/spancat/en-wikineural-dev.spacy
+        --gpu-id ${vars.gpu_id}
         --output metrics/en-wikineural/spancat/scores.json
       - "mkdir -p metrics/en-wikineural/ner"
       - >-
         python -m spacy evaluate
         training/en-wikineural/ner/model-best
         corpus/ner/en-wikineural-dev.spacy
+        --gpu-id ${vars.gpu_id}
         --output metrics/en-wikineural/ner/scores.json
       # Evaluate es dataset
       - "mkdir -p metrics/es-wikineural/spancat"
@@ -818,12 +826,14 @@ commands:
         python -m spacy evaluate
         training/es-wikineural/spancat/model-best
         corpus/spancat/es-wikineural-dev.spacy
+        --gpu-id ${vars.gpu_id}
         --output metrics/es-wikineural/spancat/scores.json
       - "mkdir -p metrics/es-wikineural/ner"
       - >-
         python -m spacy evaluate
         training/es-wikineural/ner/model-best
         corpus/ner/es-wikineural-dev.spacy
+        --gpu-id ${vars.gpu_id}
         --output metrics/es-wikineural/ner/scores.json
       # Evaluate nl dataset
       - "mkdir -p metrics/nl-wikineural/spancat"
@@ -831,12 +841,14 @@ commands:
         python -m spacy evaluate
         training/nl-wikineural/spancat/model-best
         corpus/spancat/nl-wikineural-dev.spacy
+        --gpu-id ${vars.gpu_id}
         --output metrics/nl-wikineural/spancat/scores.json
       - "mkdir -p metrics/nl-wikineural/ner"
       - >-
         python -m spacy evaluate
         training/nl-wikineural/ner/model-best
         corpus/ner/nl-wikineural-dev.spacy
+        --gpu-id ${vars.gpu_id}
         --output metrics/nl-wikineural/ner/scores.json
     deps:
       - training/en-wikineural/ner/model-best
