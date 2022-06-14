@@ -173,19 +173,19 @@ commands:
       - >-
         python -m spacy evaluate
         training/toxic-spans/ner/model-best
-        corpus/ner/toxic-spans-test.spacy
+        corpus/ner/toxic-spans-dev.spacy
         --output metrics/toxic-spans/ner/scores.json
       - "mkdir -p metrics/toxic-spans/spancat"
       - >-
         python -m spacy evaluate
         training/toxic-spans/spancat/model-best
-        corpus/spancat/toxic-spans-test.spacy
+        corpus/spancat/toxic-spans-dev.spacy
         --output metrics/toxic-spans/spancat/scores.json
     deps:
       - training/toxic-spans/spancat/model-best
-      - corpus/spancat/toxic-spans-test.spacy
+      - corpus/spancat/toxic-spans-dev.spacy
       - training/toxic-spans/ner/model-best
-      - corpus/ner/toxic-spans-test.spacy
+      - corpus/ner/toxic-spans-dev.spacy
     outputs:
       - metrics/toxic-spans/ner/scores.json
       - metrics/toxic-spans/spancat/scores.json
@@ -264,19 +264,19 @@ commands:
       - >-
         python -m spacy evaluate
         training/sec_filings/spancat/model-best
-        corpus/spancat/sec_filings-test.spacy
+        corpus/spancat/sec_filings-train-dev.spacy
         --output metrics/sec_filings/spancat/scores.json
       - "mkdir -p metrics/sec_filings/ner"
       - >-
         python -m spacy evaluate
         training/sec_filings/ner/model-best
-        corpus/ner/sec_filings-test.spacy
+        corpus/ner/sec_filings-train-dev.spacy
         --output metrics/sec_filings/ner/scores.json
     deps:
       - training/sec_filings/ner/model-best
       - training/sec_filings/spancat/model-best
-      - corpus/ner/sec_filings-test.spacy
-      - corpus/spancat/sec_filings-test.spacy
+      - corpus/ner/sec_filings-train-dev.spacy
+      - corpus/spancat/sec_filings-train-dev.spacy
     outputs:
       - metrics/sec_filings/ner/scores.json
       - metrics/sec_filings/spancat/scores.json
@@ -354,19 +354,19 @@ commands:
       - >-
         python -m spacy evaluate
         training/wnut17/spancat/model-best
-        corpus/spancat/wnut17-test.spacy
+        corpus/spancat/wnut17-dev.spacy
         --output metrics/wnut17/spancat/scores.json
       - "mkdir -p metrics/wnut17/ner"
       - >-
         python -m spacy evaluate
         training/wnut17/ner/model-best
-        corpus/ner/wnut17-test.spacy
+        corpus/ner/wnut17-dev.spacy
         --output metrics/wnut17/ner/scores.json
     deps:
       - training/wnut17/ner/model-best
       - training/wnut17/spancat/model-best
-      - corpus/ner/wnut17-test.spacy
-      - corpus/spancat/wnut17-test.spacy
+      - corpus/ner/wnut17-dev.spacy
+      - corpus/spancat/wnut17-dev.spacy
     outputs:
       - metrics/wnut17/ner/scores.json
       - metrics/wnut17/spancat/scores.json
@@ -458,19 +458,19 @@ commands:
       - >-
         python -m spacy evaluate
         training/anem/spancat/model-best
-        corpus/spancat/anem-test.spacy
+        corpus/spancat/anem-train-dev.spacy
         --output metrics/anem/spancat/scores.json
       - "mkdir -p metrics/anem/ner"
       - >-
         python -m spacy evaluate
         training/anem/ner/model-best
-        corpus/ner/anem-test.spacy
+        corpus/ner/anem-train-dev.spacy
         --output metrics/anem/ner/scores.json
     deps:
       - training/anem/ner/model-best
       - training/anem/spancat/model-best
-      - corpus/ner/anem-test.spacy
-      - corpus/spancat/anem-test.spacy
+      - corpus/ner/anem-train-dev.spacy
+      - corpus/spancat/anem-train-dev.spacy
     outputs:
       - metrics/anem/ner/scores.json
       - metrics/anem/spancat/scores.json
@@ -804,39 +804,39 @@ commands:
       - >-
         python -m spacy evaluate
         training/en-wikineural/spancat/model-best
-        corpus/spancat/en-wikineural-test.spacy
+        corpus/spancat/en-wikineural-dev.spacy
         --output metrics/en-wikineural/spancat/scores.json
       - "mkdir -p metrics/en-wikineural/ner"
       - >-
         python -m spacy evaluate
         training/en-wikineural/ner/model-best
-        corpus/ner/en-wikineural-test.spacy
+        corpus/ner/en-wikineural-dev.spacy
         --output metrics/en-wikineural/ner/scores.json
       # Evaluate es dataset
       - "mkdir -p metrics/es-wikineural/spancat"
       - >-
         python -m spacy evaluate
         training/es-wikineural/spancat/model-best
-        corpus/spancat/es-wikineural-test.spacy
+        corpus/spancat/es-wikineural-dev.spacy
         --output metrics/es-wikineural/spancat/scores.json
       - "mkdir -p metrics/es-wikineural/ner"
       - >-
         python -m spacy evaluate
         training/es-wikineural/ner/model-best
-        corpus/ner/es-wikineural-test.spacy
+        corpus/ner/es-wikineural-dev.spacy
         --output metrics/es-wikineural/ner/scores.json
       # Evaluate nl dataset
       - "mkdir -p metrics/nl-wikineural/spancat"
       - >-
         python -m spacy evaluate
         training/nl-wikineural/spancat/model-best
-        corpus/spancat/nl-wikineural-test.spacy
+        corpus/spancat/nl-wikineural-dev.spacy
         --output metrics/nl-wikineural/spancat/scores.json
       - "mkdir -p metrics/nl-wikineural/ner"
       - >-
         python -m spacy evaluate
         training/nl-wikineural/ner/model-best
-        corpus/ner/nl-wikineural-test.spacy
+        corpus/ner/nl-wikineural-dev.spacy
         --output metrics/nl-wikineural/ner/scores.json
     deps:
       - training/en-wikineural/ner/model-best
@@ -845,12 +845,12 @@ commands:
       - training/en-wikineural/spancat/model-best
       - training/es-wikineural/spancat/model-best
       - training/nl-wikineural/spancat/model-best
-      - corpus/ner/en-wikineural-test.spacy
-      - corpus/ner/es-wikineural-test.spacy
-      - corpus/ner/nl-wikineural-test.spacy
-      - corpus/spancat/en-wikineural-test.spacy
-      - corpus/spancat/es-wikineural-test.spacy
-      - corpus/spancat/nl-wikineural-test.spacy
+      - corpus/ner/en-wikineural-dev.spacy
+      - corpus/ner/es-wikineural-dev.spacy
+      - corpus/ner/nl-wikineural-dev.spacy
+      - corpus/spancat/en-wikineural-dev.spacy
+      - corpus/spancat/es-wikineural-dev.spacy
+      - corpus/spancat/nl-wikineural-dev.spacy
     outputs:
       - metrics/en-wikineural/ner/scores.json
       - metrics/es-wikineural/ner/scores.json
