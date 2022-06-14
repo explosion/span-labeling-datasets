@@ -702,3 +702,50 @@ evaluate-toxic-spans:
       md5: 83b7f6039a5acbacab1667fc4382d771
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77
+train-anem:
+  cmd: python -m spacy run train-anem
+  script:
+    - python -m spacy train configs/spancat.cfg --output training/anem/spancat/ --paths.train
+      corpus/spancat/anem-train.spacy --paths.dev corpus/spancat/anem-train-dev.spacy
+      --gpu-id 0
+  deps:
+    - path: corpus/ner/anem-train.spacy
+      md5: d41b86efa7ab39e09d793090a54a388b
+    - path: corpus/ner/anem-train-dev.spacy
+      md5: cba41ba4b7c73152be9a6c7b541704e7
+    - path: corpus/spancat/anem-train.spacy
+      md5: 08564f041b2acdfc766b008fcb129c73
+    - path: corpus/spancat/anem-train-dev.spacy
+      md5: f666ed6ccfe2b66737efa458135931f2
+  outs:
+    - path: training/anem/ner/model-best
+      md5: f7e67e9a61090843d76b0a69314e9e07
+    - path: training/anem/spancat/model-best
+      md5: 65fcd888bc4f6e5bb97393ce73edd8c1
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77
+evaluate-anem:
+  cmd: python -m spacy run evaluate-anem
+  script:
+    - mkdir -p metrics/anem/spancat
+    - python -m spacy evaluate training/anem/spancat/model-best corpus/spancat/anem-train-dev.spacy
+      --output metrics/anem/spancat/scores.json --gpu-id 0
+    - mkdir -p metrics/anem/ner
+    - python -m spacy evaluate training/anem/ner/model-best corpus/ner/anem-train-dev.spacy
+      --gpu-id 0 --output metrics/anem/ner/scores.json
+  deps:
+    - path: training/anem/ner/model-best
+      md5: f7e67e9a61090843d76b0a69314e9e07
+    - path: training/anem/spancat/model-best
+      md5: 65fcd888bc4f6e5bb97393ce73edd8c1
+    - path: corpus/ner/anem-train-dev.spacy
+      md5: cba41ba4b7c73152be9a6c7b541704e7
+    - path: corpus/spancat/anem-train-dev.spacy
+      md5: f666ed6ccfe2b66737efa458135931f2
+  outs:
+    - path: metrics/anem/ner/scores.json
+      md5: 9a08bdec1e967f6061b40952efb5bf28
+    - path: metrics/anem/spancat/scores.json
+      md5: fc73bd02479ea88037bb7fd3772eef32
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77
