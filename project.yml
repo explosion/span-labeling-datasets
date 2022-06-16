@@ -110,7 +110,7 @@ assets:
     url: https://github.com/ipavlopoulos/toxic_spans/blob/master/ACL2022/data/toxic_spans.csv
   - dest: "assets/archaeo.bio"
     description: "Dutch Archaeological NER dataset by Alex Brandsen (LREC 2020)"
-    url: https://github.com/alexbrandsen/dutch-archaeo-NER-dataset/blob/master/complete-bio-gs.bio
+    url: https://github.com/alexbrandsen/dutch-archaeo-NER-dataset/blob/master/complete-bio-gs-with-sentence-ids-no-subPOS.bio
 
 commands:
   - name: "install"
@@ -125,6 +125,18 @@ commands:
       - "python -m scripts.collate_results metrics/ results/"
     deps:
       - "metrics/"
+
+  - name: "convert-archaeo"
+    help: "Convert Dutch Archaeology dataset into the spaCy format"
+    script:
+      - >-
+        python -m scripts.convert_to_spans
+        assets/archaeo.bio corpus/spancat/
+        --spans-key ${vars.spans_key}
+        --converter iob
+        --train-size 0.8
+        --seed 42
+        --shuffle
 
   - name: "convert-toxic-spans"
     help: "Convert Toxic Spans dataset into the spaCy format"

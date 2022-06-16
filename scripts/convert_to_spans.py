@@ -139,7 +139,6 @@ def convert(
             input_data = infile.read()
         # Use converter function to convert data
         func = CONVERTERS[converter]
-        breakpoint()
         docs = func(
             input_data,
             n_sents=n_sents,
@@ -152,6 +151,7 @@ def convert(
             ner_map=ner_map,
         )
         docs = list(docs)
+        breakpoint()
         # Monkeypatched version converting docs to spans
         if not use_ents:
             msg.info("Transferring entities to doc.spans")
