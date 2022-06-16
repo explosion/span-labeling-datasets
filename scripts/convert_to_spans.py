@@ -151,7 +151,6 @@ def convert(
             ner_map=ner_map,
         )
         docs = list(docs)
-        breakpoint()
         # Monkeypatched version converting docs to spans
         if not use_ents:
             msg.info("Transferring entities to doc.spans")
