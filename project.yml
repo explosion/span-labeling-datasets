@@ -154,6 +154,32 @@ commands:
       - corpus/ner/archaeo-train-dev.spacy
       - corpus/ner/archaeo-test.spacy
 
+  - name: "train-archaeo"
+    help: "Train ner and spancat models for the Dutch Archaeology dataset"
+    script:
+      - >-
+        python -m spacy train
+        configs/ner.cfg
+        --output training/archaeo/ner/
+        --paths.train corpus/ner/archaeo-train.spacy
+        --paths.dev corpus/ner/archaeo-train-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      - >-
+        python -m spacy train
+        configs/spancat.cfg
+        --output training/archaeo/spancat/
+        --paths.train corpus/spancat/archaeo-train.spacy
+        --paths.dev corpus/spancat/archaeo-dev.spacy
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - corpus/spancat/archaeo-train.spacy
+      - corpus/spancat/toxic-spans-dev.spacy
+      - corpus/ner/toxic-spans-train.spacy
+      - corpus/ner/toxic-spans-dev.spacy
+    outputs:
+      - training/toxic-spans/spancat/model-best
+      - training/toxic-spans/ner/model-best
+
   - name: "convert-toxic-spans"
     help: "Convert Toxic Spans dataset into the spaCy format"
     script:
