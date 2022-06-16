@@ -2,3 +2,4 @@ spacy
 typer
 wasabi
 pandas
+wandb
