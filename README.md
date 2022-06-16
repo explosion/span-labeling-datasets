@@ -21,6 +21,7 @@ Commands are only re-run if their inputs have changed.
 | Command | Description |
 | --- | --- |
 | `install` | Install dependencies |
+| `collate-results` | Collate results into the results directory |
 | `convert-toxic-spans` | Convert Toxic Spans dataset into the spaCy format |
 | `train-toxic-spans` | Train ner and spancat models for the Toxic Spans dataset |
 | `evaluate-toxic-spans` | Evaluate models for the Toxic Spans dataset |
