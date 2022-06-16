@@ -702,3 +702,53 @@ evaluate-toxic-spans:
       md5: a0f4f6fb955112ceac19e569bc597dc2
   spacy_version: 3.2.0
   spacy_git_version: 0fc3dee77
+train-anem:
+  cmd: python -m spacy run train-anem
+  script:
+    - python -m spacy train configs/ner.cfg --output training/anem/ner/ --paths.train
+      corpus/ner/anem-train.spacy --paths.dev corpus/ner/anem-train-dev.spacy --gpu-id
+      0
+    - python -m spacy train configs/spancat.cfg --output training/anem/spancat/ --paths.train
+      corpus/spancat/anem-train.spacy --paths.dev corpus/spancat/anem-train-dev.spacy
+      --gpu-id 0
+  deps:
+    - path: corpus/ner/anem-train.spacy
+      md5: d41b86efa7ab39e09d793090a54a388b
+    - path: corpus/ner/anem-train-dev.spacy
+      md5: cba41ba4b7c73152be9a6c7b541704e7
+    - path: corpus/spancat/anem-train.spacy
+      md5: 08564f041b2acdfc766b008fcb129c73
+    - path: corpus/spancat/anem-train-dev.spacy
+      md5: f666ed6ccfe2b66737efa458135931f2
+  outs:
+    - path: training/anem/ner/model-best
+      md5: a2ed1222fa8c1db5232fad9f536f136f
+    - path: training/anem/spancat/model-best
+      md5: 4effd937743ebc417c3e8b7209511bea
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77
+evaluate-anem:
+  cmd: python -m spacy run evaluate-anem
+  script:
+    - mkdir -p metrics/anem/spancat
+    - python -m spacy evaluate training/anem/spancat/model-best corpus/spancat/anem-test.spacy
+      --output metrics/anem/spancat/scores.json
+    - mkdir -p metrics/anem/ner
+    - python -m spacy evaluate training/anem/ner/model-best corpus/ner/anem-test.spacy
+      --output metrics/anem/ner/scores.json
+  deps:
+    - path: training/anem/ner/model-best
+      md5: a2ed1222fa8c1db5232fad9f536f136f
+    - path: training/anem/spancat/model-best
+      md5: 4effd937743ebc417c3e8b7209511bea
+    - path: corpus/ner/anem-test.spacy
+      md5: 6033af455797a6f46f3a8564138d254c
+    - path: corpus/spancat/anem-test.spacy
+      md5: e15dfa778af4ba4103442668738aec1e
+  outs:
+    - path: metrics/anem/ner/scores.json
+      md5: 66be59ce801371a04c4b5a0aae1d7d1c
+    - path: metrics/anem/spancat/scores.json
+      md5: a47ae33ba072861addfde20a9fe03cf4
+  spacy_version: 3.2.0
+  spacy_git_version: 0fc3dee77
