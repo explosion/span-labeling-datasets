@@ -1,9 +1,10 @@
-import typer
 import json
-import pandas as pd
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Literal
+
+import pandas as pd
+import typer
 from wasabi import msg
 
 FINAL_COLUMNS = ["dataset", "label", "p", "r", "f", "speed"]
