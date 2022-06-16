@@ -115,6 +115,13 @@ commands:
     script:
       - "python -m spacy download en_core_web_lg"
 
+  - name: "collate-results"
+    help: "Collate results into the results directory"
+    script:
+      - "python -m scripts.collate_results metrics/ results/"
+    deps:
+      - "metrics/"
+
   - name: "convert-toxic-spans"
     help: "Convert Toxic Spans dataset into the spaCy format"
     script:
