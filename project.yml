@@ -505,18 +505,18 @@ commands:
   - name: "clean-wikineural"
     help: "Remove unnecessary indices from wikineural data"
     script:
-      - python -m scripts.remove_indices assets/de-wikineural-train.iob
-      - python -m scripts.remove_indices assets/de-wikineural-dev.iob
-      # - python -m scripts.remove_indices assets/de-wikineural-test.iob
-      - python -m scripts.remove_indices assets/en-wikineural-train.iob
-      - python -m scripts.remove_indices assets/en-wikineural-dev.iob
-      - python -m scripts.remove_indices assets/en-wikineural-test.iob
-      - python -m scripts.remove_indices assets/es-wikineural-train.iob
-      - python -m scripts.remove_indices assets/es-wikineural-dev.iob
-      - python -m scripts.remove_indices assets/es-wikineural-test.iob
-      - python -m scripts.remove_indices assets/nl-wikineural-train.iob
-      - python -m scripts.remove_indices assets/nl-wikineural-dev.iob
-      - python -m scripts.remove_indices assets/nl-wikineural-test.iob
+      - python -m scripts.preprocess_wikineural assets/de-wikineural-train.iob
+      - python -m scripts.preprocess_wikineural assets/de-wikineural-dev.iob
+      # - python -m scripts.preprocess_wikineural assets/de-wikineural-test.iob
+      - python -m scripts.preprocess_wikineural assets/en-wikineural-train.iob
+      - python -m scripts.preprocess_wikineural assets/en-wikineural-dev.iob
+      - python -m scripts.preprocess_wikineural assets/en-wikineural-test.iob
+      - python -m scripts.preprocess_wikineural assets/es-wikineural-train.iob
+      - python -m scripts.preprocess_wikineural assets/es-wikineural-dev.iob
+      - python -m scripts.preprocess_wikineural assets/es-wikineural-test.iob
+      - python -m scripts.preprocess_wikineural assets/nl-wikineural-train.iob
+      - python -m scripts.preprocess_wikineural assets/nl-wikineural-dev.iob
+      - python -m scripts.preprocess_wikineural assets/nl-wikineural-test.iob
     deps:
       - assets/de-wikineural-train.iob
       - assets/de-wikineural-dev.iob
@@ -556,7 +556,7 @@ commands:
         assets/de-wikineural-dev.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
-      # - python -m scripts.remove_indices assets/de-wikineural-test.iob
+      # - python -m scripts.preprocess_wikineural assets/de-wikineural-test.iob
       # - >-
       #   python -m scripts.convert_to_spans
       #   assets/de-wikineural-test.iob corpus/spancat/
@@ -649,7 +649,7 @@ commands:
         python -m scripts.convert_to_spans
         assets/de-wikineural-dev.iob corpus/ner/
         --use-ents
-      # - python -m scripts.remove_indices assets/de-wikineural-test.iob
+      # - python -m scripts.preprocess_wikineural assets/de-wikineural-test.iob
       # - >-
       #   python -m scripts.convert_to_spans
       #   assets/de-wikineural-test.iob corpus/spancat/
