@@ -108,6 +108,9 @@ assets:
   - dest: "assets/toxic_spans.csv"
     description: "Toxic Spans dataset from Pavlopoulos et al. (ACL 2022)"
     url: https://github.com/ipavlopoulos/toxic_spans/blob/master/ACL2022/data/toxic_spans.csv
+  - dest: "assets/archaeo.bio"
+    description: "Dutch Archaeological NER dataset by Alex Brandsen (LREC 2020)"
+    url: https://github.com/alexbrandsen/dutch-archaeo-NER-dataset/blob/master/complete-bio-gs.bio
 
 commands:
   - name: "install"
