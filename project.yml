@@ -25,6 +25,9 @@ workflows:
   archaeo:
     - "convert-archaeo"
     - "train-archaeo"
+  btc:
+    - "convert-btc"
+    - "train-btc"
   sec-filings:
     - "convert-sec_filings"
     - "train-sec_filings"
@@ -460,10 +463,56 @@ commands:
         assets/btc-general.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
+      - >-
+        python -m scripts.split_docs
+        corpus/spancat/btc-general.spacy corpus/spancat
+        --seed 42
+        --shuffle
+      - >-
+        python -m scripts.convert_to_spans
+        assets/btc-general.iob corpus/ner
+        --use-ents
+        --converter auto
+      - >-
+        python -m scripts.split_docs
+        corpus/ner/btc-general.spacy corpus/ner
+        --seed 42
+        --shuffle
     deps:
       - assets/btc-general.iob
     outputs:
-      - corpus/spancat/btc-general.spacy
+      - corpus/spancat/btc-general-train.spacy
+      - corpus/spancat/btc-general-dev.spacy
+      - corpus/spancat/btc-general-test.spacy
+      - corpus/ner/btc-general-train.spacy
+      - corpus/ner/btc-general-dev.spacy
+      - corpus/ner/btc-general-test.spacy
+
+  - name: "train-btc"
+    help: "Train ner and spancat models for the Broad Twitter Corpus"
+    script:
+      - >-
+        python -m spacy train
+        configs/ner.cfg
+        --output training/btc-general/ner/
+        --paths.train corpus/ner/btc-general-train.spacy
+        --paths.dev corpus/ner/btc-general-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      - >-
+        python -m spacy train
+        configs/spancat.cfg
+        --output training/btc-general/spancat/
+        --paths.train corpus/spancat/btc-general-train.spacy
+        --paths.dev corpus/spancat/btc-general-dev.spacy
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - corpus/spancat/btc-general-train.spacy
+      - corpus/spancat/btc-general-dev.spacy
+      - corpus/ner/btc-general-train.spacy
+      - corpus/ner/btc-general-dev.spacy
+    outputs:
+      - training/btc-general/spancat/model-best
+      - training/btc-general/ner/model-best
 
   - name: "convert-anem"
     help: "Convert AneM dataset into the spaCy format"
