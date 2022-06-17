@@ -22,6 +22,9 @@ workflows:
     - "convert-anem"
     - "train-anem"
     - "evaluate-anem"
+  archaeo:
+    - "convert-archaeo"
+    - "train-archaeo"
   sec-filings:
     - "convert-sec_filings"
     - "train-sec_filings"
@@ -108,6 +111,9 @@ assets:
   - dest: "assets/toxic_spans.csv"
     description: "Toxic Spans dataset from Pavlopoulos et al. (ACL 2022)"
     url: https://github.com/ipavlopoulos/toxic_spans/blob/master/ACL2022/data/toxic_spans.csv
+  - dest: "assets/archaeo.bio"
+    description: "Dutch Archaeological NER dataset by Alex Brandsen (LREC 2020)"
+    url: https://github.com/alexbrandsen/dutch-archaeo-NER-dataset/blob/master/complete-bio-gs.bio
 
 commands:
   - name: "install"
@@ -122,6 +128,64 @@ commands:
       - "python -m scripts.collate_results metrics/ results/"
     deps:
       - "metrics/"
+
+  - name: "convert-archaeo"
+    help: "Convert Dutch Archaeology dataset into the spaCy format"
+    script:
+      - >-
+        python -m scripts.convert_to_spans
+        assets/archaeo.bio corpus/spancat/
+        --spans-key ${vars.spans_key}
+        --converter iob
+      - >-
+        python -m scripts.split_docs
+        corpus/spancat/archaeo.spacy corpus/spancat
+        --seed 42
+        --shuffle
+      - >-
+        python -m scripts.convert_to_spans
+        assets/archaeo.bio corpus/ner/
+        --use-ents
+        --converter iob
+      - >-
+        python -m scripts.split_docs
+        corpus/ner/archaeo.spacy corpus/ner/
+        --seed 42
+        --shuffle
+    deps:
+      - "assets/archaeo.bio"
+    outputs:
+      - corpus/spancat/archaeo-train.spacy
+      - corpus/spancat/archaeo-dev.spacy
+      - corpus/spancat/archaeo-test.spacy
+      - corpus/ner/archaeo-dev.spacy
+      - corpus/ner/archaeo-test.spacy
+
+  - name: "train-archaeo"
+    help: "Train ner and spancat models for the Dutch Archaeology dataset"
+    script:
+      - >-
+        python -m spacy train
+        configs/ner.cfg
+        --output training/archaeo/ner/
+        --paths.train corpus/ner/archaeo-train.spacy
+        --paths.dev corpus/ner/archaeo-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      - >-
+        python -m spacy train
+        configs/spancat.cfg
+        --output training/archaeo/spancat/
+        --paths.train corpus/spancat/archaeo-train.spacy
+        --paths.dev corpus/spancat/archaeo-dev.spacy
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - corpus/spancat/archaeo-train.spacy
+      - corpus/spancat/archaeo-dev.spacy
+      - corpus/ner/archaeo-train.spacy
+      - corpus/ner/archaeo-dev.spacy
+    outputs:
+      - training/archaeo/spancat/model-best
+      - training/archaeo/ner/model-best
 
   - name: "convert-toxic-spans"
     help: "Convert Toxic Spans dataset into the spaCy format"

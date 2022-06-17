@@ -22,6 +22,8 @@ Commands are only re-run if their inputs have changed.
 | --- | --- |
 | `install` | Install dependencies |
 | `collate-results` | Collate results into the results directory |
+| `convert-archaeo` | Convert Dutch Archaeology dataset into the spaCy format |
+| `train-archaeo` | Train ner and spancat models for the Dutch Archaeology dataset |
 | `convert-toxic-spans` | Convert Toxic Spans dataset into the spaCy format |
 | `train-toxic-spans` | Train ner and spancat models for the Toxic Spans dataset |
 | `evaluate-toxic-spans` | Evaluate models for the Toxic Spans dataset |
@@ -53,6 +55,7 @@ inputs have changed.
 | Workflow | Steps |
 | --- | --- |
 | `anem` | `convert-anem` &rarr; `train-anem` &rarr; `evaluate-anem` |
+| `archaeo` | `convert-archaeo` &rarr; `train-archaeo` |
 | `sec-filings` | `convert-sec_filings` &rarr; `train-sec_filings` &rarr; `evaluate-sec_filings` |
 | `wnut17` | `convert-wnut17` &rarr; `train-wnut17` &rarr; `evaluate-wnut17` |
 | `wikineural` | `clean-wikineural` &rarr; `convert-wikineural-ents` &rarr; `convert-wikineural-spans` &rarr; `train-wikineural` &rarr; `evaluate-wikineural` |
@@ -88,5 +91,6 @@ in the project directory.
 | `assets/nl-wikineural-dev.iob` | URL | WikiNeural (nl) dev dataset from Tedeschi et al. (EMNLP 2021) |
 | `assets/nl-wikineural-test.iob` | URL | WikiNeural (nl) test dataset from Tedeschi et al. (EMNLP 2021) |
 | `assets/toxic_spans.csv` | URL | Toxic Spans dataset from Pavlopoulos et al. (ACL 2022) |
+| `assets/archaeo.bio` | URL | Dutch Archaeological NER dataset by Alex Brandsen (LREC 2020) |
 
 <!-- SPACY PROJECT: AUTO-GENERATED DOCS END (do not remove) -->
