@@ -134,7 +134,9 @@ commands:
         assets/archaeo.bio corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter iob
-        --train-size 0.8
+      - >-
+        python -m scripts.split_docs
+        corpus/spancat/archaeo.spacy corpus/spancat
         --seed 42
         --shuffle
       - >-
@@ -142,16 +144,18 @@ commands:
         assets/archaeo.bio corpus/ner/
         --use-ents
         --converter iob
-        --train-size 0.8
+      - >-
+        python -m scripts.split_docs
+        corpus/ner/archaeo.spacy corpus/ner/
         --seed 42
         --shuffle
     deps:
       - "assets/archaeo.bio"
     outputs:
       - corpus/spancat/archaeo-train.spacy
-      - corpus/spancat/archaeo-train-dev.spacy
+      - corpus/spancat/archaeo-dev.spacy
       - corpus/spancat/archaeo-test.spacy
-      - corpus/ner/archaeo-train-dev.spacy
+      - corpus/ner/archaeo-dev.spacy
       - corpus/ner/archaeo-test.spacy
 
   - name: "train-archaeo"
@@ -162,7 +166,7 @@ commands:
         configs/ner.cfg
         --output training/archaeo/ner/
         --paths.train corpus/ner/archaeo-train.spacy
-        --paths.dev corpus/ner/archaeo-train-dev.spacy
+        --paths.dev corpus/ner/archaeo-dev.spacy
         --gpu-id ${vars.gpu_id}
       - >-
         python -m spacy train
@@ -173,12 +177,12 @@ commands:
         --gpu-id ${vars.gpu_id}
     deps:
       - corpus/spancat/archaeo-train.spacy
-      - corpus/spancat/toxic-spans-dev.spacy
-      - corpus/ner/toxic-spans-train.spacy
-      - corpus/ner/toxic-spans-dev.spacy
+      - corpus/spancat/archaeo-dev.spacy
+      - corpus/ner/archaeo-train.spacy
+      - corpus/ner/archaeo-dev.spacy
     outputs:
-      - training/toxic-spans/spancat/model-best
-      - training/toxic-spans/ner/model-best
+      - training/archaeo/spancat/model-best
+      - training/archaeo/ner/model-best
 
   - name: "convert-toxic-spans"
     help: "Convert Toxic Spans dataset into the spaCy format"
