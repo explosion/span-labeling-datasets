@@ -3,3 +3,4 @@ typer
 wasabi
 pandas
 wandb
+scikit-learn
