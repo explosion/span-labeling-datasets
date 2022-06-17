@@ -36,6 +36,9 @@ workflows:
     - "convert-wnut17"
     - "train-wnut17"
     - "evaluate-wnut17"
+  wikigold:
+    - "convert-wikigold"
+    - "train-wikigold"
   wikineural:
     - "clean-wikineural"
     - "convert-wikineural-ents"
@@ -615,10 +618,56 @@ commands:
         assets/wikigold.iob corpus/spancat/
         --spans-key ${vars.spans_key}
         --converter auto
+      - >-
+        python -m scripts.split_docs
+        corpus/spancat/wikigold.spacy corpus/spancat/
+        --seed 42
+        --shuffle
+      - >-
+        python -m scripts.convert_to_spans
+        assets/wikigold.iob corpus/ner/
+        --use-ents
+        --converter auto
+      - >-
+        python -m scripts.split_docs
+        corpus/ner/wikigold.spacy corpus/ner/
+        --seed 42
+        --shuffle
     deps:
       - assets/wikigold.iob
     outputs:
-      - corpus/spancat/wikigold.spacy
+      - corpus/spancat/wikigold-train.spacy
+      - corpus/spancat/wikigold-dev.spacy
+      - corpus/spancat/wikigold-test.spacy
+      - corpus/ner/wikigold-train.spacy
+      - corpus/ner/wikigold-dev.spacy
+      - corpus/ner/wikigold-test.spacy
+
+  - name: "train-wikigold"
+    help: "Train ner and spancat models for the Wikigold corpus"
+    script:
+      - >-
+        python -m spacy train
+        configs/ner.cfg
+        --output training/wikigold/ner
+        --paths.train corpus/ner/wikigold-train.spacy
+        --paths.dev corpus/ner/wikigold-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      - >-
+        python -m spacy train
+        configs/spancat.cfg
+        --output training/wikigold/spancat
+        --paths.train corpus/spancat/wikigold-train.spacy
+        --paths.dev corpus/spancat/wikigold-dev.spacy
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - corpus/spancat/wikigold-train.spacy
+      - corpus/spancat/wikigold-dev.spacy
+      - corpus/ner/wikigold-train.spacy
+      - corpus/ner/wikigold-dev.spacy
+    outputs:
+      - training/wikigold/spancat/model-best
+      - training/wikigold/ner/model-best
 
   - name: "clean-wikineural"
     help: "Remove unnecessary indices from wikineural data"
