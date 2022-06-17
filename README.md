@@ -34,10 +34,12 @@ Commands are only re-run if their inputs have changed.
 | `train-wnut17` | Train an ner and spancat model for WNUT17 |
 | `evaluate-wnut17` | Evaluate the results for the WNUT17 dataset |
 | `convert-btc` | Convert BTC dataset into the spaCy format |
+| `train-btc` | Train ner and spancat models for the Broad Twitter Corpus |
 | `convert-anem` | Convert AneM dataset into the spaCy format |
 | `train-anem` | Train an NER and Spancat model for AnEM |
 | `evaluate-anem` | Evaluate AnEM dataset |
 | `convert-wikigold` | Convert the Wikigold dataset into the spaCy format |
+| `train-wikigold` | Train ner and spancat models for the Wikigold corpus |
 | `clean-wikineural` | Remove unnecessary indices from wikineural data |
 | `convert-wikineural-spans` | Convert WikiNeural dataset (de, en, es, nl) into the spaCy format |
 | `convert-wikineural-ents` | Convert WikiNeural dataset (de, en, es, nl) into the spaCy format |
@@ -56,8 +58,10 @@ inputs have changed.
 | --- | --- |
 | `anem` | `convert-anem` &rarr; `train-anem` &rarr; `evaluate-anem` |
 | `archaeo` | `convert-archaeo` &rarr; `train-archaeo` |
+| `btc` | `convert-btc` &rarr; `train-btc` |
 | `sec-filings` | `convert-sec_filings` &rarr; `train-sec_filings` &rarr; `evaluate-sec_filings` |
 | `wnut17` | `convert-wnut17` &rarr; `train-wnut17` &rarr; `evaluate-wnut17` |
+| `wikigold` | `convert-wikigold` &rarr; `train-wikigold` |
 | `wikineural` | `clean-wikineural` &rarr; `convert-wikineural-ents` &rarr; `convert-wikineural-spans` &rarr; `train-wikineural` &rarr; `evaluate-wikineural` |
 | `toxic-spans` | `convert-toxic-spans` &rarr; `train-toxic-spans` &rarr; `evaluate-toxic-spans` |
 
