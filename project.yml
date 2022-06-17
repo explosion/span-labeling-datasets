@@ -22,6 +22,9 @@ workflows:
     - "convert-anem"
     - "train-anem"
     - "evaluate-anem"
+  archaeo:
+    - "convert-archaeo"
+    - "train-archaeo"
   sec-filings:
     - "convert-sec_filings"
     - "train-sec_filings"
