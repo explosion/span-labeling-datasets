@@ -6,8 +6,8 @@ description: |
 vars:
   spans_key: "sc"
   gpu_id: 0
-  ner_config: "configs/ner_tok2vec_ngram.cfg"
-  spancat_config: "configs/spancat_tok2vec_ngram.cfg"
+  ner_config: "configs/ner/ner_tok2vec.cfg"
+  spancat_config: "configs/spancat/spancat_tok2vec_ngram.cfg"
 
 directories:
   - "assets"
