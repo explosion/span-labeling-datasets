@@ -4,3 +4,4 @@ wasabi
 pandas
 wandb
 scikit-learn
+spacy-experimental==0.5.0
