@@ -36,7 +36,8 @@ workflows:
     - "evaluate-sec_filings"
   wnut17:
     - "convert-wnut17"
-    - "train-wnut17"
+    - "train-wnut17-spancat"
+    - "train-wnut17-ner"
     - "evaluate-wnut17"
   wikigold:
     - "convert-wikigold"
@@ -45,7 +46,8 @@ workflows:
     - "clean-wikineural"
     - "convert-wikineural-ents"
     - "convert-wikineural-spans"
-    - "train-wikineural"
+    - "train-wikineural-spancat"
+    - "train-wikineural-ner"
     - "evaluate-wikineural"
   toxic-spans:
     - "convert-toxic-spans"
@@ -408,8 +410,8 @@ commands:
       - corpus/spancat/wnut17-dev.spacy
       - corpus/spancat/wnut17-test.spacy
 
-  - name: "train-wnut17"
-    help: "Train an ner and spancat model for WNUT17"
+  - name: "train-wnut17-ner"
+    help: "Train an ner model for WNUT17"
     script:
       - >-
         python -m spacy train
@@ -418,6 +420,15 @@ commands:
         --paths.train corpus/ner/wnut17-train.spacy
         --paths.dev corpus/ner/wnut17-dev.spacy
         --gpu-id ${vars.gpu_id}
+    deps:
+      - corpus/ner/wnut17-train.spacy
+      - corpus/ner/wnut17-dev.spacy
+    outputs:
+      - training/wnut17/ner/model-best
+
+  - name: "train-wnut17-spancat"
+    help: "Train a spancat model for WNUT17"
+    script:
       - >-
         python -m spacy train
         ${vars.spancat_config}
@@ -428,10 +439,7 @@ commands:
     deps:
       - corpus/spancat/wnut17-train.spacy
       - corpus/spancat/wnut17-dev.spacy
-      - corpus/ner/wnut17-train.spacy
-      - corpus/ner/wnut17-dev.spacy
     outputs:
-      - training/wnut17/ner/model-best
       - training/wnut17/spancat/model-best
 
   - name: "evaluate-wnut17"
@@ -889,20 +897,11 @@ commands:
       - "corpus/ner/nl-wikineural-dev.spacy"
       - "corpus/ner/nl-wikineural-test.spacy"
 
-  - name: "train-wikineural"
-    help: "Train an ner and spancat model for Wikineural datasets"
+  - name: "train-wikineural-spancat"
+    help: "Train a spancat model for Wikineural datasets"
     script:
       # Train de dataset
       - python -m spacy download de_core_news_lg
-      - >-
-        python -m spacy train
-        ${vars.ner_config}
-        --output training/de-wikineural/ner/
-        --paths.vectors de_core_news_lg
-        --nlp.lang de
-        --paths.train corpus/ner/de-wikineural-train.spacy
-        --paths.dev corpus/ner/de-wikineural-dev.spacy
-        --gpu-id ${vars.gpu_id}
       - >-
         python -m spacy train
         ${vars.spancat_config}
@@ -915,13 +914,6 @@ commands:
       # Train en dataset
       - >-
         python -m spacy train
-        ${vars.ner_config}
-        --output training/en-wikineural/ner/
-        --paths.train corpus/ner/en-wikineural-train.spacy
-        --paths.dev corpus/ner/en-wikineural-dev.spacy
-        --gpu-id ${vars.gpu_id}
-      - >-
-        python -m spacy train
         ${vars.spancat_config}
         --output training/en-wikineural/spancat/
         --paths.train corpus/spancat/en-wikineural-train.spacy
@@ -929,15 +921,6 @@ commands:
         --gpu-id ${vars.gpu_id}
       # Train es dataset
       - python -m spacy download es_core_news_lg
-      - >-
-        python -m spacy train
-        ${vars.ner_config}
-        --output training/es-wikineural/ner/
-        --paths.vectors es_core_news_lg
-        --nlp.lang es
-        --paths.train corpus/ner/es-wikineural-train.spacy
-        --paths.dev corpus/ner/es-wikineural-dev.spacy
-        --gpu-id ${vars.gpu_id}
       - >-
         python -m spacy train
         ${vars.spancat_config}
@@ -951,15 +934,6 @@ commands:
       - python -m spacy download nl_core_news_lg
       - >-
         python -m spacy train
-        ${vars.ner_config}
-        --output training/nl-wikineural/ner/
-        --paths.vectors nl_core_news_lg
-        --nlp.lang nl
-        --paths.train corpus/ner/nl-wikineural-train.spacy
-        --paths.dev corpus/ner/nl-wikineural-dev.spacy
-        --gpu-id ${vars.gpu_id}
-      - >-
-        python -m spacy train
         ${vars.spancat_config}
         --output training/nl-wikineural/spancat/
         --paths.vectors nl_core_news_lg
@@ -968,14 +942,60 @@ commands:
         --paths.dev corpus/spancat/nl-wikineural-dev.spacy
         --gpu-id ${vars.gpu_id}
     outputs:
-      - training/de-wikineural/ner/model-best
-      - training/en-wikineural/ner/model-best
-      - training/es-wikineural/ner/model-best
-      - training/nl-wikineural/ner/model-best
       - training/de-wikineural/spancat/model-best
       - training/en-wikineural/spancat/model-best
       - training/es-wikineural/spancat/model-best
       - training/nl-wikineural/spancat/model-best
+
+  - name: "train-wikineural-ner"
+    help: "Train an ner model for Wikineural datasets"
+    script:
+      # Train de dataset
+      - python -m spacy download de_core_news_lg
+      - >-
+        python -m spacy train
+        ${vars.ner_config}
+        --output training/de-wikineural/ner/
+        --paths.vectors de_core_news_lg
+        --nlp.lang de
+        --paths.train corpus/ner/de-wikineural-train.spacy
+        --paths.dev corpus/ner/de-wikineural-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      # Train en dataset
+      - >-
+        python -m spacy train
+        ${vars.ner_config}
+        --output training/en-wikineural/ner/
+        --paths.train corpus/ner/en-wikineural-train.spacy
+        --paths.dev corpus/ner/en-wikineural-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      # Train es dataset
+      - python -m spacy download es_core_news_lg
+      - >-
+        python -m spacy train
+        ${vars.ner_config}
+        --output training/es-wikineural/ner/
+        --paths.vectors es_core_news_lg
+        --nlp.lang es
+        --paths.train corpus/ner/es-wikineural-train.spacy
+        --paths.dev corpus/ner/es-wikineural-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      # Train nl dataset
+      - python -m spacy download nl_core_news_lg
+      - >-
+        python -m spacy train
+        ${vars.ner_config}
+        --output training/nl-wikineural/ner/
+        --paths.vectors nl_core_news_lg
+        --nlp.lang nl
+        --paths.train corpus/ner/nl-wikineural-train.spacy
+        --paths.dev corpus/ner/nl-wikineural-dev.spacy
+        --gpu-id ${vars.gpu_id}
+    outputs:
+      - training/de-wikineural/ner/model-best
+      - training/en-wikineural/ner/model-best
+      - training/es-wikineural/ner/model-best
+      - training/nl-wikineural/ner/model-best
 
   - name: "evaluate-wikineural"
     help: "Evaluate the results for the Wikineural datasets"
