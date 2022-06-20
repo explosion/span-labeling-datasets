@@ -6,6 +6,8 @@ description: |
 vars:
   spans_key: "sc"
   gpu_id: 0
+  ner_config: "configs/ner.cfg"
+  spancat_config: "configs/spancat.cfg"
 
 directories:
   - "assets"
@@ -173,7 +175,7 @@ commands:
       - python -m spacy download nl_core_news_lg
       - >-
         python -m spacy train
-        configs/ner.cfg
+        ${vars.ner_config}
         --output training/archaeo/ner/
         --paths.train corpus/ner/archaeo-train.spacy
         --paths.dev corpus/ner/archaeo-dev.spacy
@@ -182,7 +184,7 @@ commands:
         --gpu-id ${vars.gpu_id}
       - >-
         python -m spacy train
-        configs/spancat.cfg
+        ${vars.spancat_config}
         --output training/archaeo/spancat/
         --paths.train corpus/spancat/archaeo-train.spacy
         --paths.dev corpus/spancat/archaeo-dev.spacy
@@ -228,14 +230,14 @@ commands:
     script:
       - >-
         python -m spacy train
-        configs/ner.cfg
+        ${vars.ner_config}
         --output training/toxic-spans/ner/
         --paths.train corpus/ner/toxic-spans-train.spacy
         --paths.dev corpus/ner/toxic-spans-dev.spacy
         --gpu-id ${vars.gpu_id}
       - >-
         python -m spacy train
-        configs/spancat.cfg
+        ${vars.spancat_config}
         --output training/toxic-spans/spancat/
         --paths.train corpus/spancat/toxic-spans-train.spacy
         --paths.dev corpus/spancat/toxic-spans-dev.spacy
@@ -321,14 +323,14 @@ commands:
     script:
       - >-
         python -m spacy train
-        configs/ner.cfg
+        ${vars.ner_config}
         --output training/sec_filings/ner/
         --paths.train corpus/ner/sec_filings-train.spacy
         --paths.dev corpus/ner/sec_filings-train-dev.spacy
         --gpu-id ${vars.gpu_id}
       - >-
         python -m spacy train
-        configs/spancat.cfg
+        ${vars.spancat_config}
         --output training/sec_filings/spancat/
         --paths.train corpus/spancat/sec_filings-train.spacy
         --paths.dev corpus/spancat/sec_filings-train-dev.spacy
@@ -411,14 +413,14 @@ commands:
     script:
       - >-
         python -m spacy train
-        configs/ner.cfg
+        ${vars.ner_config}
         --output training/wnut17/ner/
         --paths.train corpus/ner/wnut17-train.spacy
         --paths.dev corpus/ner/wnut17-dev.spacy
         --gpu-id ${vars.gpu_id}
       - >-
         python -m spacy train
-        configs/spancat.cfg
+        ${vars.spancat_config}
         --output training/wnut17/spancat/
         --paths.train corpus/spancat/wnut17-train.spacy
         --paths.dev corpus/spancat/wnut17-dev.spacy
@@ -496,14 +498,14 @@ commands:
     script:
       - >-
         python -m spacy train
-        configs/ner.cfg
+        ${vars.ner_config}
         --output training/btc-general/ner/
         --paths.train corpus/ner/btc-general-train.spacy
         --paths.dev corpus/ner/btc-general-dev.spacy
         --gpu-id ${vars.gpu_id}
       - >-
         python -m spacy train
-        configs/spancat.cfg
+        ${vars.spancat_config}
         --output training/btc-general/spancat/
         --paths.train corpus/spancat/btc-general-train.spacy
         --paths.dev corpus/spancat/btc-general-dev.spacy
@@ -563,14 +565,14 @@ commands:
     script:
       - >-
         python -m spacy train
-        configs/ner.cfg
+        ${vars.ner_config}
         --output training/anem/ner/
         --paths.train corpus/ner/anem-train.spacy
         --paths.dev corpus/ner/anem-train-dev.spacy
         --gpu-id ${vars.gpu_id}
       - >-
         python -m spacy train
-        configs/spancat.cfg
+        ${vars.spancat_config}
         --output training/anem/spancat/
         --paths.train corpus/spancat/anem-train.spacy
         --paths.dev corpus/spancat/anem-train-dev.spacy
@@ -648,14 +650,14 @@ commands:
     script:
       - >-
         python -m spacy train
-        configs/ner.cfg
+        ${vars.ner_config}
         --output training/wikigold/ner
         --paths.train corpus/ner/wikigold-train.spacy
         --paths.dev corpus/ner/wikigold-dev.spacy
         --gpu-id ${vars.gpu_id}
       - >-
         python -m spacy train
-        configs/spancat.cfg
+        ${vars.spancat_config}
         --output training/wikigold/spancat
         --paths.train corpus/spancat/wikigold-train.spacy
         --paths.dev corpus/spancat/wikigold-dev.spacy
@@ -894,7 +896,7 @@ commands:
       - python -m spacy download de_core_news_lg
       - >-
         python -m spacy train
-        configs/ner.cfg
+        ${vars.ner_config}
         --output training/de-wikineural/ner/
         --paths.vectors de_core_news_lg
         --nlp.lang de
@@ -903,7 +905,7 @@ commands:
         --gpu-id ${vars.gpu_id}
       - >-
         python -m spacy train
-        configs/spancat.cfg
+        ${vars.spancat_config}
         --output training/de-wikineural/spancat/
         --paths.vectors de_core_news_lg
         --nlp.lang de
@@ -913,14 +915,14 @@ commands:
       # Train en dataset
       - >-
         python -m spacy train
-        configs/ner.cfg
+        ${vars.ner_config}
         --output training/en-wikineural/ner/
         --paths.train corpus/ner/en-wikineural-train.spacy
         --paths.dev corpus/ner/en-wikineural-dev.spacy
         --gpu-id ${vars.gpu_id}
       - >-
         python -m spacy train
-        configs/spancat.cfg
+        ${vars.spancat_config}
         --output training/en-wikineural/spancat/
         --paths.train corpus/spancat/en-wikineural-train.spacy
         --paths.dev corpus/spancat/en-wikineural-dev.spacy
@@ -929,7 +931,7 @@ commands:
       - python -m spacy download es_core_news_lg
       - >-
         python -m spacy train
-        configs/ner.cfg
+        ${vars.ner_config}
         --output training/es-wikineural/ner/
         --paths.vectors es_core_news_lg
         --nlp.lang es
@@ -938,7 +940,7 @@ commands:
         --gpu-id ${vars.gpu_id}
       - >-
         python -m spacy train
-        configs/spancat.cfg
+        ${vars.spancat_config}
         --output training/es-wikineural/spancat/
         --paths.vectors es_core_news_lg
         --nlp.lang es
@@ -949,7 +951,7 @@ commands:
       - python -m spacy download nl_core_news_lg
       - >-
         python -m spacy train
-        configs/ner.cfg
+        ${vars.ner_config}
         --output training/nl-wikineural/ner/
         --paths.vectors nl_core_news_lg
         --nlp.lang nl
@@ -958,7 +960,7 @@ commands:
         --gpu-id ${vars.gpu_id}
       - >-
         python -m spacy train
-        configs/spancat.cfg
+        ${vars.spancat_config}
         --output training/nl-wikineural/spancat/
         --paths.vectors nl_core_news_lg
         --nlp.lang nl
