@@ -90,7 +90,6 @@ def forward_gather_tokens(
             dX[start_inds[i]] = d_start
             dX[end_inds[i]] = d_end
             l_dX.append(dX)
-        # returns extra empty list for the backprop of with_getitem
         return l_dX, []
     
     tokens_features = []
@@ -117,7 +116,8 @@ def UnicodeLSTMEmbed(
     dropout: float = 0.2
 ):
     """
-    Character-level LSTM running on codepoints similar to CANINE.
+    Character-level LSTM running on codepoints embedded
+    with the hashing-trick -- similar to CANINE.
     https://arxiv.org/pdf/2103.06874.pdf.
 
     Each character in the documents is mapped to a unicode codepoint.
@@ -157,6 +157,10 @@ def UnicodeLSTMEmbed(
 
 @spacy.registry.architectures("spacy.IdentityEncode.v1")
 def IdentityEncode():
+    """
+    Give this to the Tok2Vec as encoder when only trying
+    to pre-train contextual-embedders.
+    """
     identity = thinc.registry.layers.get("noop.v1")
     return identity()
 
