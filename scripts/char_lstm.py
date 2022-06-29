@@ -1,5 +1,6 @@
-import numpy as np
 import spacy
+import thinc
+import numpy as np
 
 from spacy.tokens import Doc
 from typing import Tuple, List
@@ -31,6 +32,7 @@ def gather_tokens() -> Model:
 
 def to_unicode(
     doc: Doc,
+    xp
 ) -> Tuple[Ints1d, Ints1d, Ints1d]:
     """
     Convert Doc into a list of unicode codepoints
@@ -38,18 +40,18 @@ def to_unicode(
     Adds white space " " between each token to signal
     word-boundaries.
     """
-    token_starts = np.zeros(len(doc), dtype='int')
-    token_ends = np.zeros(len(doc), dtype='int')
+    token_starts = xp.zeros(len(doc), dtype='int')
+    token_ends = xp.zeros(len(doc), dtype='int')
     byte_list = []
     for i, token in enumerate(doc):
         token_codepoint = [ord(char) for char in token.orth_ + " "]
         byte_list += token_codepoint
         if i == 0:
-            token_ends[0] = len(token_codepoint) - 2
+            token_ends[0] = len(token_codepoint) - 1
         else:
-            token_starts[i] = token_ends[-1] + 2
-            token_ends[i] = token_starts[i] + len(token_codepoint) - 2
-    return np.array(byte_list), token_starts, token_ends
+            token_starts[i] = token_ends[i - 1] + 1
+            token_ends[i] = token_starts[i] + len(token_codepoint) - 1
+    return xp.array(byte_list), token_starts, token_ends
 
 
 def forward_docs2unicode(
@@ -58,8 +60,9 @@ def forward_docs2unicode(
     is_train: bool
 ) -> Tuple[List[Ints1d], List[Ints1d], List[Ints1d]]:
     byte_list, start_list, end_list = [], [], []
+    xp = model.ops.xp
     for doc in docs:
-        unicode_data = to_unicode(doc)
+        unicode_data = to_unicode(doc, xp)
         byte_list.append(unicode_data[0])
         start_list.append(unicode_data[1])
         end_list.append(unicode_data[2])
@@ -78,6 +81,18 @@ def forward_gather_tokens(
     bilstm_features, start_inds, end_inds = features_and_bounds
     assert len(bilstm_features) == len(start_inds)
     assert len(start_inds) == len(end_inds)
+    
+    def backprop(dY: List[Floats2d]) -> Tuple[List[Floats2d], List] :
+        l_dX = []
+        for i, dy in enumerate(dY):
+            dX = xp.zeros_like(bilstm_features[i])
+            d_start, d_end = xp.split(dy, 2, axis=1)
+            dX[start_inds[i]] = d_start
+            dX[end_inds[i]] = d_end
+            l_dX.append(dX)
+        # returns extra empty list for the backprop of with_getitem
+        return l_dX, []
+    
     tokens_features = []
     for char_feats, tok_starts, tok_ends in zip(
             bilstm_features, start_inds, end_inds
@@ -88,12 +103,6 @@ def forward_gather_tokens(
         )
         tokens_features.append(token_features)
 
-        def backprop(dY: Floats2d):
-            dY = xp.zeros_like(bilstm_features)
-            d_start, d_end = xp.split(dY, 2, axis=1)
-            dY[start_inds] = d_start
-            dY[end_inds] = d_end
-            return dY
 
     return tokens_features, backprop
 
@@ -124,19 +133,32 @@ def UnicodeLSTMEmbed(
         width, rows, seed=seed
     )
     bilstm_ = spacy.registry.architectures.get("spacy.TorchBiLSTMEncoder.v1")
+    norm = thinc.registry.layers.get("LayerNorm.v1")
+    relu = thinc.registry.layers.get("Relu.v1")
     bilstm = bilstm_(width, depth, dropout)
+    mlp_out = chain(
+        relu(width, normalize=True),
+        relu(width, normalize=True)
+    )
     encode = chain(
         docs2unicode(),
         with_getitem(
             0,
             chain(
                 with_array(embedder),
-                with_padded(bilstm)
+                with_padded(bilstm),
+                with_array(mlp_out)
             )
         ),
-        gather_tokens()
+        gather_tokens(),
     )
     return encode
+
+
+@spacy.registry.architectures("spacy.IdentityEncode.v1")
+def IdentityEncode():
+    identity = thinc.registry.layers.get("noop.v1")
+    return identity()
 
 
 if __name__ == "__main__":
