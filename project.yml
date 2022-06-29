@@ -894,13 +894,14 @@ commands:
       - python -m spacy download de_core_news_lg
       - >-
         python -m spacy train
-        configs/ner.cfg
+        configs/ner_charlstm.cfg
         --output training/de-wikineural/ner/
         --paths.vectors de_core_news_lg
         --nlp.lang de
         --paths.train corpus/ner/de-wikineural-train.spacy
         --paths.dev corpus/ner/de-wikineural-dev.spacy
         --gpu-id ${vars.gpu_id}
+        --code scripts/char_lstm.py
       - >-
         python -m spacy train
         configs/spancat.cfg
