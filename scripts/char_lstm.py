@@ -52,18 +52,18 @@ def to_unicode(doc: Doc, xp) -> Tuple[Ints1d, Ints1d, Ints1d]:
 def forward_docs2unicode(
     model: Model, docs: List[Doc], is_train: bool
 ) -> Tuple[List[Ints1d], List[Ints1d], List[Ints1d]]:
-    byte_list, start_list, end_list = [], [], []
+    unicodes_list, start_list, end_list = [], [], []
     xp = model.ops.xp
     for doc in docs:
-        unicode_data = to_unicode(doc, xp)
-        byte_list.append(unicode_data[0])
-        start_list.append(unicode_data[1])
-        end_list.append(unicode_data[2])
+        unicodes, starts, ends = to_unicode(doc, xp)
+        unicodes_list.append(unicodes)
+        start_list.append(starts)
+        end_list.append(ends)
 
     def backprop(dY):
         return []
 
-    return (byte_list, start_list, end_list), backprop
+    return (unicodes_list, start_list, end_list), backprop
 
 
 def forward_gather_tokens(
