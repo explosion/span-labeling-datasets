@@ -82,40 +82,40 @@ assets:
   - dest: "assets/wikigold.iob"
     description: "Wikigold dataset containing a manually annotated collection of Wikipedia text by Balasuriya et al. (ACL 2009)."
     url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/wikigold/CONLL-format/data/wikigold.conll.txt
-  - dest: "assets/en-wikineural-train.iob"
+  - dest: "assets/raw-en-wikineural-train.iob"
     description: "WikiNeural (en) training dataset from Tedeschi et al. (EMNLP 2021)"
     url: https://github.com/Babelscape/wikineural/blob/master/data/conll/en/train.conllu
-  - dest: "assets/en-wikineural-dev.iob"
+  - dest: "assets/raw-en-wikineural-dev.iob"
     description: "WikiNeural (en) dev dataset from Tedeschi et al. (EMNLP 2021)"
     url: https://github.com/Babelscape/wikineural/blob/master/data/conll/en/val.conllu
-  - dest: "assets/en-wikineural-test.iob"
+  - dest: "assets/raw-en-wikineural-test.iob"
     description: "WikiNeural (en) test dataset from Tedeschi et al. (EMNLP 2021)"
     url: https://github.com/Babelscape/wikineural/blob/master/data/conll/en/test.conllu
-  - dest: "assets/de-wikineural-train.iob"
+  - dest: "assets/raw-de-wikineural-train.iob"
     description: "WikiNeural (de) training dataset from Tedeschi et al. (EMNLP 2021)"
     url: https://github.com/Babelscape/wikineural/blob/master/data/conll/de/train.conllu
-  - dest: "assets/de-wikineural-dev.iob"
+  - dest: "assets/raw-de-wikineural-dev.iob"
     description: "WikiNeural (de) dev dataset from Tedeschi et al. (EMNLP 2021)"
     url: https://github.com/Babelscape/wikineural/blob/master/data/conll/de/val.conllu
-  - dest: "assets/de-wikineural-test.iob"
+  - dest: "assets/raw-de-wikineural-test.iob"
     description: "WikiNeural (de) test dataset from Tedeschi et al. (EMNLP 2021)"
     url: https://github.com/Babelscape/wikineural/blob/master/data/conll/de/test.conllu
-  - dest: "assets/es-wikineural-train.iob"
+  - dest: "assets/raw-es-wikineural-train.iob"
     description: "WikiNeural (es) training dataset from Tedeschi et al. (EMNLP 2021)"
     url: https://github.com/Babelscape/wikineural/blob/master/data/conll/es/train.conllu
-  - dest: "assets/es-wikineural-dev.iob"
+  - dest: "assets/raw-es-wikineural-dev.iob"
     description: "WikiNeural (es) dev dataset from Tedeschi et al. (EMNLP 2021)"
     url: https://github.com/Babelscape/wikineural/blob/master/data/conll/es/val.conllu
-  - dest: "assets/es-wikineural-test.iob"
+  - dest: "assets/raw-es-wikineural-test.iob"
     description: "WikiNeural (es) test dataset from Tedeschi et al. (EMNLP 2021)"
     url: https://github.com/Babelscape/wikineural/blob/master/data/conll/es/test.conllu
-  - dest: "assets/nl-wikineural-train.iob"
+  - dest: "assets/raw-nl-wikineural-train.iob"
     description: "WikiNeural (nl) training dataset from Tedeschi et al. (EMNLP 2021)"
     url: https://github.com/Babelscape/wikineural/blob/master/data/conll/nl/train.conllu
-  - dest: "assets/nl-wikineural-dev.iob"
+  - dest: "assets/raw-nl-wikineural-dev.iob"
     description: "WikiNeural (nl) dev dataset from Tedeschi et al. (EMNLP 2021)"
     url: https://github.com/Babelscape/wikineural/blob/master/data/conll/nl/val.conllu
-  - dest: "assets/nl-wikineural-test.iob"
+  - dest: "assets/raw-nl-wikineural-test.iob"
     description: "WikiNeural (nl) test dataset from Tedeschi et al. (EMNLP 2021)"
     url: https://github.com/Babelscape/wikineural/blob/master/data/conll/nl/test.conllu
   - dest: "assets/toxic_spans.csv"
@@ -682,30 +682,30 @@ commands:
   - name: "clean-wikineural"
     help: "Remove unnecessary indices from wikineural data"
     script:
-      - python -m scripts.preprocess_wikineural assets/de-wikineural-train.iob
-      - python -m scripts.preprocess_wikineural assets/de-wikineural-dev.iob
-      # - python -m scripts.preprocess_wikineural assets/de-wikineural-test.iob
-      - python -m scripts.preprocess_wikineural assets/en-wikineural-train.iob
-      - python -m scripts.preprocess_wikineural assets/en-wikineural-dev.iob
-      - python -m scripts.preprocess_wikineural assets/en-wikineural-test.iob
-      - python -m scripts.preprocess_wikineural assets/es-wikineural-train.iob
-      - python -m scripts.preprocess_wikineural assets/es-wikineural-dev.iob
-      - python -m scripts.preprocess_wikineural assets/es-wikineural-test.iob
-      - python -m scripts.preprocess_wikineural assets/nl-wikineural-train.iob
-      - python -m scripts.preprocess_wikineural assets/nl-wikineural-dev.iob
-      - python -m scripts.preprocess_wikineural assets/nl-wikineural-test.iob
+      - python -m scripts.preprocess_wikineural assets/raw-de-wikineural-train.iob assets/de-wikineural-train.iob
+      - python -m scripts.preprocess_wikineural assets/raw-de-wikineural-dev.iob assets/de-wikineural-dev.iob
+      - python -m scripts.preprocess_wikineural assets/raw-de-wikineural-test.iob assets/de-wikineural-test.iob
+      - python -m scripts.preprocess_wikineural assets/raw-en-wikineural-train.iob assets/en-wikineural-train.iob
+      - python -m scripts.preprocess_wikineural assets/raw-en-wikineural-dev.iob assets/en-wikineural-dev.iob
+      - python -m scripts.preprocess_wikineural assets/raw-en-wikineural-test.iob assets/en-wikineural-test.iob
+      - python -m scripts.preprocess_wikineural assets/raw-es-wikineural-train.iob assets/es-wikineural-train.iob
+      - python -m scripts.preprocess_wikineural assets/raw-es-wikineural-dev.iob assets/es-wikineural-dev.iob
+      - python -m scripts.preprocess_wikineural assets/raw-es-wikineural-test.iob assets/es-wikineural-test.iob
+      - python -m scripts.preprocess_wikineural assets/raw-nl-wikineural-train.iob assets/nl-wikineural-train.iob
+      - python -m scripts.preprocess_wikineural assets/raw-nl-wikineural-dev.iob assets/nl-wikineural-dev.iob
+      - python -m scripts.preprocess_wikineural assets/raw-nl-wikineural-test.iob assets/nl-wikineural-test.iob
     deps:
-      - assets/de-wikineural-train.iob
-      - assets/de-wikineural-dev.iob
-      - assets/en-wikineural-train.iob
-      - assets/en-wikineural-dev.iob
-      - assets/en-wikineural-test.iob
-      - assets/es-wikineural-train.iob
-      - assets/es-wikineural-dev.iob
-      - assets/es-wikineural-test.iob
-      - assets/nl-wikineural-train.iob
-      - assets/nl-wikineural-dev.iob
-      - assets/nl-wikineural-test.iob
+      - assets/raw-de-wikineural-train.iob
+      - assets/raw-de-wikineural-dev.iob
+      - assets/raw-en-wikineural-train.iob
+      - assets/raw-en-wikineural-dev.iob
+      - assets/raw-en-wikineural-test.iob
+      - assets/raw-es-wikineural-train.iob
+      - assets/raw-es-wikineural-dev.iob
+      - assets/raw-es-wikineural-test.iob
+      - assets/raw-nl-wikineural-train.iob
+      - assets/raw-nl-wikineural-dev.iob
+      - assets/raw-nl-wikineural-test.iob
     outputs:
       - assets/de-wikineural-train.iob
       - assets/de-wikineural-dev.iob
