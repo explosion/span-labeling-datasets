@@ -39,7 +39,7 @@ def MultiEmbed(
     else:
         attrs["dropout"] = 0.0
     # Two layers: embedding and output projection.
-    layers = [noop, noop]
+    layers = [noop(), noop()]
     model: Model = Model(
         "embed",
         forward,
@@ -60,7 +60,7 @@ def forward(
     embedding_layer = model.layers[0]
     output_layer = model.layers[1]
     embedded, bp_embed = embedding_layer(X, is_train)
-    Y, bp_output = output_layer(X, is_train)
+    Y, bp_output = output_layer(embedded, is_train)
 
     def backprop(dY: Floats2d):
         dO = bp_output(dY)
@@ -85,7 +85,7 @@ def _make_embed(
     rows = len(table) + 1
     embedder = chain(
         Remap(table, default=unk, column=column),
-        Embed(nO=width, nV=rows, column=column, dropout=dropout)
+        Embed(nO=width, nV=rows, column=0, dropout=dropout)
     )
     return embedder
 
@@ -119,11 +119,7 @@ def init(
     max_out = chain(
         with_array(
             Maxout(
-                width,
-                full_width,
-                nP=3,
-                dropout=dropout,
-                normalize=True
+                width, full_width, nP=3, dropout=dropout, normalize=True
             )
         ),
         ragged2list()
@@ -141,7 +137,7 @@ def init(
             Dropout(rate=dropout)
         )
     embedding_layer.initialize(X)
-    embedded = embedding_layer(X)
+    embedded, _ = embedding_layer(X, is_train=False)
     max_out.initialize(embedded)
-    model.replace_node(old_embeddings, embeddings)
+    model.replace_node(old_embeddings, embedding_layer)
     model.replace_node(old_output, max_out)

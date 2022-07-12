@@ -107,11 +107,11 @@ def make_mapper(
 
 if __name__ == "__main__":
     texts = [
-        "Hello, I am Robert Face."
-        "I like hanging out."
-        "Like everyone else, you know."
-        "Just hanging out"
-        "So yeah ..."
+        "Hello, I am Robert Face.",
+        "I like hanging out.",
+        "Like everyone else, you know.",
+        "Just hanging out",
+        "So yeah ...",
     ]
     nlp = spacy.blank('en')
     docbin = DocBin()
@@ -129,4 +129,7 @@ if __name__ == "__main__":
     embedder = MultiEmbed(100, 0)
     embedder.attrs["tables"] = mappers
     embedder.initialize(docs)
-    embedder(docs, False)
+    Y, _ = embedder(docs, False)
+    print(len(Y))
+    for y in Y:
+        print(y.shape)
