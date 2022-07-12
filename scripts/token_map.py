@@ -102,7 +102,7 @@ def make_mapper(
                     new_id += 1
                 mappers[attr][symbol] = new_id
                 new_id += 1
-    srsly.write_json(out_path, mappers)
+    srsly.write_msgpack(out_path, mappers)
 
 
 if __name__ == "__main__":
@@ -121,11 +121,12 @@ if __name__ == "__main__":
     docbin.to_disk("test.spacy")
     make_mapper(
         "test.spacy",
-        "mappers.json",
+        "mappers.msg",
         ["LOWER", "ORTH", "SHAPE"],
         language="en"
     )
-    mappers = srsly.read_json("mappers.json")
+    mappers = srsly.read_msgpack("mappers.msg")
     embedder = MultiEmbed(100, 0)
     embedder.attrs["tables"] = mappers
     embedder.initialize(docs)
+    embedder(docs, False)
