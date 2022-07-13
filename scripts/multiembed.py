@@ -1,17 +1,17 @@
 import spacy
 import thinc
-
-from functools import partial
+import srsly
+from pathlib import Path
 
 from spacy.tokens import Doc
+from spacy.language import Language
+from spacy.pipeline import TrainablePipe
 from thinc.api import Model, uniform_init, chain, with_array
-from with_column import remap_ids
 from thinc.api import list2ragged, ragged2list, concatenate, noop
-from thinc.types import Floats2d
-from typing import Optional, Callable, List, Dict
+from thinc.types import Floats2d, DTypes, Ints2d, Array2d
+from typing import Optional, Callable, List, Dict, Any
+from typing import Union, Sequence, Tuple
 
-
-Remap = remap_ids
 Embed = thinc.registry.layers.get("Embed.v1")
 Maxout = thinc.registry.layers.get("Maxout.v1")
 Dropout = thinc.registry.layers("Dropout.v1")
@@ -19,13 +19,91 @@ Vectors = thinc.registry.layers("spacy.StaticVectors.v2")
 Extract = thinc.registry.layers.get("spacy.FeatureExtractor.v1")
 
 
-@spacy.registry.layers("MultiEmbed.v1")
+InT = Union[Sequence[Any], Array2d]
+OutT = Ints2d
+
+
+@spacy.registry.callbacks("set_attr")
+def create_callback(
+    path: Path,
+    component: str,
+    attr: str,
+    layer: Optional[str],
+) -> Callable[[Language], Language]:
+    """
+    Should be set as a callback of [initialize.before_init].
+    You need to set the right ref in your model when you create it.
+    This is useful when you have some layer that requires a data
+    file from disk. The value will only be loaded during the '
+    initialize' step before training.
+    After training the attribute value will be serialized into the model,
+    and then during deserialization it's loaded
+    back in with the model data.
+    """
+    attr_value = srsly.read_msgpack(path)
+
+    def set_attr(nlp: Language) -> Language:
+        if not nlp.has_pipe(component):
+            raise ValueError(
+                "Trying to set attribute for non-existing component"
+            )
+        pipe: TrainablePipe = nlp.get_pipe(component)
+        model = pipe.model.get_ref(layer) if layer is not None else pipe.model
+        model.attrs[attr] = attr_value
+        return nlp
+    return set_attr
+
+@thinc.registry.layers("remap_ids.v2")
+def remap_ids(
+    table: Dict[Any, int] = {},
+    default: int = 0,
+    dtype: DTypes = "i",
+    column: Optional[int] = None
+) -> Model[InT, OutT]:
+    """Remap string or integer inputs using a mapping table, usually as a
+    preprocess before embeddings. The mapping table can be passed in on input,
+    or updated after the layer has been created. The mapping table is stored in
+    the "mapping_table" attribute.
+    """
+    return Model(
+        "remap_ids",
+        remap_forward,
+        attrs={
+            "table": table,
+            "dtype": dtype,
+            "default": default,
+            "column": column
+        },
+    )
+
+
+def remap_forward(
+    model: Model[InT, OutT], inputs: InT, is_train: bool
+) -> Tuple[OutT, Callable]:
+    table = model.attrs["table"]
+    default = model.attrs["default"]
+    dtype = model.attrs["dtype"]
+    column = model.attrs["column"]
+    if column is not None:
+        inputs = inputs[:, column]
+    # We wrap int around x, because in cupy each integer
+    # in the arrays is a cuda array with shape ()
+    values = [table.get(int(x), default) for x in inputs]
+    arr = model.ops.asarray2i(values, dtype=dtype)
+    output = model.ops.reshape2i(arr, -1, 1)
+
+    def backprop(dY: OutT) -> InT:
+        return model.ops.asarray([])
+
+    return output, backprop
+
+
+@spacy.registry.architectures("spacy.MultiEmbed.v1")
 def MultiEmbed(
-    nO: int,
+    width: int,
     unk: int,
     *,
     tables: Optional[Dict[str, Dict[int, int]]] = None,
-    initializer: Callable = uniform_init,
     include_static_vectors: Optional[bool] = False,
     dropout: Optional[float] = None
 ) -> Model[List[Doc], Floats2d]:
@@ -43,9 +121,9 @@ def MultiEmbed(
     model: Model = Model(
         "embed",
         forward,
-        init=partial(init, initializer),
+        init=init,
         attrs=attrs,
-        dims={"nO": nO},
+        dims={"width": width},
         layers=layers,
         params={},
     )
@@ -62,7 +140,7 @@ def forward(
     embedded, bp_embed = embedding_layer(X, is_train)
     Y, bp_output = output_layer(embedded, is_train)
 
-    def backprop(dY: Floats2d):
+    def backprop(dY: List[Floats2d]):
         dO = bp_output(dY)
         dX = bp_embed(dO)
         return dX
@@ -76,7 +154,6 @@ def _make_embed(
     width: int,
     column: int,
     table: Dict[int, int],
-    initializer: Callable,
     dropout: float
 ) -> Model[List[Doc], Floats2d]:
     """
@@ -84,14 +161,13 @@ def _make_embed(
     """
     rows = len(table) + 1
     embedder = chain(
-        Remap(table, default=unk, column=column),
+        remap_ids(table, default=unk, column=column),
         Embed(nO=width, nV=rows, column=0, dropout=dropout)
     )
     return embedder
 
 
 def init(
-    initializer: Callable,
     model: Model[List[Doc], Floats2d],
     X: Optional[List[Doc]] = None,
     Y: Optional = None,
@@ -102,7 +178,7 @@ def init(
     """
     tables = model.attrs["tables"]
     unk = model.attrs["unk"]
-    width = model.get_dim("nO")
+    width = model.get_dim("width")
     include_static_vectors = model.attrs["include_static_vectors"]
     dropout = model.attrs["dropout"]
     embeddings = []
@@ -112,7 +188,7 @@ def init(
     for i, (attr, mapper) in enumerate(tables.items()):
         attrs.append(attr)
         embedding = _make_embed(
-            attr, unk, width, i, mapper, initializer, dropout
+            attr, unk, width, i, mapper, dropout
         )
         embeddings.append(embedding)
     full_width = (len(embeddings) + include_static_vectors) * width
