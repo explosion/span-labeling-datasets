@@ -6,7 +6,7 @@ description: |
 vars:
   spans_key: "sc"
   gpu_id: 0
-  ner_config: "configs/ner/ner_tok2vec"
+  ner_config: "configs/ner/ner_multiembed"
   spancat_config: "configs/spancat/spancat_tok2vec_ngram"
 
 directories:
@@ -19,6 +19,7 @@ directories:
   - "training"
   - "metrics"
   - "vectors"
+  - "tables"
 
 workflows:
   anem:
@@ -143,8 +144,8 @@ commands:
   - name: "install"
     help: "Install dependencies"
     script:
-      - "python -m spacy download en_core_web_lg"
       - "python -m wandb login"
+      - "python -m spacy download en_core_web_lg"
       - "python -m spacy download nl_core_news_lg"
       - "python -m spacy download de_core_news_lg"
       - "python -m spacy download es_core_news_lg"
@@ -925,6 +926,35 @@ commands:
       - "corpus/ner/nl-wikineural-dev.spacy"
       - "corpus/ner/nl-wikineural-test.spacy"
 
+  - name: "make-wikineural-tables"
+    help: "Pre-compute token-to-id tables from the Wikineural training sets."
+    script:
+      - >- 
+        python scripts/token_map.py
+        corpus/ner/de-wikineural-train.spacy
+        tables/wikineural.de.table
+        --language de
+      
+      - >- 
+        python scripts/token_map.py
+        corpus/ner/en-wikineural-train.spacy
+        tables/wikineural.en.table
+        --language en
+      
+      - >- 
+        python scripts/token_map.py
+        corpus/ner/es-wikineural-train.spacy
+        tables/wikineural.es.table
+        --language es
+      
+
+      - >- 
+        python scripts/token_map.py
+        corpus/ner/nl-wikineural-train.spacy
+        tables/wikineural.nl.table
+        --language nl
+
+
   - name: "train-wikineural-spancat"
     help: "Train a spancat model for Wikineural datasets"
     script:
@@ -984,6 +1014,8 @@ commands:
         --nlp.lang de
         --paths.train corpus/ner/de-wikineural-train.spacy
         --paths.dev corpus/ner/de-wikineural-dev.spacy
+        --paths.tables tables/wikineural.de.table
+        --code scripts/multiembed.py
         --gpu-id ${vars.gpu_id}
       # Train en dataset
       - >-
