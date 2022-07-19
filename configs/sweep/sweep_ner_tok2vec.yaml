@@ -1,8 +1,19 @@
-method: bayes
+method: random
 metric:
   goal: maximize
-  name: ents_score_f
+  name: ents_f
 parameters:
+  components.tok2vec.model.embed.attrs:
+    values:
+      [
+        ["NORM", "PREFIX", "SUFFIX", "SHAPE"],
+        ["ORTH", "PREFIX", "SUFFIX", "SHAPE"],
+        ["NORM", "PREFIX", "SUFFIX"],
+        ["ORTH", "PREFIX", "SUFFIX"],
+        ["NORM"],
+        ["ORTH"],
+        ["LOWER"],
+      ]
   training.dropout:
     distribution: uniform
     max: 0.5

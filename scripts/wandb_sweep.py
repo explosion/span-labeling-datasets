@@ -2,19 +2,16 @@ from pathlib import Path
 from typing import Optional
 
 import typer
+import yaml
 from spacy import util
-from spacy.cli._util import (
-    parse_config_overrides,
-    import_code,
-    setup_gpu,
-    show_validation_error,
-)
+from spacy.cli._util import import_code, parse_config_overrides, setup_gpu
+from spacy.cli._util import show_validation_error
 from spacy.training.initialize import init_nlp
 from spacy.training.loop import train
 from thinc.api import Config
-
-import yaml
+from wasabi import msg
 from yaml.loader import SafeLoader
+
 import wandb
 
 app = typer.Typer()
@@ -33,6 +30,7 @@ def main(
     project_id: str = typer.Option("spancat-paper", help="WandB project ID."),
     num_trials: int = typer.Option(2, help="Number of trials to run for each hyperparam combination"),
     use_gpu: int = typer.Option(0, help="GPU id to use. Pass -1 to use the CPU."),
+    default_row_size: int = typer.Option(5000, help="Default row size for components.tok2vec.model.embed.rows")
     # fmt: on
 ):
 
@@ -48,8 +46,19 @@ def main(
         with wandb.init() as run:
             sweeps_config = Config(util.dot_to_dict(run.config))
             merged_config = Config(loaded_local_config).merge(sweeps_config)
+
+            # Hacky way to ensure that the rows are of equal length to the attrs
+            # Currently, wandb doesn't have a way to create conditional params: wandb/client#1487
+            rows = merged_config["components"]["tok2vec"]["model"]["embed"]["rows"]
+            attrs = merged_config["components"]["tok2vec"]["model"]["embed"]["attrs"]
+            if len(rows) != len(attrs) or not all(i == default_row_size for i in rows):
+                nrows = [default_row_size] * len(attrs)
+                msg.text(f"Setting components.tok2vec.model.embed.rows to {nrows}")
+                merged_config["components"]["tok2vec"]["model"]["embed"]["rows"] = nrows
+
+            breakpoint()
             with show_validation_error(merged_config, hint_fill=False):
-                nlp = init_nlp(merged_config, use_gpu)
+                nlp = init_nlp(merged_config, use_gpu=use_gpu)
             output_path.mkdir(parents=True, exist_ok=True)
             train(nlp, output_path, use_gpu=use_gpu)
 
