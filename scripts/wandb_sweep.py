@@ -56,7 +56,6 @@ def main(
                 msg.text(f"Setting components.tok2vec.model.embed.rows to {nrows}")
                 merged_config["components"]["tok2vec"]["model"]["embed"]["rows"] = nrows
 
-            breakpoint()
             with show_validation_error(merged_config, hint_fill=False):
                 nlp = init_nlp(merged_config, use_gpu=use_gpu)
             output_path.mkdir(parents=True, exist_ok=True)
