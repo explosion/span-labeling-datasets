@@ -14,11 +14,3 @@ parameters:
         ["ORTH"],
         ["LOWER"],
       ]
-  training.dropout:
-    distribution: uniform
-    max: 0.5
-    min: 0.05
-  training.optimizer.learn_rate:
-    distribution: uniform
-    max: 0.01
-    min: 0.001
