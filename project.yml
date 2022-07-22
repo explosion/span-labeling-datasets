@@ -6,7 +6,7 @@ description: |
 vars:
   spans_key: "sc"
   gpu_id: 0
-  ner_config: "configs/ner/ner_multiembed"
+  ner_config: "ner_metalstm"
   spancat_config: "configs/spancat/spancat_tok2vec_ngram"
 
 directories:
@@ -1008,14 +1008,15 @@ commands:
       # Train de dataset
       - >-
         python -m spacy train
-        ${vars.ner_config}.cfg
-        --output training/de-wikineural/ner_config/
+        configs/ner/${vars.ner_config}.cfg
+        --output training/de-wikineural/${vars.ner_config}
         --paths.vectors de_core_news_lg
         --nlp.lang de
         --paths.train corpus/ner/de-wikineural-train.spacy
         --paths.dev corpus/ner/de-wikineural-dev.spacy
-        --paths.tables tables/wikineural.de.table
-        --code scripts/multiembed.py
+        --paths.charlstm training/de-wikineural/ner_charlstm/model-best
+        --paths.tokenlstm training/de-wikineural/ner_tokenlstm/model-best
+        --code scripts/custom_components.py
         --gpu-id ${vars.gpu_id}
       # Train en dataset
       - >-
