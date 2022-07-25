@@ -25,7 +25,6 @@ def main(
     ctx: typer.Context,  # This is only used to read additional arguments
     default_config: Path = typer.Argument(..., help="Path for the default spaCy config to override."),
     wandb_config: Path = typer.Argument(..., help="Path for the WandB YAML configuration."),
-    output_path: Path = typer.Argument(..., help="Output path for the trained model."),
     code_path: Optional[Path] = typer.Option(None, "--code", "-c", help="Path to Python file with additional code (registered functions) to be imported."),
     project_id: str = typer.Option("spancat-paper", help="WandB project ID."),
     num_trials: int = typer.Option(2, help="Number of trials to run for each hyperparam combination"),
@@ -54,7 +53,7 @@ def main(
             with show_validation_error(merged_config, hint_fill=False):
                 nlp = init_nlp(merged_config, use_gpu=use_gpu)
             output_path.mkdir(parents=True, exist_ok=True)
-            train(nlp, output_path, use_gpu=use_gpu)
+            train(nlp, output_path=None, use_gpu=use_gpu)
 
     with open(wandb_config) as f:
         sweep_config = yaml.load(f, Loader=SafeLoader)
