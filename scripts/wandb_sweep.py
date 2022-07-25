@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Dict
 
 import typer
 import yaml
@@ -30,7 +30,7 @@ def main(
     project_id: str = typer.Option("spancat-paper", help="WandB project ID."),
     num_trials: int = typer.Option(2, help="Number of trials to run for each hyperparam combination"),
     use_gpu: int = typer.Option(0, help="GPU id to use. Pass -1 to use the CPU."),
-    default_row_size: int = typer.Option(5000, help="Default row size for components.tok2vec.model.embed.rows")
+    autofill_tok2vec_rows: Optional[int] = typer.Option(None, help="Update the tok2vec hyperparameter rows based on the chosen attr")
     # fmt: on
 ):
 
@@ -47,14 +47,9 @@ def main(
             sweeps_config = Config(util.dot_to_dict(run.config))
             merged_config = Config(loaded_local_config).merge(sweeps_config)
 
-            # Hacky way to ensure that the rows are of equal length to the attrs
-            # Currently, wandb doesn't have a way to create conditional params: wandb/client#1487
-            rows = merged_config["components"]["tok2vec"]["model"]["embed"]["rows"]
-            attrs = merged_config["components"]["tok2vec"]["model"]["embed"]["attrs"]
-            if len(rows) != len(attrs) or not all(i == default_row_size for i in rows):
-                nrows = [default_row_size] * len(attrs)
-                msg.text(f"Setting components.tok2vec.model.embed.rows to {nrows}")
-                merged_config["components"]["tok2vec"]["model"]["embed"]["rows"] = nrows
+            # FIXME: WandB overrides
+            if autofill_tok2vec_rows:
+                merged_config = _autofill_tok2vec_rows(merged_config)
 
             with show_validation_error(merged_config, hint_fill=False):
                 nlp = init_nlp(merged_config, use_gpu=use_gpu)
@@ -66,6 +61,23 @@ def main(
 
     sweep_id = wandb.sweep(sweep_config, project=project_id)
     wandb.agent(sweep_id, train_spacy, count=num_trials)
+
+
+def _autofill_tok2vec_rows(merged_config: Dict, row_size: 5000) -> Dict:
+    """WandB overload that fills the components.tok2vec.model.embed.rows based on the attrs
+
+    The problem with WandB is that it cannot do conditional hyperparameter setup. So we have
+    to manually override the components.tok2vec.model.embed.rows with a value based on the
+    chosen components.tok2vec.model.embed.attrs.
+    """
+    rows = merged_config["components"]["tok2vec"]["model"]["embed"]["rows"]
+    attrs = merged_config["components"]["tok2vec"]["model"]["embed"]["attrs"]
+    if len(rows) != len(attrs) or not all(i == row_size for i in rows):
+        nrows = [row_size] * len(attrs)
+        msg.text(f"Setting components.tok2vec.model.embed.rows to {nrows}")
+        merged_config["components"]["tok2vec"]["model"]["embed"]["rows"] = nrows
+
+    return merged_config
 
 
 if __name__ == "__main__":
