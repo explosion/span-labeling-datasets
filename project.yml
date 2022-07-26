@@ -247,6 +247,7 @@ commands:
       - "python -m spacy download es_core_news_lg"
 
   - name: "init-fasttext"
+    help: "Initialize the FastText vectors"
     script:
       - "gzip -d assets/fasttext.en.gz"
       - "gzip -d assets/fasttext.de.gz"

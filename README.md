@@ -21,7 +21,7 @@ Commands are only re-run if their inputs have changed.
 | Command | Description |
 | --- | --- |
 | `install` | Install dependencies |
-| `init-fasttext` |  |
+| `init-fasttext` | Initialize the FastText vectors |
 | `convert-wnut17` | Convert WNUT17 dataset into the spaCy format |
 | `train-wnut17-ner` | Train an ner model for WNUT17 |
 | `train-wnut17-spancat` | Train a spancat model for WNUT17 |
