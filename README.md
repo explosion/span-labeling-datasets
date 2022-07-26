@@ -21,30 +21,27 @@ Commands are only re-run if their inputs have changed.
 | Command | Description |
 | --- | --- |
 | `install` | Install dependencies |
-| `collate-results` | Collate results into the results directory |
-| `convert-archaeo` | Convert Dutch Archaeology dataset into the spaCy format |
-| `train-archaeo` | Train ner and spancat models for the Dutch Archaeology dataset |
-| `convert-toxic-spans` | Convert Toxic Spans dataset into the spaCy format |
-| `train-toxic-spans` | Train ner and spancat models for the Toxic Spans dataset |
-| `evaluate-toxic-spans` | Evaluate models for the Toxic Spans dataset |
-| `convert-sec_filings` | Convert SEC filings dataset into the spaCy format |
-| `train-sec_filings` | Train an NER and Spancat model for SEC Filings dataset |
-| `evaluate-sec_filings` | Evaluate the results for the SEC Filings dataset |
+| `init-fasttext` |  |
 | `convert-wnut17` | Convert WNUT17 dataset into the spaCy format |
-| `train-wnut17` | Train an ner and spancat model for WNUT17 |
+| `train-wnut17-ner` | Train an ner model for WNUT17 |
+| `train-wnut17-spancat` | Train a spancat model for WNUT17 |
 | `evaluate-wnut17` | Evaluate the results for the WNUT17 dataset |
-| `convert-btc` | Convert BTC dataset into the spaCy format |
-| `train-btc` | Train ner and spancat models for the Broad Twitter Corpus |
-| `convert-anem` | Convert AneM dataset into the spaCy format |
-| `train-anem` | Train an NER and Spancat model for AnEM |
-| `evaluate-anem` | Evaluate AnEM dataset |
-| `convert-wikigold` | Convert the Wikigold dataset into the spaCy format |
-| `train-wikigold` | Train ner and spancat models for the Wikigold corpus |
 | `clean-wikineural` | Remove unnecessary indices from wikineural data |
 | `convert-wikineural-spans` | Convert WikiNeural dataset (de, en, es, nl) into the spaCy format |
 | `convert-wikineural-ents` | Convert WikiNeural dataset (de, en, es, nl) into the spaCy format |
-| `train-wikineural` | Train an ner and spancat model for Wikineural datasets |
-| `evaluate-wikineural` | Evaluate the results for the Wikineural datasets |
+| `make-wikineural-tables` | Pre-compute token-to-id tables from the Wikineural training sets. |
+| `train-wikineural-spancat` | Train a spancat model for Wikineural datasets |
+| `train-wikineural-ner` | Train an ner model for Wikineural datasets |
+| `evaluate-wikineural-ner` | Evaluate the ner results for the Wikineural datasets |
+| `evaluate-wikineural-spancat` | Evaluate the spancat results for the Wikineural datasets |
+| `clean-conll` | Remove unnecessary indices from ConLL data |
+| `convert-conll-spans` | Convert CoNLL dataset (de, en, es, nl) into the spaCy format |
+| `convert-conll-ents` | Convert CoNLL dataset (de, en, es, nl) into the spaCy format |
+| `make-conll-tables` | Pre-compute token-to-id tables from the Wikineural training sets. |
+| `train-conll-spancat` | Train a spancat model for Wikineural datasets |
+| `train-conll-ner` | Train an ner model for Wikineural datasets |
+| `evaluate-conll-ner` | Evaluate the ner results for the CoNLL datasets |
+| `evaluate-conll-spancat` | Evaluate the spancat results for the Wikineural datasets |
 | `clean` | Remove intermediary files |
 
 ### ⏭ Workflows
@@ -56,14 +53,11 @@ inputs have changed.
 
 | Workflow | Steps |
 | --- | --- |
-| `anem` | `convert-anem` &rarr; `train-anem` &rarr; `evaluate-anem` |
-| `archaeo` | `convert-archaeo` &rarr; `train-archaeo` |
-| `btc` | `convert-btc` &rarr; `train-btc` |
-| `sec-filings` | `convert-sec_filings` &rarr; `train-sec_filings` &rarr; `evaluate-sec_filings` |
-| `wnut17` | `convert-wnut17` &rarr; `train-wnut17` &rarr; `evaluate-wnut17` |
-| `wikigold` | `convert-wikigold` &rarr; `train-wikigold` |
-| `wikineural` | `clean-wikineural` &rarr; `convert-wikineural-ents` &rarr; `convert-wikineural-spans` &rarr; `train-wikineural` &rarr; `evaluate-wikineural` |
-| `toxic-spans` | `convert-toxic-spans` &rarr; `train-toxic-spans` &rarr; `evaluate-toxic-spans` |
+| `wnut17` | `convert-wnut17` &rarr; `train-wnut17-spancat` &rarr; `train-wnut17-ner` &rarr; `evaluate-wnut17` |
+| `wikineural-ner` | `clean-wikineural` &rarr; `convert-wikineural-ents` &rarr; `train-wikineural-ner` &rarr; `evaluate-wikineural-ner` |
+| `wikineural-spancat` | `clean-wikineural` &rarr; `convert-wikineural-spans` &rarr; `train-wikineural-spancat` &rarr; `evaluate-wikineural-spancat` |
+| `conll-ner` | `clean-conll` &rarr; `convert-conll-ents` &rarr; `train-conll-ner` &rarr; `evaluate-conll-ner` |
+| `conll-spancat` | `clean-conll` &rarr; `convert-conll-spans` &rarr; `train-conll-spancat` &rarr; `evaluate-conll-spancat` |
 
 ### 🗂 Assets
 
@@ -73,28 +67,36 @@ in the project directory.
 
 | File | Source | Description |
 | --- | --- | --- |
-| `assets/sec_filings-train.iob` | URL | SEC filings training dataset from Alvarado et al. (ALTA 2015) |
-| `assets/sec_filings-test.iob` | URL | SEC filings test dataset from Alvarado et al. (ALTA 2015) |
-| `assets/wnut17-train.iob` | URL | WNUT17 training dataset for Emerging and Rare Entities Task from Derczynski et al., 2017 |
-| `assets/wnut17-dev.iob` | URL | WNUT17 dev dataset for Emerging and Rare Entities Task from Derczynski et al., 2017 |
-| `assets/wnut17-test.iob` | URL | WNUT17 test dataset for Emerging and Rare Entities Task from Derczynski et al., 2017 |
-| `assets/btc-general.iob` | URL | Broad Twitter Corpus (BTC) containing UK general tweets from Derczynski et al., 2016 |
-| `assets/anem-train.iob` | URL | Anatomical Entity Mention (AnEM) training corpus containing abstracts and full-text biomedical papers from Ohta et al. (ACL 2012) |
-| `assets/anem-test.iob` | URL | Anatomical Entity Mention (AnEM) test corpus containing abstracts and full-text biomedical papers from Ohta et al. (ACL 2012) |
-| `assets/wikigold.iob` | URL | Wikigold dataset containing a manually annotated collection of Wikipedia text by Balasuriya et al. (ACL 2009). |
-| `assets/en-wikineural-train.iob` | URL | WikiNeural (en) training dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/en-wikineural-dev.iob` | URL | WikiNeural (en) dev dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/en-wikineural-test.iob` | URL | WikiNeural (en) test dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/de-wikineural-train.iob` | URL | WikiNeural (de) training dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/de-wikineural-dev.iob` | URL | WikiNeural (de) dev dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/de-wikineural-test.iob` | URL | WikiNeural (de) test dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/es-wikineural-train.iob` | URL | WikiNeural (es) training dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/es-wikineural-dev.iob` | URL | WikiNeural (es) dev dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/es-wikineural-test.iob` | URL | WikiNeural (es) test dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/nl-wikineural-train.iob` | URL | WikiNeural (nl) training dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/nl-wikineural-dev.iob` | URL | WikiNeural (nl) dev dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/nl-wikineural-test.iob` | URL | WikiNeural (nl) test dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/toxic_spans.csv` | URL | Toxic Spans dataset from Pavlopoulos et al. (ACL 2022) |
-| `assets/archaeo.bio` | URL | Dutch Archaeological NER dataset by Alex Brandsen (LREC 2020) |
+| `assets/wnut17-train.iob` | Git | WNUT17 training dataset for Emerging and Rare Entities Task from Derczynski et al., 2017 |
+| `assets/wnut17-dev.iob` | Git | WNUT17 dev dataset for Emerging and Rare Entities Task from Derczynski et al., 2017 |
+| `assets/wnut17-test.iob` | Git | WNUT17 test dataset for Emerging and Rare Entities Task from Derczynski et al., 2017 |
+| `assets/raw-en-wikineural-train.iob` | Git | WikiNeural (en) training dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-en-wikineural-dev.iob` | Git | WikiNeural (en) dev dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-en-wikineural-test.iob` | Git | WikiNeural (en) test dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-de-wikineural-train.iob` | Git | WikiNeural (de) training dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-de-wikineural-dev.iob` | Git | WikiNeural (de) dev dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-de-wikineural-test.iob` | Git | WikiNeural (de) test dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-es-wikineural-train.iob` | Git | WikiNeural (es) training dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-es-wikineural-dev.iob` | Git | WikiNeural (es) dev dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-es-wikineural-test.iob` | Git | WikiNeural (es) test dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-nl-wikineural-train.iob` | Git | WikiNeural (nl) training dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-nl-wikineural-dev.iob` | Git | WikiNeural (nl) dev dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-nl-wikineural-test.iob` | Git | WikiNeural (nl) test dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-en-conll-train.iob` | Git | CoNLL 2003 (en) training dataset |
+| `assets/raw-en-conll-dev.iob` | Git | CoNLL 2003 (en) dev dataset |
+| `assets/raw-en-conll-test.iob` | Git | CoNLL 2003 (en) test dataset |
+| `assets/raw-de-conll-train.iob` | Git | CoNLL 2003 (de) training dataset |
+| `assets/raw-de-conll-dev.iob` | Git | CoNLL 2003 (de) dev dataset |
+| `assets/raw-de-conll-test.iob` | Git | CoNLL 2003 (de) test dataset |
+| `assets/raw-es-conll-train.iob` | Git | CoNLL 2002 (es) training dataset |
+| `assets/raw-es-conll-dev.iob` | Git | CoNLL 2002 (es) dev dataset |
+| `assets/raw-es-conll-test.iob` | Git | CoNLL (es) test dataset |
+| `assets/raw-nl-conll-train.iob` | Git | CoNLL 2002 (nl) training dataset |
+| `assets/raw-nl-conll-dev.iob` | Git | CoNLL 2002 (nl) dev dataset |
+| `assets/raw-nl-conll-test.iob` | Git | CoNLL 202 (nl) test dataset |
+| `assets/fasttext.en.gz` | URL |  |
+| `assets/fasttext.de.gz` | URL | German fastText vectors. |
+| `assets/fasttext.es.gz` | URL | Spanish fastText vectors. |
+| `assets/fasttext.nl.gz` | URL | Dutch fastText vectors. |
 
 <!-- SPACY PROJECT: AUTO-GENERATED DOCS END (do not remove) -->
