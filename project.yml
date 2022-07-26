@@ -22,11 +22,14 @@ directories:
   - "tables"
 
 workflows:
-  wnut17:
+  wnut17-ner:
+    - "convert-wnut17"
+    - "train-wnut17-ner"
+    - "evaluate-wnut17-ner"
+  wnut17-spancat:
     - "convert-wnut17"
     - "train-wnut17-spancat"
-    - "train-wnut17-ner"
-    - "evaluate-wnut17"
+    - "evaluate-wnut17-spancat"
   wikineural-ner:
     - "clean-wikineural"
     - "convert-wikineural-ents"
@@ -330,16 +333,9 @@ commands:
     outputs:
       - training/wnut17/${vars.spancat_config}/model-best
 
-  - name: "evaluate-wnut17"
-    help: "Evaluate the results for the WNUT17 dataset"
+  - name: "evaluate-wnut17-ner"
+    help: "Evaluate the NER results for the WNUT17 dataset"
     script:
-      - "mkdir -p metrics/wnut17/spancat"
-      - >-
-        python -m spacy evaluate
-        training/wnut17/${vars.spancat_config}/model-best
-        corpus/spancat/wnut17-dev.spacy
-        --output metrics/wnut17/${vars.spancat_config}/scores.json
-        --gpu-id ${vars.gpu_id}
       - "mkdir -p metrics/wnut17/ner"
       - >-
         python -m spacy evaluate
@@ -349,11 +345,25 @@ commands:
         --gpu-id ${vars.gpu_id}
     deps:
       - training/wnut17/${vars.ner_config}/model-best
-      - training/wnut17/${vars.spancat_config}/model-best
       - corpus/ner/wnut17-dev.spacy
-      - corpus/spancat/wnut17-dev.spacy
     outputs:
       - metrics/wnut17/${vars.ner_config}/scores.json
+
+  - name: "evaluate-wnut17-spancat"
+    help: "Evaluate the spancat results for the WNUT17 dataset"
+    script:
+      - "mkdir -p metrics/wnut17/spancat"
+      - >-
+        python -m spacy evaluate
+        training/wnut17/${vars.spancat_config}/model-best
+        corpus/spancat/wnut17-dev.spacy
+        --output metrics/wnut17/${vars.spancat_config}/scores.json
+        --gpu-id ${vars.gpu_id}
+      - "mkdir -p metrics/wnut17/ner"
+    deps:
+      - training/wnut17/${vars.spancat_config}/model-best
+      - corpus/spancat/wnut17-dev.spacy
+    outputs:
       - metrics/wnut17/${vars.spancat_config}/scores.json
 
   - name: "clean-wikineural"
