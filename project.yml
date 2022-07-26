@@ -27,13 +27,16 @@ workflows:
     - "train-wnut17-spancat"
     - "train-wnut17-ner"
     - "evaluate-wnut17"
-  wikineural:
+  wikineural-ner:
     - "clean-wikineural"
     - "convert-wikineural-ents"
+    - "train-wikineural-ner"
+    - "evaluate-wikineural-ner"
+  wikineural-spancat:
+    - "clean-wikineural"
     - "convert-wikineural-spans"
     - "train-wikineural-spancat"
-    - "train-wikineural-ner"
-    - "evaluate-wikineural"
+    - "evaluate-wikineural-spancat"
 
 assets:
   # WNUT17
