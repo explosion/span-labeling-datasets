@@ -55,176 +55,95 @@ assets:
   # WNUT17
   - dest: "assets/wnut17-train.iob"
     description: "WNUT17 training dataset for Emerging and Rare Entities Task from Derczynski et al., 2017"
-    git:
-      repo: "https://github.com/juand-r/entity-recognition-datasets"
-      branch: "master"
-      path: "data/WNUT17/CONLL-format/data/train/wnut17train.conll"
+    url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/WNUT17/CONLL-format/data/train/wnut17train.conll
   - dest: "assets/wnut17-dev.iob"
     description: "WNUT17 dev dataset for Emerging and Rare Entities Task from Derczynski et al., 2017"
-    git:
-      repo: "https://github.com/juand-r/entity-recognition-datasets"
-      branch: "master"
-      path: "data/WNUT17/CONLL-format/data/dev/emerging.dev.conll"
+    url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/WNUT17/CONLL-format/data/dev/emerging.dev.conll
   - dest: "assets/wnut17-test.iob"
     description: "WNUT17 test dataset for Emerging and Rare Entities Task from Derczynski et al., 2017"
-    git:
-      repo: "https://github.com/juand-r/entity-recognition-datasets"
-      branch: "master"
-      path: "data/WNUT17/CONLL-format/data/test/emerging.test.conll"
+    url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/WNUT17/CONLL-format/data/test/emerging.test.annotated
   ### Wikineural datasets ###
   # Wikineural (en)
   - dest: "assets/raw-en-wikineural-train.iob"
     description: "WikiNeural (en) training dataset from Tedeschi et al. (EMNLP 2021)"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/wikineural/en/train.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/wikineural/en/train.conllu
   - dest: "assets/raw-en-wikineural-dev.iob"
     description: "WikiNeural (en) dev dataset from Tedeschi et al. (EMNLP 2021)"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/wikineural/en/val.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/wikineural/en/val.conllu
   - dest: "assets/raw-en-wikineural-test.iob"
     description: "WikiNeural (en) test dataset from Tedeschi et al. (EMNLP 2021)"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/wikineural/en/test.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/wikineural/en/test.conllu
   # Wikineural (de)
   - dest: "assets/raw-de-wikineural-train.iob"
     description: "WikiNeural (de) training dataset from Tedeschi et al. (EMNLP 2021)"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/wikineural/de/train.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/wikineural/de/train.conllu
   - dest: "assets/raw-de-wikineural-dev.iob"
     description: "WikiNeural (de) dev dataset from Tedeschi et al. (EMNLP 2021)"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/wikineural/de/val.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/wikineural/de/val.conllu
   - dest: "assets/raw-de-wikineural-test.iob"
     description: "WikiNeural (de) test dataset from Tedeschi et al. (EMNLP 2021)"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/wikineural/de/test.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/wikineural/de/test.conllu
   # Wikineural (es)
   - dest: "assets/raw-es-wikineural-train.iob"
     description: "WikiNeural (es) training dataset from Tedeschi et al. (EMNLP 2021)"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/wikineural/es/train.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/wikineural/es/train.conllu
   - dest: "assets/raw-es-wikineural-dev.iob"
     description: "WikiNeural (es) dev dataset from Tedeschi et al. (EMNLP 2021)"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/wikineural/es/val.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/wikineural/es/val.conllu
   - dest: "assets/raw-es-wikineural-test.iob"
     description: "WikiNeural (es) test dataset from Tedeschi et al. (EMNLP 2021)"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/wikineural/es/test.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/wikineural/es/test.conllu
   # Wikineural (nl)
   - dest: "assets/raw-nl-wikineural-train.iob"
     description: "WikiNeural (nl) training dataset from Tedeschi et al. (EMNLP 2021)"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/wikineural/nl/train.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/wikineural/nl/train.conllu
   - dest: "assets/raw-nl-wikineural-dev.iob"
     description: "WikiNeural (nl) dev dataset from Tedeschi et al. (EMNLP 2021)"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/wikineural/nl/val.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/wikineural/nl/val.conllu
   - dest: "assets/raw-nl-wikineural-test.iob"
     description: "WikiNeural (nl) test dataset from Tedeschi et al. (EMNLP 2021)"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/wikineural/nl/test.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/wikineural/nl/test.conllu
   ### ConLL datasets ###
   #  CoNLL-2003 (en)
   - dest: "assets/raw-en-conll-train.iob"
     description: "CoNLL 2003 (en) training dataset"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/conll/en/train.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/en/train.conllu
   - dest: "assets/raw-en-conll-dev.iob"
     description: "CoNLL 2003 (en) dev dataset"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/conll/en/val.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/en/val.conllu
   - dest: "assets/raw-en-conll-test.iob"
     description: "CoNLL 2003 (en) test dataset"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/conll/en/test.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/en/test.conllu
   # CoNLL-2003 (de)
   - dest: "assets/raw-de-conll-train.iob"
     description: "CoNLL 2003 (de) training dataset"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/conll/de/train.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/de/train.conllu
   - dest: "assets/raw-de-conll-dev.iob"
     description: "CoNLL 2003 (de) dev dataset"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/conll/de/val.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/de/val.conllu
   - dest: "assets/raw-de-conll-test.iob"
     description: "CoNLL 2003 (de) test dataset"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/conll/de/test.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/de/test.conllu
   # CoNLL-2002 (es)
   - dest: "assets/raw-es-conll-train.iob"
     description: "CoNLL 2002 (es) training dataset"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/conll/es/train.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/es/train.conllu
   - dest: "assets/raw-es-conll-dev.iob"
     description: "CoNLL 2002 (es) dev dataset"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/conll/es/val.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/es/val.conllu
   - dest: "assets/raw-es-conll-test.iob"
     description: "CoNLL (es) test dataset"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/conll/es/test.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/es/test.conllu
   # CoNLL-2002 (nl)
   - dest: "assets/raw-nl-conll-train.iob"
     description: "CoNLL 2002 (nl) training dataset"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/conll/nl/train.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/nl/train.conllu
   - dest: "assets/raw-nl-conll-dev.iob"
     description: "CoNLL 2002 (nl) dev dataset"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/conll/nl/val.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/nl/val.conllu
   - dest: "assets/raw-nl-conll-test.iob"
     description: "CoNLL 202 (nl) test dataset"
-    git:
-      repo: "https://github.com/Babelscape/wikineural"
-      branch: "master"
-      path: "data/conll/nl/test.conllu"
+    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/nl/test.conllu
   # Fastext vectors
   - dest: "assets/fasttext.en.gz"
     descrption: "English fastText vectors."

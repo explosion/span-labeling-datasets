@@ -69,33 +69,33 @@ in the project directory.
 
 | File | Source | Description |
 | --- | --- | --- |
-| `assets/wnut17-train.iob` | Git | WNUT17 training dataset for Emerging and Rare Entities Task from Derczynski et al., 2017 |
-| `assets/wnut17-dev.iob` | Git | WNUT17 dev dataset for Emerging and Rare Entities Task from Derczynski et al., 2017 |
-| `assets/wnut17-test.iob` | Git | WNUT17 test dataset for Emerging and Rare Entities Task from Derczynski et al., 2017 |
-| `assets/raw-en-wikineural-train.iob` | Git | WikiNeural (en) training dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/raw-en-wikineural-dev.iob` | Git | WikiNeural (en) dev dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/raw-en-wikineural-test.iob` | Git | WikiNeural (en) test dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/raw-de-wikineural-train.iob` | Git | WikiNeural (de) training dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/raw-de-wikineural-dev.iob` | Git | WikiNeural (de) dev dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/raw-de-wikineural-test.iob` | Git | WikiNeural (de) test dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/raw-es-wikineural-train.iob` | Git | WikiNeural (es) training dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/raw-es-wikineural-dev.iob` | Git | WikiNeural (es) dev dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/raw-es-wikineural-test.iob` | Git | WikiNeural (es) test dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/raw-nl-wikineural-train.iob` | Git | WikiNeural (nl) training dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/raw-nl-wikineural-dev.iob` | Git | WikiNeural (nl) dev dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/raw-nl-wikineural-test.iob` | Git | WikiNeural (nl) test dataset from Tedeschi et al. (EMNLP 2021) |
-| `assets/raw-en-conll-train.iob` | Git | CoNLL 2003 (en) training dataset |
-| `assets/raw-en-conll-dev.iob` | Git | CoNLL 2003 (en) dev dataset |
-| `assets/raw-en-conll-test.iob` | Git | CoNLL 2003 (en) test dataset |
-| `assets/raw-de-conll-train.iob` | Git | CoNLL 2003 (de) training dataset |
-| `assets/raw-de-conll-dev.iob` | Git | CoNLL 2003 (de) dev dataset |
-| `assets/raw-de-conll-test.iob` | Git | CoNLL 2003 (de) test dataset |
-| `assets/raw-es-conll-train.iob` | Git | CoNLL 2002 (es) training dataset |
-| `assets/raw-es-conll-dev.iob` | Git | CoNLL 2002 (es) dev dataset |
-| `assets/raw-es-conll-test.iob` | Git | CoNLL (es) test dataset |
-| `assets/raw-nl-conll-train.iob` | Git | CoNLL 2002 (nl) training dataset |
-| `assets/raw-nl-conll-dev.iob` | Git | CoNLL 2002 (nl) dev dataset |
-| `assets/raw-nl-conll-test.iob` | Git | CoNLL 202 (nl) test dataset |
+| `assets/wnut17-train.iob` | URL | WNUT17 training dataset for Emerging and Rare Entities Task from Derczynski et al., 2017 |
+| `assets/wnut17-dev.iob` | URL | WNUT17 dev dataset for Emerging and Rare Entities Task from Derczynski et al., 2017 |
+| `assets/wnut17-test.iob` | URL | WNUT17 test dataset for Emerging and Rare Entities Task from Derczynski et al., 2017 |
+| `assets/raw-en-wikineural-train.iob` | URL | WikiNeural (en) training dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-en-wikineural-dev.iob` | URL | WikiNeural (en) dev dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-en-wikineural-test.iob` | URL | WikiNeural (en) test dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-de-wikineural-train.iob` | URL | WikiNeural (de) training dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-de-wikineural-dev.iob` | URL | WikiNeural (de) dev dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-de-wikineural-test.iob` | URL | WikiNeural (de) test dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-es-wikineural-train.iob` | URL | WikiNeural (es) training dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-es-wikineural-dev.iob` | URL | WikiNeural (es) dev dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-es-wikineural-test.iob` | URL | WikiNeural (es) test dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-nl-wikineural-train.iob` | URL | WikiNeural (nl) training dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-nl-wikineural-dev.iob` | URL | WikiNeural (nl) dev dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-nl-wikineural-test.iob` | URL | WikiNeural (nl) test dataset from Tedeschi et al. (EMNLP 2021) |
+| `assets/raw-en-conll-train.iob` | URL | CoNLL 2003 (en) training dataset |
+| `assets/raw-en-conll-dev.iob` | URL | CoNLL 2003 (en) dev dataset |
+| `assets/raw-en-conll-test.iob` | URL | CoNLL 2003 (en) test dataset |
+| `assets/raw-de-conll-train.iob` | URL | CoNLL 2003 (de) training dataset |
+| `assets/raw-de-conll-dev.iob` | URL | CoNLL 2003 (de) dev dataset |
+| `assets/raw-de-conll-test.iob` | URL | CoNLL 2003 (de) test dataset |
+| `assets/raw-es-conll-train.iob` | URL | CoNLL 2002 (es) training dataset |
+| `assets/raw-es-conll-dev.iob` | URL | CoNLL 2002 (es) dev dataset |
+| `assets/raw-es-conll-test.iob` | URL | CoNLL (es) test dataset |
+| `assets/raw-nl-conll-train.iob` | URL | CoNLL 2002 (nl) training dataset |
+| `assets/raw-nl-conll-dev.iob` | URL | CoNLL 2002 (nl) dev dataset |
+| `assets/raw-nl-conll-test.iob` | URL | CoNLL 202 (nl) test dataset |
 | `assets/fasttext.en.gz` | URL |  |
 | `assets/fasttext.de.gz` | URL | German fastText vectors. |
 | `assets/fasttext.es.gz` | URL | Spanish fastText vectors. |
