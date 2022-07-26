@@ -1,16 +1,16 @@
 import spacy
 import thinc
-import numpy as np
 
 from spacy.tokens import Doc
 from typing import Tuple, List
 from thinc.types import Ints1d, Floats2d
-from thinc.api import HashEmbed, Model, chain
+from thinc.api import HashEmbed, Model, chain, residual, clone
 from thinc.api import with_getitem, with_array, with_padded
 from thinc.api import get_array_module
 
 
-def docs2unicode() -> Model[List[Doc], Tuple[List[Ints1d], List[Ints1d], List[Ints1d]]]:
+def docs2unicode(
+) -> Model[List[Doc], Tuple[List[Ints1d], List[Ints1d], List[Ints1d]]]:
     """
     Convert a list of docs into variable length unicode arrays.
     The layer also returns the start and end indices for each token.
@@ -102,7 +102,7 @@ def UnicodeLSTMEmbed(
     depth: int = 2,
     seed: int = 100101,
     dropout: float = 0.2
-):
+) -> Model[List[Doc], List[Floats2d]]:
     """
     Character-level LSTM running on codepoints embedded
     with the hashing-trick -- similar to CANINE.
@@ -119,14 +119,16 @@ def UnicodeLSTMEmbed(
     """
     embedder = HashEmbed(width, rows, seed=seed)
     bilstm_ = spacy.registry.architectures.get("spacy.TorchBiLSTMEncoder.v1")
-    norm = thinc.registry.layers.get("LayerNorm.v1")
-    relu = thinc.registry.layers.get("Relu.v1")
+    relu = thinc.registry.layers.get("Relu.v1")(width, normalize=True)
     bilstm = bilstm_(width, depth, dropout)
-    mlp_out = chain(relu(width, normalize=True), relu(width, normalize=True))
+    mlp_out = clone(residual(relu), 2)
     encode = chain(
         docs2unicode(),
         with_getitem(
-            0, chain(with_array(embedder), with_padded(bilstm), with_array(mlp_out))
+            0, chain(
+                with_array(embedder),
+                with_padded(residual(bilstm)),
+                with_array(residual(mlp_out)))
         ),
         gather_tokens(),
     )
