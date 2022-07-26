@@ -22,7 +22,8 @@ Commands are only re-run if their inputs have changed.
 | --- | --- |
 | `install` | Install dependencies |
 | `init-fasttext` | Initialize the FastText vectors |
-| `convert-wnut17` | Convert WNUT17 dataset into the spaCy format |
+| `convert-wnut17-ents` | Convert WNUT17 dataset into the spaCy format |
+| `convert-wnut17-spans` | Convert WNUT17 dataset into the spaCy format |
 | `train-wnut17-ner` | Train an ner model for WNUT17 |
 | `train-wnut17-spancat` | Train a spancat model for WNUT17 |
 | `evaluate-wnut17-ner` | Evaluate the NER results for the WNUT17 dataset |
@@ -54,8 +55,8 @@ inputs have changed.
 
 | Workflow | Steps |
 | --- | --- |
-| `wnut17-ner` | `convert-wnut17` &rarr; `train-wnut17-ner` &rarr; `evaluate-wnut17-ner` |
-| `wnut17-spancat` | `convert-wnut17` &rarr; `train-wnut17-spancat` &rarr; `evaluate-wnut17-spancat` |
+| `wnut17-ner` | `convert-wnut17-ents` &rarr; `train-wnut17-ner` &rarr; `evaluate-wnut17-ner` |
+| `wnut17-spancat` | `convert-wnut17-spans` &rarr; `train-wnut17-spancat` &rarr; `evaluate-wnut17-spancat` |
 | `wikineural-ner` | `clean-wikineural` &rarr; `convert-wikineural-ents` &rarr; `train-wikineural-ner` &rarr; `evaluate-wikineural-ner` |
 | `wikineural-spancat` | `clean-wikineural` &rarr; `convert-wikineural-spans` &rarr; `train-wikineural-spancat` &rarr; `evaluate-wikineural-spancat` |
 | `conll-ner` | `clean-conll` &rarr; `convert-conll-ents` &rarr; `train-conll-ner` &rarr; `evaluate-conll-ner` |

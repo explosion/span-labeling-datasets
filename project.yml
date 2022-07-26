@@ -23,11 +23,11 @@ directories:
 
 workflows:
   wnut17-ner:
-    - "convert-wnut17"
+    - "convert-wnut17-ents"
     - "train-wnut17-ner"
     - "evaluate-wnut17-ner"
   wnut17-spancat:
-    - "convert-wnut17"
+    - "convert-wnut17-spans"
     - "train-wnut17-spancat"
     - "evaluate-wnut17-spancat"
   wikineural-ner:
@@ -180,22 +180,9 @@ commands:
       - "python -m spacy init vectors de assets/fasttext.de vectors/fasttext-de"
       - "python -m spacy init vectors nl assets/fasttext.nl vectors/fasttext-nl"
 
-  - name: "convert-wnut17"
+  - name: "convert-wnut17-ents"
     help: "Convert WNUT17 dataset into the spaCy format"
     script:
-      - >-
-        python -m scripts.convert_to_spans
-        assets/wnut17-train.iob corpus/spancat/
-        --spans-key ${vars.spans_key}
-      - >-
-        python -m scripts.convert_to_spans
-        assets/wnut17-dev.iob corpus/spancat/
-        --spans-key ${vars.spans_key}
-      - >-
-        python -m scripts.convert_to_spans
-        assets/wnut17-test.iob corpus/spancat/
-        --spans-key ${vars.spans_key}
-      # NER
       - >-
         python -m scripts.convert_to_spans
         assets/wnut17-train.iob corpus/ner/
@@ -216,6 +203,27 @@ commands:
       - corpus/ner/wnut17-train.spacy
       - corpus/ner/wnut17-dev.spacy
       - corpus/ner/wnut17-test.spacy
+
+  - name: "convert-wnut17-spans"
+    help: "Convert WNUT17 dataset into the spaCy format"
+    script:
+      - >-
+        python -m scripts.convert_to_spans
+        assets/wnut17-train.iob corpus/spancat/
+        --spans-key ${vars.spans_key}
+      - >-
+        python -m scripts.convert_to_spans
+        assets/wnut17-dev.iob corpus/spancat/
+        --spans-key ${vars.spans_key}
+      - >-
+        python -m scripts.convert_to_spans
+        assets/wnut17-test.iob corpus/spancat/
+        --spans-key ${vars.spans_key}
+    deps:
+      - assets/wnut17-train.iob
+      - assets/wnut17-dev.iob
+      - assets/wnut17-test.iob
+    outputs:
       - corpus/spancat/wnut17-train.spacy
       - corpus/spancat/wnut17-dev.spacy
       - corpus/spancat/wnut17-test.spacy
@@ -1143,6 +1151,6 @@ commands:
     help: "Remove intermediary files"
     script:
       - "rm -rf assets/*"
-      - "rm -rf corpus/spancat/*"
+      - "rm -rf corpus/*"
       - "rm -rf training/*"
       - "rm -rf metrics/*"
