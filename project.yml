@@ -1,7 +1,9 @@
 title: "Spancat datasets"
 description: |
   This project compiles various spancat datasets and their converters into the
-  [spaCy format](https://spacy.io/api/data-formats).
+  [spaCy format](https://spacy.io/api/data-formats). You can use this in tandem
+  with the [`spancat-encoders`](https://github.com/explosion/spancat-encoders)
+  repository to run various experiments on these datasets.
 
 vars:
   spans_key: "sc"
