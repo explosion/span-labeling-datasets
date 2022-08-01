@@ -20,30 +20,14 @@ Commands are only re-run if their inputs have changed.
 
 | Command | Description |
 | --- | --- |
-| `install` | Install dependencies |
-| `init-fasttext` | Initialize the FastText vectors |
 | `convert-wnut17-ents` | Convert WNUT17 dataset into the spaCy format |
 | `convert-wnut17-spans` | Convert WNUT17 dataset into the spaCy format |
-| `train-wnut17-ner` | Train an ner model for WNUT17 |
-| `train-wnut17-spancat` | Train a spancat model for WNUT17 |
-| `evaluate-wnut17-ner` | Evaluate the NER results for the WNUT17 dataset |
-| `evaluate-wnut17-spancat` | Evaluate the spancat results for the WNUT17 dataset |
 | `clean-wikineural` | Remove unnecessary indices from wikineural data |
 | `convert-wikineural-spans` | Convert WikiNeural dataset (de, en, es, nl) into the spaCy format |
 | `convert-wikineural-ents` | Convert WikiNeural dataset (de, en, es, nl) into the spaCy format |
-| `make-wikineural-tables` | Pre-compute token-to-id tables from the Wikineural training sets. |
-| `train-wikineural-spancat` | Train a spancat model for Wikineural datasets |
-| `train-wikineural-ner` | Train an ner model for Wikineural datasets |
-| `evaluate-wikineural-ner` | Evaluate the ner results for the Wikineural datasets |
-| `evaluate-wikineural-spancat` | Evaluate the spancat results for the Wikineural datasets |
 | `clean-conll` | Remove unnecessary indices from ConLL data |
 | `convert-conll-spans` | Convert CoNLL dataset (de, en, es, nl) into the spaCy format |
 | `convert-conll-ents` | Convert CoNLL dataset (de, en, es, nl) into the spaCy format |
-| `make-conll-tables` | Pre-compute token-to-id tables from the Wikineural training sets. |
-| `train-conll-spancat` | Train a spancat model for Wikineural datasets |
-| `train-conll-ner` | Train an ner model for Wikineural datasets |
-| `evaluate-conll-ner` | Evaluate the ner results for the CoNLL datasets |
-| `evaluate-conll-spancat` | Evaluate the spancat results for the Wikineural datasets |
 | `clean` | Remove intermediary files |
 
 ### ⏭ Workflows
@@ -55,12 +39,9 @@ inputs have changed.
 
 | Workflow | Steps |
 | --- | --- |
-| `wnut17-ner` | `convert-wnut17-ents` &rarr; `train-wnut17-ner` &rarr; `evaluate-wnut17-ner` |
-| `wnut17-spancat` | `convert-wnut17-spans` &rarr; `train-wnut17-spancat` &rarr; `evaluate-wnut17-spancat` |
-| `wikineural-ner` | `clean-wikineural` &rarr; `convert-wikineural-ents` &rarr; `train-wikineural-ner` &rarr; `evaluate-wikineural-ner` |
-| `wikineural-spancat` | `clean-wikineural` &rarr; `convert-wikineural-spans` &rarr; `train-wikineural-spancat` &rarr; `evaluate-wikineural-spancat` |
-| `conll-ner` | `clean-conll` &rarr; `convert-conll-ents` &rarr; `train-conll-ner` &rarr; `evaluate-conll-ner` |
-| `conll-spancat` | `clean-conll` &rarr; `convert-conll-spans` &rarr; `train-conll-spancat` &rarr; `evaluate-conll-spancat` |
+| `wnut17` | `convert-wnut17-ents` &rarr; `convert-wnut17-spans` |
+| `wikineural` | `clean-wikineural` &rarr; `convert-wikineural-ents` &rarr; `convert-wikineural-spans` |
+| `conll` | `clean-conll` &rarr; `convert-conll-spans` |
 
 ### 🗂 Assets
 
@@ -97,9 +78,5 @@ in the project directory.
 | `assets/raw-nl-conll-train.iob` | URL | CoNLL 2002 (nl) training dataset |
 | `assets/raw-nl-conll-dev.iob` | URL | CoNLL 2002 (nl) dev dataset |
 | `assets/raw-nl-conll-test.iob` | URL | CoNLL 202 (nl) test dataset |
-| `assets/fasttext.en.gz` | URL |  |
-| `assets/fasttext.de.gz` | URL | German fastText vectors. |
-| `assets/fasttext.es.gz` | URL | Spanish fastText vectors. |
-| `assets/fasttext.nl.gz` | URL | Dutch fastText vectors. |
 
 <!-- SPACY PROJECT: AUTO-GENERATED DOCS END (do not remove) -->
