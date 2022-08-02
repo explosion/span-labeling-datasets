@@ -28,6 +28,9 @@ workflows:
   conll:
     - "clean-conll"
     - "convert-conll-spans"
+  archaeo:
+    - "convert-archaeo-ents"
+    - "convert-archaeo-spans"
 
 assets:
   # WNUT17
@@ -122,6 +125,10 @@ assets:
   - dest: "assets/raw-nl-conll-test.iob"
     description: "CoNLL 202 (nl) test dataset"
     url: https://github.com/Babelscape/wikineural/blob/master/data/conll/nl/test.conllu
+  ## Archaeo dataset ##
+  - dest: "assets/archaeo.bio"
+    description: "Dutch Archaeological NER dataset by Alex Brandsen (LREC 2020)"
+    url: https://github.com/alexbrandsen/dutch-archaeo-NER-dataset/blob/master/complete-bio-gs.bio
 
 commands:
   - name: "convert-wnut17-ents"
@@ -613,6 +620,46 @@ commands:
       - "corpus/ner/nl-conll-train.spacy"
       - "corpus/ner/nl-conll-dev.spacy"
       - "corpus/ner/nl-conll-test.spacy"
+
+  - name: "convert-archaeo-spans"
+    help: "Convert Dutch Archaeology dataset into the spaCy format"
+    script:
+      - >-
+        python -m scripts.convert_to_spans
+        assets/archaeo.bio corpus/spancat/
+        --spans-key ${vars.spans_key}
+        --converter iob
+      - >-
+        python -m scripts.split_docs
+        corpus/spancat/archaeo.spacy corpus/spancat
+        --seed 42
+        --shuffle
+    deps:
+      - "assets/archaeo.bio"
+    outputs:
+      - "corpus/spancat/archaeo-train.spacy"
+      - "corpus/spancat/archaeo-dev.spacy"
+      - "corpus/spancat/archaeo-test.spacy"
+
+  - name: "convert-archaeo-ents"
+    help: "Convert Dutch Archaeology dataset into the spaCy format"
+    script:
+      - >-
+        python -m scripts.convert_to_spans
+        assets/archaeo.bio corpus/ner/
+        --use-ents
+        --converter iob
+      - >-
+        python -m scripts.split_docs
+        corpus/ner/archaeo.spacy corpus/ner/
+        --seed 42
+        --shuffle
+    deps:
+      - "assets/archaeo.bio"
+    outputs:
+      - "corpus/ner/archaeo-train.spacy"
+      - "corpus/ner/archaeo-dev.spacy"
+      - "corpus/ner/archaeo-test.spacy"
 
   - name: "clean"
     help: "Remove intermediary files"

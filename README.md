@@ -3,7 +3,9 @@
 # 🪐 spaCy Project: Spancat datasets
 
 This project compiles various spancat datasets and their converters into the
-[spaCy format](https://spacy.io/api/data-formats).
+[spaCy format](https://spacy.io/api/data-formats). You can use this in tandem
+with the [`spancat-encoders`](https://github.com/explosion/spancat-encoders)
+repository to run various experiments on these datasets.
 
 
 ## 📋 project.yml
@@ -28,6 +30,8 @@ Commands are only re-run if their inputs have changed.
 | `clean-conll` | Remove unnecessary indices from ConLL data |
 | `convert-conll-spans` | Convert CoNLL dataset (de, en, es, nl) into the spaCy format |
 | `convert-conll-ents` | Convert CoNLL dataset (de, en, es, nl) into the spaCy format |
+| `convert-archaeo-spans` | Convert Dutch Archaeology dataset into the spaCy format |
+| `convert-archaeo-ents` | Convert Dutch Archaeology dataset into the spaCy format |
 | `clean` | Remove intermediary files |
 
 ### ⏭ Workflows
@@ -42,6 +46,7 @@ inputs have changed.
 | `wnut17` | `convert-wnut17-ents` &rarr; `convert-wnut17-spans` |
 | `wikineural` | `clean-wikineural` &rarr; `convert-wikineural-ents` &rarr; `convert-wikineural-spans` |
 | `conll` | `clean-conll` &rarr; `convert-conll-spans` |
+| `archaeo` | `convert-archaeo-ents` &rarr; `convert-archaeo-spans` |
 
 ### 🗂 Assets
 
@@ -78,5 +83,6 @@ in the project directory.
 | `assets/raw-nl-conll-train.iob` | URL | CoNLL 2002 (nl) training dataset |
 | `assets/raw-nl-conll-dev.iob` | URL | CoNLL 2002 (nl) dev dataset |
 | `assets/raw-nl-conll-test.iob` | URL | CoNLL 202 (nl) test dataset |
+| `assets/archaeo.bio` | URL | Dutch Archaeological NER dataset by Alex Brandsen (LREC 2020) |
 
 <!-- SPACY PROJECT: AUTO-GENERATED DOCS END (do not remove) -->
