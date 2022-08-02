@@ -32,6 +32,8 @@ Commands are only re-run if their inputs have changed.
 | `convert-conll-ents` | Convert CoNLL dataset (de, en, es, nl) into the spaCy format |
 | `convert-archaeo-spans` | Convert Dutch Archaeology dataset into the spaCy format |
 | `convert-archaeo-ents` | Convert Dutch Archaeology dataset into the spaCy format |
+| `convert-anem-spans` | Convert AnEM dataset into the spaCy format |
+| `convert-anem-ents` | Convert AnEM dataset into the spaCy format |
 | `clean` | Remove intermediary files |
 
 ### ⏭ Workflows
@@ -47,6 +49,7 @@ inputs have changed.
 | `wikineural` | `clean-wikineural` &rarr; `convert-wikineural-ents` &rarr; `convert-wikineural-spans` |
 | `conll` | `clean-conll` &rarr; `convert-conll-spans` |
 | `archaeo` | `convert-archaeo-ents` &rarr; `convert-archaeo-spans` |
+| `anem` | `convert-anem-ents` &rarr; `convert-anem-spans` |
 
 ### 🗂 Assets
 
@@ -84,5 +87,7 @@ in the project directory.
 | `assets/raw-nl-conll-dev.iob` | URL | CoNLL 2002 (nl) dev dataset |
 | `assets/raw-nl-conll-test.iob` | URL | CoNLL 202 (nl) test dataset |
 | `assets/archaeo.bio` | URL | Dutch Archaeological NER dataset by Alex Brandsen (LREC 2020) |
+| `assets/anem-train.iob` | URL | Anatomical Entity Mention (AnEM) training corpus containing abstracts and full-text biomedical papers from Ohta et al. (ACL 2012) |
+| `assets/anem-test.iob` | URL | Anatomical Entity Mention (AnEM) test corpus containing abstracts and full-text biomedical papers from Ohta et al. (ACL 2012) |
 
 <!-- SPACY PROJECT: AUTO-GENERATED DOCS END (do not remove) -->

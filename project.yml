@@ -31,6 +31,9 @@ workflows:
   archaeo:
     - "convert-archaeo-ents"
     - "convert-archaeo-spans"
+  anem:
+    - "convert-anem-ents"
+    - "convert-anem-spans"
 
 assets:
   # WNUT17
@@ -125,10 +128,17 @@ assets:
   - dest: "assets/raw-nl-conll-test.iob"
     description: "CoNLL 202 (nl) test dataset"
     url: https://github.com/Babelscape/wikineural/blob/master/data/conll/nl/test.conllu
-  ## Archaeo dataset ##
+  ### Archaeo dataset ###
   - dest: "assets/archaeo.bio"
     description: "Dutch Archaeological NER dataset by Alex Brandsen (LREC 2020)"
     url: https://github.com/alexbrandsen/dutch-archaeo-NER-dataset/blob/master/complete-bio-gs.bio
+  ### AnEM dataset ###
+  - dest: "assets/anem-train.iob"
+    description: "Anatomical Entity Mention (AnEM) training corpus containing abstracts and full-text biomedical papers from Ohta et al. (ACL 2012)"
+    url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/AnEM/CONLL-format/data/AnEM.train
+  - dest: "assets/anem-test.iob"
+    description: "Anatomical Entity Mention (AnEM) test corpus containing abstracts and full-text biomedical papers from Ohta et al. (ACL 2012)"
+    url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/AnEM/CONLL-format/data/AnEM.test
 
 commands:
   - name: "convert-wnut17-ents"
@@ -660,6 +670,56 @@ commands:
       - "corpus/ner/archaeo-train.spacy"
       - "corpus/ner/archaeo-dev.spacy"
       - "corpus/ner/archaeo-test.spacy"
+
+  - name: "convert-anem-spans"
+    help: "Convert AnEM dataset into the spaCy format"
+    script:
+      - >-
+        python -m scripts.convert_to_spans
+        assets/anem-train.iob corpus/spancat/
+        --spans-key ${vars.spans_key}
+        --converter auto
+        --train-size 0.8
+        --seed 42
+        --shuffle
+      - mv corpus/spancat/anem-train-dev.spacy corpus/spancat/anem-dev.spacy
+      - >-
+        python -m scripts.convert_to_spans
+        assets/anem-test.iob corpus/spancat/
+        --spans-key ${vars.spans_key}
+        --converter auto
+    deps:
+      - assets/anem-train.iob
+      - assets/anem-test.iob
+    outputs:
+      - corpus/spancat/anem-train.spacy
+      - corpus/spancat/anem-dev.spacy
+      - corpus/spancat/anem-test.spacy
+
+  - name: "convert-anem-ents"
+    help: "Convert AnEM dataset into the spaCy format"
+    script:
+      - >-
+        python -m scripts.convert_to_spans
+        assets/anem-train.iob corpus/ner/
+        --use-ents
+        --converter auto
+        --train-size 0.8
+        --seed 42
+        --shuffle
+      - mv corpus/ner/anem-train-dev.spacy corpus/ner/anem-dev.spacy
+      - >-
+        python -m scripts.convert_to_spans
+        assets/anem-test.iob corpus/ner/
+        --use-ents
+        --converter auto
+    deps:
+      - assets/anem-train.iob
+      - assets/anem-test.iob
+    outputs:
+      - corpus/ner/anem-train.spacy
+      - corpus/ner/anem-dev.spacy
+      - corpus/ner/anem-test.spacy
 
   - name: "clean"
     help: "Remove intermediary files"
