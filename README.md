@@ -47,7 +47,7 @@ inputs have changed.
 | --- | --- |
 | `wnut17` | `convert-wnut17-ents` &rarr; `convert-wnut17-spans` |
 | `wikineural` | `clean-wikineural` &rarr; `convert-wikineural-ents` &rarr; `convert-wikineural-spans` |
-| `conll` | `clean-conll` &rarr; `convert-conll-spans` |
+| `conll` | `clean-conll` &rarr; `convert-conll-spans` &rarr; `convert-conll-ents` |
 | `archaeo` | `convert-archaeo-ents` &rarr; `convert-archaeo-spans` |
 | `anem` | `convert-anem-ents` &rarr; `convert-anem-spans` |
 

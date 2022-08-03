@@ -28,6 +28,7 @@ workflows:
   conll:
     - "clean-conll"
     - "convert-conll-spans"
+    - "convert-conll-ents"
   archaeo:
     - "convert-archaeo-ents"
     - "convert-archaeo-spans"
@@ -560,7 +561,6 @@ commands:
         python -m scripts.convert_to_spans
         assets/de-conll-dev.iob corpus/ner/
         --use-ents
-      # - python -m scripts.preprocess_conll assets/de-conll-test.iob
       # - >-
       #   python -m scripts.convert_to_spans
       #   assets/de-conll-test.iob corpus/spancat/
@@ -620,7 +620,7 @@ commands:
     outputs:
       - "corpus/ner/de-conll-train.spacy"
       - "corpus/ner/de-conll-dev.spacy"
-      # - "corpus/spancat/de-conll-test.spacy"
+      # - "corpus/ner/de-conll-test.spacy"
       - "corpus/ner/en-conll-train.spacy"
       - "corpus/ner/en-conll-dev.spacy"
       - "corpus/ner/en-conll-test.spacy"
