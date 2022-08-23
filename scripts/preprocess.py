@@ -8,11 +8,10 @@ Arg = typer.Argument
 Opt = typer.Option
 
 
-def preprocess_wikineural(input_path: Path, output_path: Path):
+def preprocess(input_path: Path, output_path: Path):
     """Helper function to remove the indices for the WikiNeural dataset"""
     with input_path.open() as f:
         lines = f.readlines()
-    msg.good(f"Loaded file from {input_path}")
     with output_path.open("w") as f:
         for i, line in enumerate(lines):
             # XXX bit weird, but line 9883 in the German ConLL dev set
@@ -27,4 +26,4 @@ def preprocess_wikineural(input_path: Path, output_path: Path):
 
 
 if __name__ == "__main__":
-    typer.run(preprocess_wikineural)
+    typer.run(preprocess)
