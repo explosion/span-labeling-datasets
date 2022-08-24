@@ -1,22 +1,46 @@
 """Split a spaCy-formatted file into train, dev, and test partitions"""
 
 from pathlib import Path
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Any, List
 
+import random
 import typer
 import spacy
+from math import ceil
 from spacy.tokens import DocBin
-from sklearn.model_selection import train_test_split
 from wasabi import msg
 
 Arg = typer.Argument
 Opt = typer.Option
 
 
+def _train_dev_test_split(
+    data: List[Any],
+    train_size,
+    dev_size: float,
+    test_size: float,
+    shuffle: Optional[bool] = False,
+    seed: Optional[int] = None,
+) -> Tuple[List[Any], List[Any]]:
+    if shuffle:
+        if not seed:
+            raise ValueError("Must provide 'seed' when 'shuffle = True'")
+        rng = random.Random(seed)
+        rng.shuffle(data)
+    n_samples = len(data)
+    n_test = ceil(test_size * n_samples)
+    n_dev = ceil(dev_size * n_samples)
+    n_train = n_samples - (n_test + n_dev)
+    train = data[:n_train]
+    dev = data[n_train:n_train+n_dev]
+    test = data[n_train+n_dev:]
+    return train, dev, test
+
+
 def split_docs(
     # fmt: off
-    input_path: Path, 
-    output_dir: Path, 
+    input_path: Path,
+    output_dir: Path,
     split_size: Tuple[float, float, float] = Arg((0.8, 0.1, 0.1), help="Split sizes for train/dev/test respectively"),
     shuffle: bool = Opt(False, "--shuffle", "-sf", help="Shuffle the dataset before splitting"),
     seed: Optional[int] = Opt(None, "--seed", "-sd", help="Random seed for shuffling the data")
@@ -36,15 +60,8 @@ def split_docs(
 
     train_size, dev_size, test_size = split_size
     msg.info(f"Splitting docs using sizes: {split_size}")
-
-    train, test = train_test_split(
-        docs, test_size=1 - train_size, random_state=seed, shuffle=shuffle
-    )
-    dev, test = train_test_split(
-        test,
-        test_size=test_size / (test_size + dev_size),
-        random_state=seed,
-        shuffle=shuffle,
+    train, dev, test = _train_dev_test_split(
+        docs, train_size, dev_size, test_size, shuffle, seed
     )
     datasets = {"train": train, "dev": dev, "test": test}
 
