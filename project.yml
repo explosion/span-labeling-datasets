@@ -28,7 +28,7 @@ workflows:
     - "convert-wikineural-spans"
     - "inspect-wikineural"
   conll:
-    - "clean-conll"
+    - "unpack-conll"
     - "convert-conll-spans"
     - "convert-conll-ents"
     - "inspect-conll"
@@ -45,7 +45,7 @@ workflows:
     - "clean-wikineural"
     - "convert-wikineural-ents"
     - "convert-wikineural-spans"
-    - "clean-conll"
+    - "unpack-conll"
     - "convert-conll-spans"
     - "convert-conll-ents"
     - "convert-archaeo-ents"
@@ -56,14 +56,11 @@ workflows:
 assets:
   # WNUT17
   - dest: "assets/wnut17-train.iob"
-    description: "WNUT17 training dataset for Emerging and Rare Entities Task from Derczynski et al., 2017"
-    url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/WNUT17/CONLL-format/data/train/wnut17train.conll
-  - dest: "assets/wnut17-dev.iob"
-    description: "WNUT17 dev dataset for Emerging and Rare Entities Task from Derczynski et al., 2017"
-    url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/WNUT17/CONLL-format/data/dev/emerging.dev.conll
+    url: "https://github.com/leondz/emerging_entities_17/blob/master/wnut17train.conll"
   - dest: "assets/wnut17-test.iob"
-    description: "WNUT17 test dataset for Emerging and Rare Entities Task from Derczynski et al., 2017"
-    url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/WNUT17/CONLL-format/data/test/emerging.test.annotated
+    url: "https://github.com/leondz/emerging_entities_17/blob/master/emerging.test.annotated"
+  - dest: "assets/wnut17-dev.iob"
+    url: "https://github.com/leondz/emerging_entities_17/blob/master/emerging.dev.conll"
   ### Wikineural datasets ###
   # Wikineural (en)
   - dest: "assets/raw-en-wikineural-train.iob"
@@ -106,57 +103,19 @@ assets:
     description: "WikiNeural (nl) test dataset from Tedeschi et al. (EMNLP 2021)"
     url: https://github.com/Babelscape/wikineural/blob/master/data/wikineural/nl/test.conllu
   ### ConLL datasets ###
-  #  CoNLL-2003 (en)
-  - dest: "assets/raw-en-conll-train.iob"
-    description: "CoNLL 2003 (en) training dataset"
-    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/en/train.conllu
-  - dest: "assets/raw-en-conll-dev.iob"
-    description: "CoNLL 2003 (en) dev dataset"
-    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/en/val.conllu
-  - dest: "assets/raw-en-conll-test.iob"
-    description: "CoNLL 2003 (en) test dataset"
-    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/en/test.conllu
-  # CoNLL-2003 (de)
-  - dest: "assets/raw-de-conll-train.iob"
-    description: "CoNLL 2003 (de) training dataset"
-    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/de/train.conllu
-  - dest: "assets/raw-de-conll-dev.iob"
-    description: "CoNLL 2003 (de) dev dataset"
-    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/de/val.conllu
-  - dest: "assets/raw-de-conll-test.iob"
-    description: "CoNLL 2003 (de) test dataset"
-    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/de/test.conllu
-  # CoNLL-2002 (es)
-  - dest: "assets/raw-es-conll-train.iob"
-    description: "CoNLL 2002 (es) training dataset"
-    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/es/train.conllu
-  - dest: "assets/raw-es-conll-dev.iob"
-    description: "CoNLL 2002 (es) dev dataset"
-    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/es/val.conllu
-  - dest: "assets/raw-es-conll-test.iob"
-    description: "CoNLL (es) test dataset"
-    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/es/test.conllu
-  # CoNLL-2002 (nl)
-  - dest: "assets/raw-nl-conll-train.iob"
-    description: "CoNLL 2002 (nl) training dataset"
-    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/nl/train.conllu
-  - dest: "assets/raw-nl-conll-dev.iob"
-    description: "CoNLL 2002 (nl) dev dataset"
-    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/nl/val.conllu
-  - dest: "assets/raw-nl-conll-test.iob"
-    description: "CoNLL 202 (nl) test dataset"
-    url: https://github.com/Babelscape/wikineural/blob/master/data/conll/nl/test.conllu
+  # CoNLL-2002 (es, nl)
+  - dest: "assets/conll.tgz"
+    description: "ConLL 2002 shared task data."
+    url: http://www.cnts.ua.ac.be/conll2002/ner.tgz
   ### Archaeo dataset ###
   - dest: "assets/archaeo.bio"
     description: "Dutch Archaeological NER dataset by Alex Brandsen (LREC 2020)"
     url: https://github.com/alexbrandsen/dutch-archaeo-NER-dataset/blob/master/complete-bio-gs.bio
   ### AnEM dataset ###
   - dest: "assets/anem-train.iob"
-    description: "Anatomical Entity Mention (AnEM) training corpus containing abstracts and full-text biomedical papers from Ohta et al. (ACL 2012)"
-    url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/AnEM/CONLL-format/data/AnEM.train
+    url: "https://github.com/openbiocorpora/anem/blob/master/original-data/test/AnEM.train"
   - dest: "assets/anem-test.iob"
-    description: "Anatomical Entity Mention (AnEM) test corpus containing abstracts and full-text biomedical papers from Ohta et al. (ACL 2012)"
-    url: https://github.com/juand-r/entity-recognition-datasets/blob/master/data/AnEM/CONLL-format/data/AnEM.test
+    url: "https://github.com/openbiocorpora/anem/blob/master/original-data/test/AnEM.test"
 
 commands:
   - name: "convert-wnut17-ents"
@@ -453,85 +412,28 @@ commands:
         --paths.train corpus/spancat/nl-wikineural-train.spacy 
         --paths.dev corpus/spancat/nl-wikineural-dev.spacy
 
-
-  - name: "clean-conll"
-    help: "Remove unnecessary indices from ConLL data"
+  - name: "unpack-conll"
+    help: "Decompress ConLL 2002 and remove temporary files"
     script:
-      # Clean CoNLL datasets
-      - python -m scripts.preprocess assets/raw-de-conll-train.iob assets/de-conll-train.iob
-      - python -m scripts.preprocess assets/raw-de-conll-dev.iob assets/de-conll-dev.iob
-      - python -m scripts.preprocess assets/raw-de-conll-test.iob assets/de-conll-test.iob
-      - python -m scripts.preprocess assets/raw-en-conll-train.iob assets/en-conll-train.iob
-      - python -m scripts.preprocess assets/raw-en-conll-dev.iob assets/en-conll-dev.iob
-      - python -m scripts.preprocess assets/raw-en-conll-test.iob assets/en-conll-test.iob
-      - python -m scripts.preprocess assets/raw-es-conll-train.iob assets/es-conll-train.iob
-      - python -m scripts.preprocess assets/raw-es-conll-dev.iob assets/es-conll-dev.iob
-      - python -m scripts.preprocess assets/raw-es-conll-test.iob assets/es-conll-test.iob
-      - python -m scripts.preprocess assets/raw-nl-conll-train.iob assets/nl-conll-train.iob
-      - python -m scripts.preprocess assets/raw-nl-conll-dev.iob assets/nl-conll-dev.iob
-      - python -m scripts.preprocess assets/raw-nl-conll-test.iob assets/nl-conll-test.iob
-    deps:
-      # CoNLL datasets
-      - assets/raw-de-conll-train.iob
-      - assets/raw-de-conll-dev.iob
-      - assets/raw-en-conll-train.iob
-      - assets/raw-en-conll-dev.iob
-      - assets/raw-en-conll-test.iob
-      - assets/raw-es-conll-train.iob
-      - assets/raw-es-conll-dev.iob
-      - assets/raw-es-conll-test.iob
-      - assets/raw-nl-conll-train.iob
-      - assets/raw-nl-conll-dev.iob
-      - assets/raw-nl-conll-test.iob
-    outputs:
-      # Cleaned CoNLL datasets
-      - assets/de-conll-train.iob
-      - assets/de-conll-dev.iob
-      - assets/en-conll-train.iob
-      - assets/en-conll-dev.iob
-      - assets/en-conll-test.iob
-      - assets/es-conll-train.iob
-      - assets/es-conll-dev.iob
-      - assets/es-conll-test.iob
-      - assets/nl-conll-train.iob
-      - assets/nl-conll-dev.iob
-      - assets/nl-conll-test.iob
+      - mkdir temp
+      - tar -xvf assets/conll.tgz -C temp
+      - gzip -d temp/ner/data/esp.testa.gz 
+      - gzip -d temp/ner/data/esp.testb.gz
+      - gzip -d temp/ner/data/esp.train.gz
+      - gzip -d temp/ner/data/ned.testa.gz
+      - gzip -d temp/ner/data/ned.testb.gz
+      - gzip -d temp/ner/data/ned.train.gz
+      - iconv -f iso-8859-1 temp/ner/data/esp.testa -o assets/es-conll-dev.iob
+      - iconv -f iso-8859-1 temp/ner/data/esp.testb -o assets/es-conll-test.iob
+      - iconv -f iso-8859-1 temp/ner/data/esp.train -o assets/es-conll-train.iob
+      - iconv -f iso-8859-1 temp/ner/data/ned.testa -o assets/nl-conll-dev.iob
+      - iconv -f iso-8859-1 temp/ner/data/ned.testb -o assets/nl-conll-test.iob
+      - iconv -f iso-8859-1 temp/ner/data/ned.train -o assets/nl-conll-train.iob
+      - rm -rf temp
 
   - name: "convert-conll-spans"
     help: "Convert CoNLL dataset (de, en, es, nl) into the spaCy format"
     script:
-      # Convert de dataset
-      - >-
-        python -m scripts.convert_to_spans
-        assets/de-conll-train.iob corpus/spancat/
-        --spans-key ${vars.spans_key}
-        --converter auto
-      - >-
-        python -m scripts.convert_to_spans
-        assets/de-conll-dev.iob corpus/spancat/
-        --spans-key ${vars.spans_key}
-        --converter auto
-      - >-
-        python -m scripts.convert_to_spans
-        assets/de-conll-test.iob corpus/spancat/
-        --spans-key ${vars.spans_key}
-        --converter auto
-      # Convert en dataset
-      - >-
-        python -m scripts.convert_to_spans
-        assets/en-conll-train.iob corpus/spancat/
-        --spans-key ${vars.spans_key}
-        --converter auto
-      - >-
-        python -m scripts.convert_to_spans
-        assets/en-conll-dev.iob corpus/spancat/
-        --spans-key ${vars.spans_key}
-        --converter auto
-      - >-
-        python -m scripts.convert_to_spans
-        assets/en-conll-test.iob corpus/spancat/
-        --spans-key ${vars.spans_key}
-        --converter auto
       # Convert es dataset
       - >-
         python -m scripts.convert_to_spans
@@ -565,12 +467,6 @@ commands:
         --spans-key ${vars.spans_key}
         --converter auto
     deps:
-      - "assets/de-conll-train.iob"
-      - "assets/de-conll-dev.iob"
-      - "assets/de-conll-test.iob"
-      - "assets/en-conll-train.iob"
-      - "assets/en-conll-dev.iob"
-      - "assets/en-conll-test.iob"
       - "assets/es-conll-train.iob"
       - "assets/es-conll-dev.iob"
       - "assets/es-conll-test.iob"
@@ -578,12 +474,6 @@ commands:
       - "assets/nl-conll-dev.iob"
       - "assets/nl-conll-test.iob"
     outputs:
-      - "corpus/spancat/de-conll-train.spacy"
-      - "corpus/spancat/de-conll-dev.spacy"
-      - "corpus/spancat/de-conll-test.spacy"
-      - "corpus/spancat/en-conll-train.spacy"
-      - "corpus/spancat/en-conll-dev.spacy"
-      - "corpus/spancat/en-conll-test.spacy"
       - "corpus/spancat/es-conll-train.spacy"
       - "corpus/spancat/es-conll-dev.spacy"
       - "corpus/spancat/es-conll-test.spacy"
@@ -594,32 +484,6 @@ commands:
   - name: "convert-conll-ents"
     help: "Convert CoNLL dataset (de, en, es, nl) into the spaCy format"
     script:
-      # Convert de dataset
-      - >-
-        python -m scripts.convert_to_spans
-        assets/de-conll-train.iob corpus/ner/
-        --use-ents
-      - >-
-        python -m scripts.convert_to_spans
-        assets/de-conll-dev.iob corpus/ner/
-        --use-ents
-      - >-
-        python -m scripts.convert_to_spans
-        assets/de-conll-test.iob corpus/spancat/
-        --converter auto
-      # Convert en dataset
-      - >-
-        python -m scripts.convert_to_spans
-        assets/en-conll-train.iob corpus/ner/
-        --use-ents
-      - >-
-        python -m scripts.convert_to_spans
-        assets/en-conll-dev.iob corpus/ner/
-        --use-ents
-      - >-
-        python -m scripts.convert_to_spans
-        assets/en-conll-test.iob corpus/ner/
-        --use-ents
       # Convert es dataset
       - >-
         python -m scripts.convert_to_spans
@@ -647,12 +511,6 @@ commands:
         assets/nl-conll-test.iob corpus/ner/
         --use-ents
     deps:
-      - "assets/de-conll-train.iob"
-      - "assets/de-conll-dev.iob"
-      - "assets/de-conll-test.iob"
-      - "assets/en-conll-train.iob"
-      - "assets/en-conll-dev.iob"
-      - "assets/en-conll-test.iob"
       - "assets/es-conll-train.iob"
       - "assets/es-conll-dev.iob"
       - "assets/es-conll-test.iob"
@@ -660,12 +518,6 @@ commands:
       - "assets/nl-conll-dev.iob"
       - "assets/nl-conll-test.iob"
     outputs:
-      - "corpus/ner/de-conll-train.spacy"
-      - "corpus/ner/de-conll-dev.spacy"
-      - "corpus/ner/de-conll-test.spacy"
-      - "corpus/ner/en-conll-train.spacy"
-      - "corpus/ner/en-conll-dev.spacy"
-      - "corpus/ner/en-conll-test.spacy"
       - "corpus/ner/es-conll-train.spacy"
       - "corpus/ner/es-conll-dev.spacy"
       - "corpus/ner/es-conll-test.spacy"
@@ -676,16 +528,6 @@ commands:
   - name: "inspect-conll"
     help: "Analyze span-characteristics"
     script:
-      - >-
-        python -m spacy debug data configs/spancat_default.cfg 
-        --paths.train corpus/spancat/de-conll-train.spacy 
-        --paths.dev corpus/spancat/de-conll-dev.spacy
-      
-      - >-
-        python -m spacy debug data configs/spancat_default.cfg 
-        --paths.train corpus/spancat/en-conll-train.spacy 
-        --paths.dev corpus/spancat/en-conll-dev.spacy
-      
       - >-
         python -m spacy debug data configs/spancat_default.cfg 
         --paths.train corpus/spancat/es-conll-train.spacy 
@@ -743,7 +585,7 @@ commands:
         python -m spacy debug data configs/spancat_default.cfg 
         --paths.train corpus/spancat/archaeo-train.spacy 
         --paths.dev corpus/spancat/archaeo-dev.spacy
-
+  
   - name: "convert-anem-spans"
     help: "Convert AnEM dataset into the spaCy format"
     script:
