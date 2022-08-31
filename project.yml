@@ -412,6 +412,7 @@ commands:
         --paths.train corpus/spancat/nl-wikineural-train.spacy 
         --paths.dev corpus/spancat/nl-wikineural-dev.spacy
 
+
   - name: "unpack-conll"
     help: "Decompress ConLL 2002 and remove temporary files"
     script:
@@ -430,6 +431,46 @@ commands:
       - iconv -f iso-8859-1 temp/ner/data/ned.testb -o assets/nl-conll-test.iob
       - iconv -f iso-8859-1 temp/ner/data/ned.train -o assets/nl-conll-train.iob
       - rm -rf temp
+=======
+      # Clean CoNLL datasets
+      - python -m scripts.preprocess assets/raw-de-conll-train.iob assets/de-conll-train.iob
+      - python -m scripts.preprocess assets/raw-de-conll-dev.iob assets/de-conll-dev.iob
+      - python -m scripts.preprocess assets/raw-de-conll-test.iob assets/de-conll-test.iob
+      - python -m scripts.preprocess assets/raw-en-conll-train.iob assets/en-conll-train.iob
+      - python -m scripts.preprocess assets/raw-en-conll-dev.iob assets/en-conll-dev.iob
+      - python -m scripts.preprocess assets/raw-en-conll-test.iob assets/en-conll-test.iob
+      - python -m scripts.preprocess assets/raw-es-conll-train.iob assets/es-conll-train.iob
+      - python -m scripts.preprocess assets/raw-es-conll-dev.iob assets/es-conll-dev.iob
+      - python -m scripts.preprocess assets/raw-es-conll-test.iob assets/es-conll-test.iob
+      - python -m scripts.preprocess assets/raw-nl-conll-train.iob assets/nl-conll-train.iob
+      - python -m scripts.preprocess assets/raw-nl-conll-dev.iob assets/nl-conll-dev.iob
+      - python -m scripts.preprocess assets/raw-nl-conll-test.iob assets/nl-conll-test.iob
+    deps:
+      # CoNLL datasets
+      - assets/raw-de-conll-train.iob
+      - assets/raw-de-conll-dev.iob
+      - assets/raw-en-conll-train.iob
+      - assets/raw-en-conll-dev.iob
+      - assets/raw-en-conll-test.iob
+      - assets/raw-es-conll-train.iob
+      - assets/raw-es-conll-dev.iob
+      - assets/raw-es-conll-test.iob
+      - assets/raw-nl-conll-train.iob
+      - assets/raw-nl-conll-dev.iob
+      - assets/raw-nl-conll-test.iob
+    outputs:
+      # Cleaned CoNLL datasets
+      - assets/de-conll-train.iob
+      - assets/de-conll-dev.iob
+      - assets/en-conll-train.iob
+      - assets/en-conll-dev.iob
+      - assets/en-conll-test.iob
+      - assets/es-conll-train.iob
+      - assets/es-conll-dev.iob
+      - assets/es-conll-test.iob
+      - assets/nl-conll-train.iob
+      - assets/nl-conll-dev.iob
+      - assets/nl-conll-test.iob
 
   - name: "convert-conll-spans"
     help: "Convert CoNLL dataset (de, en, es, nl) into the spaCy format"
