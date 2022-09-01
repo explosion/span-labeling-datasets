@@ -672,7 +672,7 @@ commands:
       - mkdir temp
       - unzip assets/finer139.zip -d temp
       - python scripts/prepare_finer.py
-      - rm -r temp
+      - rm -rf temp
 
   - name: "convert-finer-ents"
     help: "Convert FiNER dataset into the spaCy format"
