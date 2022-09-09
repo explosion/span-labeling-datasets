@@ -16,6 +16,7 @@ directories:
   - "corpus/spancat"
   - "corpus/ner"
   - "scripts"
+  - "analytics"
 
 workflows:
   wnut17:
@@ -124,6 +125,14 @@ assets:
   ### FiNER ###
   - dest: "assets/finer139.zip"
     url: "https://huggingface.co/datasets/nlpaueb/finer-139/resolve/main/finer139.zip"
+  ### Textual Anonymization Benchmark (TAB) dataset
+  - dest: "assets/tab-train.json"
+    url: "https://github.com/NorskRegnesentral/text-anonymization-benchmark/blob/master/echr_train.json"
+  - dest: "assets/tab-dev.json"
+    url: "https://github.com/NorskRegnesentral/text-anonymization-benchmark/blob/master/echr_dev.json"
+  - dest: "assets/tab-test.json"
+    url: "https://github.com/NorskRegnesentral/text-anonymization-benchmark/blob/master/echr_test.json"
+
 
 commands:
 
@@ -665,6 +674,9 @@ commands:
         python -m spacy debug data configs/spancat_default.cfg 
         --paths.train corpus/spancat/anem-train.spacy 
         --paths.dev corpus/spancat/anem-dev.spacy
+      - python scripts/analyze.py anem en_core_web_sm train
+      - python scripts/analyze.py anem en_core_web_sm dev
+      - python scripts/analyze.py anem en_core_web_sm test
   
   - name: "unpack-finer"
     help: "Prepare the FiNER dataset."
