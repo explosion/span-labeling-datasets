@@ -17,6 +17,7 @@ directories:
   - "corpus/ner"
   - "scripts"
   - "analytics"
+  - "unseen"
 
 workflows:
   wnut17:
