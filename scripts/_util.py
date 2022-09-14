@@ -13,6 +13,14 @@ class SplitInfo:
     the data file names, but its also useful
     to validate that the file names are in
     stardardized format.
+
+    It checks that all files have the format
+    "source-split.spacy" or "lang-source-split.spacy"
+    and stores the full path, "source", "split" and "lang"
+    fields. Additionally if one data set comes in multiple
+    languages like "es-conll-train.spacy" and "nl-conll-train.spacy"
+    it stores "es-conll" or "nl-conll" as .source, but
+    "conll" as .dataset for both.
     """
     path: Union[Path, str]
 
@@ -54,7 +62,11 @@ def info(model: str, *, home: str = "corpus"):
     validate that all splits are there and the
     filenames are in the standardized format.
     """
-    assert model in ["ner", "spancat"]
+    if model not in ["ner", "spancat"]:
+        raise ValueError(
+            "'model' has to be 'ner' or 'spancat', "
+            f"but found {model}"
+        )
     home = os.path.join(home, model)
     filenames = os.listdir(home)
     splits = []
