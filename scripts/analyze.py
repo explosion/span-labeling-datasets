@@ -4,7 +4,6 @@ import csv
 import spacy
 import typer
 
-from pathlib import Path
 from spacy.tokens import Doc, DocBin
 from collections import defaultdict
 from typing import Sequence
