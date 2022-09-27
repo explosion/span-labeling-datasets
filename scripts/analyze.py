@@ -6,16 +6,18 @@ import typer
 
 from spacy.tokens import Doc, DocBin
 from collections import defaultdict
-from typing import Sequence
+from typing import Sequence, List, Tuple, Dict, Union
 
 from _util import info
+
+Number = Union[int, float]
 
 
 def _per_label_fields():
     return {"count": 0, "length": 0, "doc_freq": 0}
 
 
-def _per_label(docs: DocBin):
+def _per_label(docs: DocBin) -> Dict[str, Dict[str, Number]]:
     classes = defaultdict(_per_label_fields)
     for i, doc in enumerate(docs, start=1):
         seen = set()
@@ -31,11 +33,11 @@ def _per_label(docs: DocBin):
     return classes
 
 
-def _per_span(docs: Sequence[Doc]):
+def _per_span(docs: Sequence[Doc]) -> List[Tuple[int, int, int]]:
     spans = []
     for doc in docs:
         for span in doc.spans["sc"]:
-            row = [len(span), len(doc), len(doc.spans["sc"])]
+            row = (len(span), len(doc), len(doc.spans["sc"]))
             spans.append(row)
     return spans
 
@@ -48,6 +50,11 @@ def analyze(
     data_dir: str = "corpus",
     output_dir: str = "analytics"
 ):
+    """
+    Write two .csv files one with label statistics
+    and another with properties of each entity in
+    the data set.
+    """
     datainfo = info("spancat", home=data_dir)
     path = datainfo[dataset][split].path
     nlp = spacy.blank(datainfo[dataset].lang)
@@ -67,6 +74,7 @@ def analyze(
         writer = csv.DictWriter(
             csvfile, fieldnames=fieldnames
         )
+        writer.writeheader()
         for label, stats in label_stats.items():
             row = {"label": label}
             row.update(stats)
@@ -76,6 +84,7 @@ def analyze(
         writer = csv.DictWriter(
             csvfile, fieldnames=fieldnames
         )
+        writer.writeheader()
         for record in span_stats:
             row = {
                 "length": record[0],
