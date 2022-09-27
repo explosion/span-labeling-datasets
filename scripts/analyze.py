@@ -50,7 +50,7 @@ def analyze(
 ):
     datainfo = info("spancat", home=data_dir)
     path = datainfo[dataset][split].path
-    nlp = spacy.load(model)
+    nlp = spacy.blank(datainfo[dataset].lang)
     docs = list(
         DocBin().from_disk(path).get_docs(nlp.vocab)
     )
