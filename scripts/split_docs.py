@@ -1,7 +1,7 @@
 """Split a spaCy-formatted file into train, dev, and test partitions"""
 
 from pathlib import Path
-from typing import Tuple, Optional, Any, List
+from typing import Tuple, Optional, Any, List, Sequence
 
 import random
 import typer
@@ -15,7 +15,7 @@ Opt = typer.Option
 
 
 def _train_dev_test_split(
-    data: List[Any],
+    data: Sequence[Any],
     train_size,
     dev_size: float,
     test_size: float,
