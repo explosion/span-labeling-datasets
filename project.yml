@@ -27,7 +27,6 @@ workflows:
     - "clean-wikineural"
     - "convert-wikineural-ents"
     - "convert-wikineural-spans"
-    - "inspect-wikineural"
   conll:
     - "unpack-conll"
     - "convert-conll-spans"
@@ -210,6 +209,7 @@ commands:
       # Wikineural datasets
       - assets/raw-de-wikineural-train.iob
       - assets/raw-de-wikineural-dev.iob
+      - assets/raw-de-wikineural-test.iob
       - assets/raw-en-wikineural-train.iob
       - assets/raw-en-wikineural-dev.iob
       - assets/raw-en-wikineural-test.iob
@@ -223,6 +223,7 @@ commands:
       # Cleaned Wikineural datasets
       - assets/de-wikineural-train.iob
       - assets/de-wikineural-dev.iob
+      - assets/de-wikineural-test.iob
       - assets/en-wikineural-train.iob
       - assets/en-wikineural-dev.iob
       - assets/en-wikineural-test.iob
@@ -334,6 +335,10 @@ commands:
       - >-
         python -m scripts.convert_to_spans
         assets/de-wikineural-dev.iob corpus/ner/
+        --use-ents
+      - >-
+        python -m scripts.convert_to_spans
+        assets/de-wikineural-test.iob corpus/ner/
         --use-ents
       - >-
         python -m scripts.convert_to_spans
@@ -746,8 +751,7 @@ commands:
         --paths.train corpus/spancat/finer-train.spacy 
         --paths.dev corpus/spancat/finer-dev.spacy
   
-  - name: "clean"
-    help: "Remove intermediary files"
+  - name: "generate-unseen"
+    help: "Create unseen entities splits for all preprocessed datasets."
     script:
-      - "rm -rf assets/*"
-      - "rm -rf corpus/*"
+      - python scripts/generate_unseen.py
