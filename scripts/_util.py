@@ -33,7 +33,7 @@ class SplitInfo:
         tokens = self.name.split("-")
         if not 1 < len(tokens) <= 3:
             raise ValueError(
-                f"Incorrect file name {self.name}"
+                f"Incorrect file name {self.path}"
             )
         self.split = tokens[-1].split(".")[0]
         if self.split not in {"train", "dev", "test"}:
@@ -110,7 +110,7 @@ def info(model: str, *, home: str = "corpus"):
     for source in datasets:
         if len(datasets[source]) < 3:
             raise ValueError(
-                "Each dataset has to have 3 splits"
+                f"Each dataset has to have 3 splits, check {source}"
             )
         datainfo = DatasetInfo(
             source,
