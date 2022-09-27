@@ -1,9 +1,12 @@
 import os
-from pathlib import Path
-from typing import Union
-from collections import defaultdict
-from spacy.util import ensure_path
+
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Union, Tuple
+from collections import defaultdict
+
+from spacy.tokens import DocBin
+from spacy.util import ensure_path
 
 
 @dataclass
@@ -32,7 +35,6 @@ class SplitInfo:
             raise ValueError(
                 f"Incorrect file name {self.name}"
             )
-        self.source = tokens[0]
         self.split = tokens[-1].split(".")[0]
         if self.split not in {"train", "dev", "test"}:
             raise ValueError(
@@ -40,19 +42,45 @@ class SplitInfo:
                 f"but found {self.split}"
             )
         if len(tokens) == 3:
-            self.lang = tokens[1]
+            source = tokens[1]
+            self.lang = tokens[0]
+            self.source = f"{self.lang}-{source}"
+        elif tokens[0] in ["anem", "wnut17", "archaeo", "finer"]:
+            source = tokens[0]
+            self.source = tokens[0]
+            self.lang = "en"
         else:
-            self.lang = ""
+            source = tokens[0]
+            self.source = tokens[0]
+            self.lang = "xx"
+        self.dataset = source
 
 
 @dataclass
 class DatasetInfo:
+    source: str
     train: SplitInfo
     dev: SplitInfo
     test: SplitInfo
 
+    def __post_init__(self):
+        langs = [self.train.lang, self.dev.lang, self.test.lang]
+        if not len(set(langs)) == 1:
+            raise ValueError(
+                "All splits of the same dataset should have the "
+                f"same langauge, but found {langs}."
+            )
+        else:
+            self.lang = self.train.lang
+
     def __getitem__(self, key):
         return self.__dict__[key]
+
+    def load(self) -> Tuple[DocBin, DocBin, DocBin]:
+        train = DocBin().from_disk(self.train.path)
+        dev = DocBin().from_disk(self.dev.path)
+        test = DocBin().from_disk(self.test.path)
+        return train, dev, test
 
 
 def info(model: str, *, home: str = "corpus"):
@@ -72,7 +100,8 @@ def info(model: str, *, home: str = "corpus"):
     splits = []
     for name in filenames:
         path = os.path.join(home, name)
-        splits.append(SplitInfo(path))
+        split = SplitInfo(path)
+        splits.append(split)
     datasets = defaultdict(dict)
     for split in splits:
         datasets[split.source][split.split] = split
@@ -83,6 +112,7 @@ def info(model: str, *, home: str = "corpus"):
                 "Each dataset has to have 3 splits"
             )
         datainfo = DatasetInfo(
+            source,
             datasets[source]["train"],
             datasets[source]["dev"],
             datasets[source]["test"]
