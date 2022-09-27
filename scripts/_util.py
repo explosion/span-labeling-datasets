@@ -86,7 +86,7 @@ class DatasetInfo:
 
 def info(model: str, *, home: str = "corpus"):
     """
-    Provides convenient wrapper to avoid keep
+    Provides convenient wrapper to avoid
     parsing the filenames. It's also useful to
     validate that all splits are there and the
     filenames are in the standardized format.
