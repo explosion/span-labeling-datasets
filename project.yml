@@ -1,9 +1,9 @@
 title: "Spancat datasets"
 description: |
-  This project compiles various spancat datasets and their converters into the
-  [spaCy format](https://spacy.io/api/data-formats). You can use this in tandem
-  with the [`spancat-encoders`](https://github.com/explosion/spancat-encoders)
-  repository to run various experiments on these datasets.
+  This project compiles various NER and more general spancat datasets 
+  and their converters into the [spaCy format](https://spacy.io/api/data-formats). 
+  You can use this to try out experiment with `ner` and `spancat`
+  or to potentially pre-train them for your application.
 
 vars:
   spans_key: "sc"
@@ -12,7 +12,6 @@ vars:
 directories:
   - "assets"
   - "configs"
-  - "corpus"
   - "corpus/spancat"
   - "corpus/ner"
   - "scripts"
@@ -36,10 +35,12 @@ workflows:
   archaeo:
     - "convert-archaeo-ents"
     - "convert-archaeo-spans"
+    - "clean-archaeo"
     - "inspect-archaeo"
   anem:
     - "convert-anem-ents"
     - "convert-anem-spans"
+    - "inspect-anem"
   finer:
     - "unpack-finer"
     - "convert-finer-ents"
@@ -58,16 +59,20 @@ workflows:
     - "convert-archaeo-spans"
     - "convert-anem-ents"
     - "convert-anem-spans"
+    - "unpack-finer"
+    - "convert-finer-ents"
+    - "convert-finer-spans"
+    - "inspect-finer"
 
 assets:
-  # WNUT17
+  # WNUT17 https://aclanthology.org/W17-4418/
   - dest: "assets/wnut17-train.iob"
     url: "https://github.com/leondz/emerging_entities_17/blob/master/wnut17train.conll"
   - dest: "assets/wnut17-test.iob"
     url: "https://github.com/leondz/emerging_entities_17/blob/master/emerging.test.annotated"
   - dest: "assets/wnut17-dev.iob"
     url: "https://github.com/leondz/emerging_entities_17/blob/master/emerging.dev.conll"
-  ### Wikineural datasets ###
+  ### Wikineural datasets https://aclanthology.org/2021.findings-emnlp.215/ ###
   # Wikineural (en)
   - dest: "assets/raw-en-wikineural-train.iob"
     description: "WikiNeural (en) training dataset from Tedeschi et al. (EMNLP 2021)"
@@ -108,30 +113,22 @@ assets:
   - dest: "assets/raw-nl-wikineural-test.iob"
     description: "WikiNeural (nl) test dataset from Tedeschi et al. (EMNLP 2021)"
     url: https://github.com/Babelscape/wikineural/blob/master/data/wikineural/nl/test.conllu
-  ### ConLL datasets ###
-  # CoNLL-2002 (es, nl)
+  # CoNLL-2002 (es, nl) https://aclanthology.org/W02-2024/
   - dest: "assets/conll.tgz"
     description: "ConLL 2002 shared task data."
     url: http://www.cnts.ua.ac.be/conll2002/ner.tgz
-  ### Archaeo dataset ###
+  ### Archaeo dataset https://aclanthology.org/2020.lrec-1.562/ ###
   - dest: "assets/archaeo.bio"
     description: "Dutch Archaeological NER dataset by Alex Brandsen (LREC 2020)"
     url: https://github.com/alexbrandsen/dutch-archaeo-NER-dataset/blob/master/complete-bio-gs.bio
-  ### AnEM dataset ###
+  ### AnEM dataset https://aclanthology.org/W12-4304/ ###
   - dest: "assets/anem-train.iob"
     url: "https://github.com/openbiocorpora/anem/blob/master/original-data/test/AnEM.train"
   - dest: "assets/anem-test.iob"
     url: "https://github.com/openbiocorpora/anem/blob/master/original-data/test/AnEM.test"
-  ### FiNER ###
+  ### FiNER https://aclanthology.org/2022.acl-long.303/ ###
   - dest: "assets/finer139.zip"
     url: "https://huggingface.co/datasets/nlpaueb/finer-139/resolve/main/finer139.zip"
-  ### Textual Anonymization Benchmark (TAB) dataset
-  - dest: "assets/tab-train.json"
-    url: "https://github.com/NorskRegnesentral/text-anonymization-benchmark/blob/master/echr_train.json"
-  - dest: "assets/tab-dev.json"
-    url: "https://github.com/NorskRegnesentral/text-anonymization-benchmark/blob/master/echr_dev.json"
-  - dest: "assets/tab-test.json"
-    url: "https://github.com/NorskRegnesentral/text-anonymization-benchmark/blob/master/echr_test.json"
 
 
 commands:
@@ -581,6 +578,7 @@ commands:
         corpus/spancat/archaeo.spacy corpus/spancat
         --seed 42
         --shuffle
+      - rm 
     deps:
       - "assets/archaeo.bio"
     outputs:
@@ -616,6 +614,11 @@ commands:
         --paths.train corpus/spancat/archaeo-train.spacy 
         --paths.dev corpus/spancat/archaeo-dev.spacy
   
+  - name: "clean-archaeo"
+    script:
+      - mv corpus/ner/archaeo.spacy assets/archaeo_ner.spacy
+      - mv corpus/spancat/archaeo.spacy assets/archaeo_span.spacy
+
   - name: "convert-anem-spans"
     help: "Convert AnEM dataset into the spaCy format"
     script:
