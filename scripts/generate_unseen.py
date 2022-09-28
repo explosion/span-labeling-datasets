@@ -18,19 +18,13 @@ def _only_unseen(
 ) -> DocBin:
     new_docbin = DocBin()
     for doc in tqdm(docs, total=total):
-        # docs with no entities are not taken into account.
-        if len(doc.ents) == 0:
-            continue
-        # mark entities that appear in the training set as missing
-        keep, missing = [], []
-        for ent in doc.ents:
-            if ent.text in seen:
-                missing.append(ent)
-            else:
-                keep.append(ent)
-        if len(keep) == 0:
-            continue
-        doc.set_ents(keep, missing=missing, default="unmodified")
+        if len(doc.ents) != 0:
+            # mark entities that appear in the training set as missing
+            missing = []
+            for ent in doc.ents:
+                if ent.text in seen:
+                    missing.append(ent)
+            doc.set_ents([], missing=missing, default="unmodified")
         new_docbin.add(doc)
     return new_docbin
 
