@@ -48,7 +48,7 @@ def analyze(
     split: str,
     *,
     data_dir: str = "corpus",
-    output_dir: str = "analytics"
+    output_dir: str = "analyses"
 ):
     """
     Write two .csv files one with label statistics

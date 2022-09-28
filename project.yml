@@ -15,7 +15,7 @@ directories:
   - "corpus/spancat"
   - "corpus/ner"
   - "scripts"
-  - "analytics"
+  - "analyes"
   - "unseen"
 
 workflows:
