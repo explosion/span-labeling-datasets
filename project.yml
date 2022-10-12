@@ -565,7 +565,6 @@ commands:
         python -m spacy debug data configs/spancat_default.cfg 
         --paths.train corpus/spancat/es-conll-train.spacy 
         --paths.dev corpus/spancat/es-conll-dev.spacy
-      
       - >-
         python -m spacy debug data configs/spancat_default.cfg 
         --paths.train corpus/spancat/nl-conll-train.spacy 
@@ -584,7 +583,6 @@ commands:
         corpus/spancat/archaeo.spacy corpus/spancat
         --seed 42
         --shuffle
-      - rm 
     deps:
       - "assets/archaeo.bio"
     outputs:
