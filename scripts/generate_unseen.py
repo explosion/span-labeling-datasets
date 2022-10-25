@@ -35,7 +35,7 @@ def _mark_as_missing(
     return new_docbin
 
 
-def split_seen_unseen():
+def make_unseen():
     datasets = info("ner")
     for _, dataset in datasets.items():
         trainbin, devbin, testbin = dataset.load()
