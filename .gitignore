@@ -3,6 +3,7 @@ assets/
 corpus/
 training/
 wandb/
+unseen/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
