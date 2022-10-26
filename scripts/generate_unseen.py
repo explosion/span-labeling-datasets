@@ -11,11 +11,7 @@ from _util import info
 
 
 def _mark_as_missing(
-    docs: Sequence[Doc],
-    seen: Set[str],
-    mark_seen: True,
-    *,
-    total: Optional[int] = None
+    docs: Sequence[Doc], seen: Set[str], mark_seen: True, *, total: Optional[int] = None
 ) -> DocBin:
     """
     Marks some of the ents in the input Docs as missing.
@@ -35,7 +31,7 @@ def _mark_as_missing(
     return new_docbin
 
 
-def make_unseen():
+def split_seen_unseen():
     datasets = info("ner")
     for _, dataset in datasets.items():
         trainbin, devbin, testbin = dataset.load()
@@ -55,38 +51,30 @@ def make_unseen():
             docs=devbin.get_docs(nlp.vocab),
             seen=train_entities,
             mark_seen=True,
-            total=len(devbin)
+            total=len(devbin),
         )
         seen_dev = _mark_as_missing(
-           docs=devbin.get_docs(nlp.vocab),
-           seen=train_entities,
-           mark_seen=False,
-           total=len(devbin)
+            docs=devbin.get_docs(nlp.vocab),
+            seen=train_entities,
+            mark_seen=False,
+            total=len(devbin),
         )
         unseen_test = _mark_as_missing(
             docs=testbin.get_docs(nlp.vocab),
             seen=train_entities,
             mark_seen=True,
-            total=len(testbin)
+            total=len(testbin),
         )
         seen_test = _mark_as_missing(
             docs=testbin.get_docs(nlp.vocab),
             seen=train_entities,
             mark_seen=False,
-            total=len(testbin)
+            total=len(testbin),
         )
-        unseen_dev_path = os.path.join(
-            "unseen", f"{dataset.source}-dev-unseen.spacy"
-        )
-        unseen_test_path = os.path.join(
-            "unseen", f"{dataset.source}-test-unseen.spacy"
-        )
-        seen_dev_path = os.path.join(
-           "unseen", f"{dataset.source}-dev-seen.spacy"
-        )
-        seen_test_path = os.path.join(
-           "unseen", f"{dataset.source}-test-seen.spacy"
-        )
+        unseen_dev_path = os.path.join("unseen", f"{dataset.source}-dev-unseen.spacy")
+        unseen_test_path = os.path.join("unseen", f"{dataset.source}-test-unseen.spacy")
+        seen_dev_path = os.path.join("unseen", f"{dataset.source}-dev-seen.spacy")
+        seen_test_path = os.path.join("unseen", f"{dataset.source}-test-seen.spacy")
         seen_dev.to_disk(seen_dev_path)
         seen_test.to_disk(seen_test_path)
         unseen_dev.to_disk(unseen_dev_path)
