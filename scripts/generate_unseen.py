@@ -10,19 +10,25 @@ from spacy.tokens import DocBin, Doc
 from _util import info
 
 
-def _only_unseen(
+def _mark_as_missing(
     docs: Sequence[Doc],
     seen: Set[str],
+    mark_seen: True,
     *,
     total: Optional[int] = None
 ) -> DocBin:
+    """
+    Marks some of the ents in the input Docs as missing.
+    If 'mark_seen' is True then it marks entities in
+    'seen' as missing otherwise it marks the entities not in 'seen'
+    as missing.
+    """
     new_docbin = DocBin()
     for doc in tqdm(docs, total=total):
         if len(doc.ents) != 0:
-            # mark entities that appear in the training set as missing
             missing = []
             for ent in doc.ents:
-                if ent.text in seen:
+                if not mark_seen ^ (ent.text in seen):
                     missing.append(ent)
             doc.set_ents([], missing=missing, default="unmodified")
         new_docbin.add(doc)
@@ -45,21 +51,47 @@ def make_unseen():
             f"Collected {len(train_entities)} unique "
             f"entities from a total of {all_ents}."
         )
-        new_dev = _only_unseen(
-            devbin.get_docs(nlp.vocab), train_entities, total=len(devbin)
+        unseen_dev = _mark_as_missing(
+            docs=devbin.get_docs(nlp.vocab),
+            seen=train_entities,
+            mark_seen=True,
+            total=len(devbin)
         )
-        new_test = _only_unseen(
-            testbin.get_docs(nlp.vocab), train_entities, total=len(testbin)
+        seen_dev = _mark_as_missing(
+           docs=devbin.get_docs(nlp.vocab),
+           seen=train_entities,
+           mark_seen=False,
+           total=len(devbin)
         )
-        dev_path = os.path.join(
+        unseen_test = _mark_as_missing(
+            docs=testbin.get_docs(nlp.vocab),
+            seen=train_entities,
+            mark_seen=True,
+            total=len(testbin)
+        )
+        seen_test = _mark_as_missing(
+            docs=testbin.get_docs(nlp.vocab),
+            seen=train_entities,
+            mark_seen=False,
+            total=len(testbin)
+        )
+        unseen_dev_path = os.path.join(
             "unseen", f"{dataset.source}-dev-unseen.spacy"
         )
-        test_path = os.path.join(
+        unseen_test_path = os.path.join(
             "unseen", f"{dataset.source}-test-unseen.spacy"
         )
-        new_dev.to_disk(dev_path)
-        new_test.to_disk(test_path)
+        seen_dev_path = os.path.join(
+           "unseen", f"{dataset.source}-dev-seen.spacy"
+        )
+        seen_test_path = os.path.join(
+           "unseen", f"{dataset.source}-test-seen.spacy"
+        )
+        seen_dev.to_disk(seen_dev_path)
+        seen_test.to_disk(seen_test_path)
+        unseen_dev.to_disk(unseen_dev_path)
+        unseen_test.to_disk(unseen_test_path)
 
 
 if __name__ == "__main__":
-    typer.run(make_unseen)
+    typer.run(split_seen_unseen)
