@@ -15,11 +15,12 @@ directories:
   - "corpus/spancat"
   - "corpus/ner"
   - "scripts"
-  - "analyes"
+  - "analyses"
   - "unseen"
 
 workflows:
   wnut17:
+    - "preprocess-wnut17"
     - "convert-wnut17-ents"
     - "convert-wnut17-spans"
     - "inspect-wnut17"
@@ -29,8 +30,9 @@ workflows:
     - "convert-wikineural-spans"
   conll:
     - "unpack-conll"
-    - "convert-conll-spans"
+    - "preprocess-conll"
     - "convert-conll-ents"
+    - "convert-conll-spans"
     - "inspect-conll"
   archaeo:
     - "convert-archaeo-ents"
@@ -47,6 +49,7 @@ workflows:
     - "convert-finer-spans"
     - "inspect-finer"
   all:
+    - "preprocess-wnut17"
     - "convert-wnut17-ents"
     - "convert-wnut17-spans"
     - "clean-wikineural"
@@ -133,6 +136,21 @@ assets:
 
 commands:
 
+  - name: "preprocess-wnut17"
+    help: "Canonicalize the WNUT2017 data set for conversion to .spacy."
+    script:
+      - python -m scripts.preprocess assets/wnut17-train.iob assets/wnut17-train.iob
+      - python -m scripts.preprocess assets/wnut17-dev.iob assets/wnut17-dev.iob
+      - python -m scripts.preprocess assets/wnut17-test.iob assets/wnut17-test.iob
+    deps:
+      - assets/wnut17-train.iob
+      - assets/wnut17-dev.iob
+      - assets/wnut17-test.iob
+    outputs:
+      - assets/wnut17-train.iob
+      - assets/wnut17-dev.iob
+      - assets/wnut17-test.iob
+      
   - name: "convert-wnut17-ents"
     help: "Convert WNUT17 dataset into the spaCy format"
     script:
@@ -193,18 +211,65 @@ commands:
     help: "Remove unnecessary indices from wikineural data"
     script:
       # Clean Wikineural datasets
-      - python -m scripts.preprocess assets/raw-de-wikineural-train.iob assets/de-wikineural-train.iob
-      - python -m scripts.preprocess assets/raw-de-wikineural-dev.iob assets/de-wikineural-dev.iob
-      - python -m scripts.preprocess assets/raw-de-wikineural-test.iob assets/de-wikineural-test.iob
-      - python -m scripts.preprocess assets/raw-en-wikineural-train.iob assets/en-wikineural-train.iob
-      - python -m scripts.preprocess assets/raw-en-wikineural-dev.iob assets/en-wikineural-dev.iob
-      - python -m scripts.preprocess assets/raw-en-wikineural-test.iob assets/en-wikineural-test.iob
-      - python -m scripts.preprocess assets/raw-es-wikineural-train.iob assets/es-wikineural-train.iob
-      - python -m scripts.preprocess assets/raw-es-wikineural-dev.iob assets/es-wikineural-dev.iob
-      - python -m scripts.preprocess assets/raw-es-wikineural-test.iob assets/es-wikineural-test.iob
-      - python -m scripts.preprocess assets/raw-nl-wikineural-train.iob assets/nl-wikineural-train.iob
-      - python -m scripts.preprocess assets/raw-nl-wikineural-dev.iob assets/nl-wikineural-dev.iob
-      - python -m scripts.preprocess assets/raw-nl-wikineural-test.iob assets/nl-wikineural-test.iob
+      - >- 
+        python -m scripts.preprocess
+        assets/raw-de-wikineural-train.iob
+        assets/de-wikineural-train.iob
+        --strip-digits
+      - >-
+        python -m scripts.preprocess
+        assets/raw-de-wikineural-dev.iob
+        assets/de-wikineural-dev.iob
+        --strip-digits
+      - >-
+        python -m scripts.preprocess
+        assets/raw-de-wikineural-test.iob
+        assets/de-wikineural-test.iob
+        --strip-digits
+      - >-
+        python -m scripts.preprocess
+        assets/raw-en-wikineural-train.iob
+        assets/en-wikineural-train.iob
+        --strip-digits
+      - >- 
+        python -m scripts.preprocess
+        assets/raw-en-wikineural-dev.iob
+        assets/en-wikineural-dev.iob
+        --strip-digits
+      - >-
+        python -m scripts.preprocess
+        assets/raw-en-wikineural-test.iob
+        assets/en-wikineural-test.iob
+        --strip-digits
+      - >- 
+        python -m scripts.preprocess
+        assets/raw-es-wikineural-train.iob
+        assets/es-wikineural-train.iob
+        --strip-digits
+      - >-
+        python -m scripts.preprocess
+        assets/raw-es-wikineural-dev.iob
+        assets/es-wikineural-dev.iob
+        --strip-digits
+      - >- 
+        python -m scripts.preprocess
+        assets/raw-es-wikineural-test.iob
+        assets/es-wikineural-test.iob
+        --strip-digits
+      - >- 
+        python -m scripts.preprocess
+        assets/raw-nl-wikineural-train.iob
+        assets/nl-wikineural-train.iob
+        --strip-digits
+      - >- 
+        python -m scripts.preprocess
+        assets/raw-nl-wikineural-dev.iob
+        assets/nl-wikineural-dev.iob
+      - >-
+        python -m scripts.preprocess
+        assets/raw-nl-wikineural-test.iob
+        assets/nl-wikineural-test.iob
+        --strip-digits
     deps:
       # Wikineural datasets
       - assets/raw-de-wikineural-train.iob
@@ -435,7 +500,7 @@ commands:
 
 
   - name: "unpack-conll"
-    help: "Decompress ConLL 2002 and remove temporary files"
+    help: "Decompress ConLL 2002, remove temporary files and change encoding."
     script:
       - mkdir temp
       - tar -xvf assets/conll.tgz -C temp
@@ -460,6 +525,21 @@ commands:
       - assets/es-conll-train.iob
       - assets/es-conll-dev.iob
       - assets/es-conll-test.iob
+      - assets/nl-conll-train.iob
+      - assets/nl-conll-dev.iob
+      - assets/nl-conll-test.iob
+  
+  - name: "preprocess-conll"
+    help: "Canonicalize the Dutch ConLL data set for conversion to .spacy."
+    script:
+      - python -m scripts.preprocess assets/nl-conll-train.iob assets/nl-conll-train.iob
+      - python -m scripts.preprocess assets/nl-conll-dev.iob assets/nl-conll-dev.iob
+      - python -m scripts.preprocess assets/nl-conll-test.iob assets/nl-conll-test.iob
+    deps:
+      - assets/nl-conll-train.iob
+      - assets/nl-conll-dev.iob
+      - assets/nl-conll-test.iob
+    outputs:
       - assets/nl-conll-train.iob
       - assets/nl-conll-dev.iob
       - assets/nl-conll-test.iob
