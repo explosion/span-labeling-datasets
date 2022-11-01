@@ -1,6 +1,6 @@
 import os
 
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Union, Tuple
 from collections import defaultdict
@@ -18,9 +18,10 @@ class SplitInfo:
     stardardized format.
 
     It checks that all files have the format
-    "source-split.spacy" or "lang-source-split.spacy"
-    and stores the full path, "source", "split" and "lang"
-    fields. Additionally if one data set comes in multiple
+    "(lang)-source-split-(seen/unseen).spacy"
+    and stores the full path, "source", "split", "lang"
+    and unseen/seen fields.
+    Additionally if one data set comes in multiple
     languages like "es-conll-train.spacy" and "nl-conll-train.spacy"
     it stores "es-conll" or "nl-conll" as .source, but
     "conll" as .dataset for both.
@@ -31,11 +32,22 @@ class SplitInfo:
         self.path = ensure_path(self.path)
         self.name = self.path.name
         tokens = self.name.split("-")
-        if not 1 < len(tokens) <= 3:
+        if not 1 < len(tokens) <= 4:
             raise ValueError(
                 f"Incorrect file name {self.path}"
             )
-        self.split = tokens[-1].split(".")[0]
+        if not tokens[-1].endswith(".spacy"):
+            raise ValueError(
+                f"Incorrect file name {self.path}"
+            )
+        last = tokens[-1].split(".")[0]
+        if last in {"seen", "unseen"}:
+            self.seen = last
+            self.split = tokens[-2]
+            tokens.pop()
+        else:
+            self.seen = ""
+            self.split = last
         if self.split not in {"train", "dev", "test"}:
             raise ValueError(
                 "Splits has to be either 'train', 'dev' or 'test', "
