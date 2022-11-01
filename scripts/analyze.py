@@ -72,8 +72,9 @@ def analyze(
     span_stats = per_ent_stats(docs)
     datastats(span_stats)
     vocabulary = {token.text for doc in docs for token in doc}
+    vec_vocabulary = {nlp.vocab.strings[k] for k in nlp.vocab.vectors.keys()}
     print(f"Vocabulary size: {len(vocabulary)}")
-    print(f"Unknown words: {len(vocabulary - set(vocab.strings))}")
+    print(f"Unknown words: {len(vocabulary - vec_vocabulary)}")
     prefix = (f"{splitinfo.dataset}-{splitinfo.split}"
               f"-{splitinfo.seen}")
     span_stats_path = os.path.join(output_dir, f"{prefix}.csv")
