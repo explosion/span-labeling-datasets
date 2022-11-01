@@ -49,6 +49,7 @@ def datastats(data: Sequence[Dict]):
     print(f"Average number of entities: {doc_group['num_ents'].mean().mean()}")
     print(f"Average document length: {doc_group['doc_length'].mean().mean()}")
     print(f"Average entity length: {df['length'].mean()}")
+    print(f"Total number of entities: {len(df[df['label'].notnull()])}")
 
 
 def analyze(
