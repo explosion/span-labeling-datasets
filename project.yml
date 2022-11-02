@@ -482,40 +482,39 @@ commands:
         python -m spacy debug data configs/spancat_default.cfg 
         --paths.train corpus/spancat/de-wikineural-train.spacy 
         --paths.dev corpus/spancat/de-wikineural-dev.spacy
-      
+
       - >-
         python -m spacy debug data configs/spancat_default.cfg 
         --paths.train corpus/spancat/en-wikineural-train.spacy 
         --paths.dev corpus/spancat/en-wikineural-dev.spacy
-      
+
       - >-
         python -m spacy debug data configs/spancat_default.cfg 
         --paths.train corpus/spancat/es-wikineural-train.spacy 
         --paths.dev corpus/spancat/es-wikineural-dev.spacy
-      
+
       - >-
         python -m spacy debug data configs/spancat_default.cfg 
         --paths.train corpus/spancat/nl-wikineural-train.spacy 
         --paths.dev corpus/spancat/nl-wikineural-dev.spacy
-
 
   - name: "unpack-conll"
     help: "Decompress ConLL 2002, remove temporary files and change encoding."
     script:
       - mkdir temp
       - tar -xvf assets/conll.tgz -C temp
-      - gzip -d temp/ner/data/esp.testa.gz 
+      - gzip -d temp/ner/data/esp.testa.gz
       - gzip -d temp/ner/data/esp.testb.gz
       - gzip -d temp/ner/data/esp.train.gz
       - gzip -d temp/ner/data/ned.testa.gz
       - gzip -d temp/ner/data/ned.testb.gz
       - gzip -d temp/ner/data/ned.train.gz
-      - iconv -f iso-8859-1 temp/ner/data/esp.testa -o assets/es-conll-dev.iob
-      - iconv -f iso-8859-1 temp/ner/data/esp.testb -o assets/es-conll-test.iob
-      - iconv -f iso-8859-1 temp/ner/data/esp.train -o assets/es-conll-train.iob
-      - iconv -f iso-8859-1 temp/ner/data/ned.testa -o assets/nl-conll-dev.iob
-      - iconv -f iso-8859-1 temp/ner/data/ned.testb -o assets/nl-conll-test.iob
-      - iconv -f iso-8859-1 temp/ner/data/ned.train -o assets/nl-conll-train.iob
+      - iconv -f latin1 -t ascii//TRANSLIT temp/ner/data/esp.testa -o assets/es-conll-dev.iob
+      - iconv -f latin1 -t ascii//TRANSLIT temp/ner/data/esp.testb -o assets/es-conll-test.iob
+      - iconv -f latin1 -t ascii//TRANSLIT temp/ner/data/esp.train -o assets/es-conll-train.iob
+      - iconv -f latin1 -t ascii//TRANSLIT temp/ner/data/ned.testa -o assets/nl-conll-dev.iob
+      - iconv -f latin1 -t ascii//TRANSLIT temp/ner/data/ned.testb -o assets/nl-conll-test.iob
+      - iconv -f latin1 -t ascii//TRANSLIT temp/ner/data/ned.train -o assets/nl-conll-train.iob
       - rm -rf temp
       - rm assets/conll.tgz
     deps:
