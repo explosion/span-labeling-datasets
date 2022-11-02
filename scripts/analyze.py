@@ -1,51 +1,60 @@
 import os
 import csv
+import tqdm
 
 import spacy
 import typer
+import pandas as pd
 
 from spacy.tokens import Doc, DocBin
-from collections import defaultdict
-from typing import Sequence, List, Tuple, Dict, Union
-
-from _util import info
+from typing import Sequence, List, Union, Dict
+from _util import SplitInfo
 
 Number = Union[int, float]
 
 
-def _per_label_fields():
-    return {"count": 0, "length": 0, "doc_freq": 0}
-
-
-def _per_label(docs: DocBin) -> Dict[str, Dict[str, Number]]:
-    classes = defaultdict(_per_label_fields)
-    for i, doc in enumerate(docs, start=1):
-        seen = set()
-        for span in doc.spans['sc']:
-            label = span.label_
-            classes[label]['count'] += 1
-            classes[label]["length"] += len(span)
-            if label not in seen:
-                classes[label]["doc_freq"] += 1
-                seen.add(label)
-    for key in classes:
-        classes[key]["length"] /= classes[key]["count"]
-    return classes
-
-
-def _per_span(docs: Sequence[Doc]) -> List[Tuple[int, int, int]]:
+def per_ent_stats(docs: Sequence[Doc]) -> List[Dict]:
     spans = []
-    for doc in docs:
-        for span in doc.spans["sc"]:
-            row = (len(span), len(doc), len(doc.spans["sc"]))
+    for i, doc in tqdm.tqdm(enumerate(docs), total=len(docs)):
+        # Special "null span" row.
+        if not doc.ents:
+            row = {
+                "doc_id": i,
+                "text": None,
+                "label": None,
+                "length": None,
+                "doc_length": len(doc),
+                "num_ents": 0
+            }
+            spans.append(row)
+        for span in doc.ents:
+            row = {
+                "doc_id": i,
+                "text": span.text,
+                "label": span.label_,
+                "length": len(span),
+                "doc_length": len(doc),
+                "num_ents": len(doc.ents)
+            }
             spans.append(row)
     return spans
 
 
+def datastats(data: Sequence[Dict]):
+    df = pd.DataFrame.from_dict(data)
+    doc_group = df.groupby(["doc_id"])
+    print(f"Num docs {len(doc_group)}")
+    print(f"Number of classes {df['label'].nunique()}")
+    print(f"Average doc-length: {doc_group['doc_length'].mean().mean()}")
+    print(f"Average number of entities: {doc_group['num_ents'].mean().mean()}")
+    print(f"Average document length: {doc_group['doc_length'].mean().mean()}")
+    print(f"Average entity length: {df['length'].mean()}")
+    print(f"Total number of entities: {len(df[df['label'].notnull()])}")
+
+
 def analyze(
-    dataset: str,
+    docbin_path: str,
     model: str,
-    split: str,
     *,
     data_dir: str = "corpus",
     output_dir: str = "analyses"
@@ -55,43 +64,35 @@ def analyze(
     and another with properties of each entity in
     the data set.
     """
-    datainfo = info("spancat", home=data_dir)
-    path = datainfo[dataset][split].path
-    nlp = spacy.blank(datainfo[dataset].lang)
+    nlp = spacy.load(model)
+    vocab = nlp.vocab
     docs = list(
-        DocBin().from_disk(path).get_docs(nlp.vocab)
+        DocBin().from_disk(docbin_path).get_docs(vocab)
     )
-    label_stats = _per_label(docs)
-    span_stats = _per_span(docs)
-    label_stats_path = os.path.join(
-        output_dir, f"{dataset}-{split}-labels.csv"
-    )
-    span_stats_path = os.path.join(
-        output_dir, f"{dataset}-{split}-spans.csv"
-    )
-    with open(label_stats_path, "w") as csvfile:
-        fieldnames = ["label", "count", "length", "doc_freq"]
+    splitinfo = SplitInfo(docbin_path)
+    span_stats = per_ent_stats(docs)
+    datastats(span_stats)
+    vocabulary = {token.text for doc in docs for token in doc}
+    vec_vocabulary = {nlp.vocab.strings[k] for k in nlp.vocab.vectors.keys()}
+    print(f"Vocabulary size: {len(vocabulary)}")
+    print(f"Unknown words: {len(vocabulary - vec_vocabulary)}")
+    prefix = (f"{splitinfo.dataset}-{splitinfo.split}"
+              f"-{splitinfo.seen}")
+    span_stats_path = os.path.join(output_dir, f"{prefix}.csv")
+    vocabulary_path = os.path.join(output_dir, f"{prefix}.vocab")
+    with open(span_stats_path, "w", encoding="utf-8") as csvfile:
+        fieldnames = [
+            "doc_id", "text", "label", "length", "doc_length", "num_ents"
+        ]
         writer = csv.DictWriter(
-            csvfile, fieldnames=fieldnames
-        )
-        writer.writeheader()
-        for label, stats in label_stats.items():
-            row = {"label": label}
-            row.update(stats)
-            writer.writerow(row)
-    with open(span_stats_path, "w") as csvfile:
-        fieldnames = ["length", "doc_length", "neighbours"]
-        writer = csv.DictWriter(
-            csvfile, fieldnames=fieldnames
+            csvfile, fieldnames=fieldnames, delimiter="\t"
         )
         writer.writeheader()
         for record in span_stats:
-            row = {
-                "length": record[0],
-                "doc_length": record[1],
-                "neighbours": record[2]
-            }
-            writer.writerow(row)
+            writer.writerow(record)
+    with open(vocabulary_path, "w", encoding="utf-8") as vocabfile:
+        vocab_str = "\n".join(vocabulary)
+        vocabfile.write(vocab_str)
 
 
 if __name__ == "__main__":
