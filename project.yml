@@ -133,9 +133,7 @@ assets:
   - dest: "assets/finer139.zip"
     url: "https://huggingface.co/datasets/nlpaueb/finer-139/resolve/main/finer139.zip"
 
-
 commands:
-
   - name: "preprocess-wnut17"
     help: "Canonicalize the WNUT2017 data set for conversion to .spacy."
     script:
@@ -150,7 +148,7 @@ commands:
       - assets/wnut17-train.iob
       - assets/wnut17-dev.iob
       - assets/wnut17-test.iob
-      
+
   - name: "convert-wnut17-ents"
     help: "Convert WNUT17 dataset into the spaCy format"
     script:
@@ -211,7 +209,7 @@ commands:
     help: "Remove unnecessary indices from wikineural data"
     script:
       # Clean Wikineural datasets
-      - >- 
+      - >-
         python -m scripts.preprocess
         assets/raw-de-wikineural-train.iob
         assets/de-wikineural-train.iob
@@ -231,7 +229,7 @@ commands:
         assets/raw-en-wikineural-train.iob
         assets/en-wikineural-train.iob
         --strip-digits
-      - >- 
+      - >-
         python -m scripts.preprocess
         assets/raw-en-wikineural-dev.iob
         assets/en-wikineural-dev.iob
@@ -241,7 +239,7 @@ commands:
         assets/raw-en-wikineural-test.iob
         assets/en-wikineural-test.iob
         --strip-digits
-      - >- 
+      - >-
         python -m scripts.preprocess
         assets/raw-es-wikineural-train.iob
         assets/es-wikineural-train.iob
@@ -251,17 +249,17 @@ commands:
         assets/raw-es-wikineural-dev.iob
         assets/es-wikineural-dev.iob
         --strip-digits
-      - >- 
+      - >-
         python -m scripts.preprocess
         assets/raw-es-wikineural-test.iob
         assets/es-wikineural-test.iob
         --strip-digits
-      - >- 
+      - >-
         python -m scripts.preprocess
         assets/raw-nl-wikineural-train.iob
         assets/nl-wikineural-train.iob
         --strip-digits
-      - >- 
+      - >-
         python -m scripts.preprocess
         assets/raw-nl-wikineural-dev.iob
         assets/nl-wikineural-dev.iob
@@ -474,7 +472,7 @@ commands:
       - "corpus/ner/nl-wikineural-train.spacy"
       - "corpus/ner/nl-wikineural-dev.spacy"
       - "corpus/ner/nl-wikineural-test.spacy"
-  
+
   - name: "inspect-wikineural"
     help: "Analyze span-characteristics"
     script:
@@ -527,7 +525,7 @@ commands:
       - assets/nl-conll-train.iob
       - assets/nl-conll-dev.iob
       - assets/nl-conll-test.iob
-  
+
   - name: "preprocess-conll"
     help: "Canonicalize the Dutch ConLL data set for conversion to .spacy."
     script:
@@ -636,7 +634,7 @@ commands:
       - "corpus/ner/nl-conll-train.spacy"
       - "corpus/ner/nl-conll-dev.spacy"
       - "corpus/ner/nl-conll-test.spacy"
-  
+
   - name: "inspect-conll"
     help: "Analyze span-characteristics"
     script:
@@ -688,7 +686,7 @@ commands:
       - "corpus/ner/archaeo-train.spacy"
       - "corpus/ner/archaeo-dev.spacy"
       - "corpus/ner/archaeo-test.spacy"
-  
+
   - name: "inspect-archaeo"
     help: "Analyze span-characteristics"
     script:
@@ -696,7 +694,7 @@ commands:
         python -m spacy debug data configs/spancat_default.cfg 
         --paths.train corpus/spancat/archaeo-train.spacy 
         --paths.dev corpus/spancat/archaeo-dev.spacy
-  
+
   - name: "clean-archaeo"
     script:
       - mv corpus/ner/archaeo.spacy assets/archaeo_ner.spacy
@@ -726,7 +724,6 @@ commands:
       - corpus/spancat/anem-train.spacy
       - corpus/spancat/anem-dev.spacy
       - corpus/spancat/anem-test.spacy
-  
 
   - name: "convert-anem-ents"
     help: "Convert AnEM dataset into the spaCy format"
@@ -752,7 +749,7 @@ commands:
       - corpus/ner/anem-train.spacy
       - corpus/ner/anem-dev.spacy
       - corpus/ner/anem-test.spacy
-  
+
   - name: "inspect-anem"
     help: "Analyze span-characteristics"
     script:
@@ -763,7 +760,7 @@ commands:
       - python scripts/analyze.py anem en_core_web_sm train
       - python scripts/analyze.py anem en_core_web_sm dev
       - python scripts/analyze.py anem en_core_web_sm test
-  
+
   - name: "unpack-finer"
     help: "Prepare the FiNER dataset."
     script:
@@ -827,7 +824,7 @@ commands:
         python -m spacy debug data configs/spancat_default.cfg 
         --paths.train corpus/spancat/finer-train.spacy 
         --paths.dev corpus/spancat/finer-dev.spacy
-  
+
   - name: "generate-unseen"
     help: "Create unseen entities splits for all preprocessed datasets."
     script:
