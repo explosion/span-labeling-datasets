@@ -6,6 +6,8 @@ import spacy
 import typer
 import pandas as pd
 
+from collections import Counter
+
 from spacy.tokens import Doc, DocBin
 from typing import Sequence, List, Union, Dict
 from _util import SplitInfo
@@ -72,10 +74,25 @@ def analyze(
     splitinfo = SplitInfo(docbin_path)
     span_stats = per_ent_stats(docs)
     datastats(span_stats)
-    vocabulary = {token.text for doc in docs for token in doc}
+    vocabulary = set()
+    norms = set()
+    prefixes = set()
+    suffixes = set()
+    shapes = set()
+    for doc in docs:
+        for token in doc:
+            vocabulary.add(token.text)
+            norms.add(token.norm_)
+            prefixes.add(token.prefix_)
+            suffixes.add(token.suffix_)
+            shapes.add(token.shape_)
     vec_vocabulary = {nlp.vocab.strings[k] for k in nlp.vocab.vectors.keys()}
     print(f"Vocabulary size: {len(vocabulary)}")
     print(f"Unknown words: {len(vocabulary - vec_vocabulary)}")
+    print(f"Number of norms: {len(norms)}")
+    print(f"Number of prefixes: {len(prefixes)}")
+    print(f"Number of suffixes: {len(suffixes)}")
+    print(f"Number of shapes: {len(shapes)}")
     prefix = (f"{splitinfo.dataset}-{splitinfo.split}"
               f"-{splitinfo.seen}")
     span_stats_path = os.path.join(output_dir, f"{prefix}.csv")
