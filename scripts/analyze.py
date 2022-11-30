@@ -6,8 +6,6 @@ import spacy
 import typer
 import pandas as pd
 
-from collections import Counter
-
 from spacy.tokens import Doc, DocBin
 from typing import Sequence, List, Union, Dict
 from _util import SplitInfo
