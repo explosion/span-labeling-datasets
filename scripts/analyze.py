@@ -77,6 +77,7 @@ def analyze(
     prefixes = set()
     suffixes = set()
     shapes = set()
+    num_tokens = 0
     for doc in docs:
         for token in doc:
             vocabulary.add(token.text)
@@ -84,6 +85,7 @@ def analyze(
             prefixes.add(token.prefix_)
             suffixes.add(token.suffix_)
             shapes.add(token.shape_)
+            num_tokens += 1
     vec_vocabulary = {nlp.vocab.strings[k] for k in nlp.vocab.vectors.keys()}
     print(f"Vocabulary size: {len(vocabulary)}")
     print(f"Unknown words: {len(vocabulary - vec_vocabulary)}")
@@ -91,6 +93,7 @@ def analyze(
     print(f"Number of prefixes: {len(prefixes)}")
     print(f"Number of suffixes: {len(suffixes)}")
     print(f"Number of shapes: {len(shapes)}")
+    print(f"Number of tokens: {num_tokens}")
     prefix = (f"{splitinfo.dataset}-{splitinfo.split}"
               f"-{splitinfo.seen}")
     span_stats_path = os.path.join(output_dir, f"{prefix}.csv")
