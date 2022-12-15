@@ -21,7 +21,7 @@ def _train_dev_test_split(
     test_size: float,
     shuffle: Optional[bool] = False,
     seed: Optional[int] = None,
-) -> Tuple[List[Any], List[Any]]:
+) -> Tuple[List[Any], List[Any], List[Any]]:
     if shuffle:
         if not seed:
             raise ValueError("Must provide 'seed' when 'shuffle = True'")

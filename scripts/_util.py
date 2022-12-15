@@ -2,7 +2,7 @@ import os
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Union, Tuple
+from typing import Union, Tuple, Dict
 from collections import defaultdict
 
 from spacy.tokens import DocBin
@@ -86,7 +86,7 @@ class DatasetInfo:
         else:
             self.lang = self.train.lang
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> SplitInfo:
         return self.__dict__[key]
 
     def load(self) -> Tuple[DocBin, DocBin, DocBin]:
@@ -96,7 +96,7 @@ class DatasetInfo:
         return train, dev, test
 
 
-def info(model: str, *, home: str = "corpus"):
+def info(model: str, *, home: str = "corpus") -> Dict[str, DatasetInfo]:
     """
     Provides convenient wrapper to avoid
     parsing the filenames. It's also useful to
@@ -115,7 +115,7 @@ def info(model: str, *, home: str = "corpus"):
         path = os.path.join(home, name)
         split = SplitInfo(path)
         splits.append(split)
-    datasets = defaultdict(dict)
+    datasets: Dict[str, Dict[str, SplitInfo]] = defaultdict(dict)
     for split in splits:
         datasets[split.source][split.split] = split
     out = {}
