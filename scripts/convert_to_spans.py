@@ -18,7 +18,7 @@ Opt = typer.Option
 
 def convert_cli(
     # fmt: off
-    input_path: str = Arg(..., help="Input file or directory", exists=True),
+    input_path: Path = Arg(..., help="Input file or directory", exists=True),
     output_dir: Path = Arg("-", help="Output directory. '-' for stdout.", allow_dash=True, exists=True),
     spans_key: str = Opt("sc", "--spans-key", "-sc", help="Spans key to use when storing entities"),
     n_sents: int = Opt(1, "--n-sents", "-n", help="Number of sentences per doc (0 to disable)"),

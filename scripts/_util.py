@@ -1,12 +1,16 @@
 import os
 
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Union, Tuple
+from typing import Union, Tuple, Dict
 from collections import defaultdict
 
 from spacy.tokens import DocBin
 from spacy.util import ensure_path
+
+
+format_error = ("Incorrect file name {path}."
+                "(lang)-source-split-(seen/unseen).spacy")
 
 
 @dataclass
@@ -33,13 +37,9 @@ class SplitInfo:
         self.name = self.path.name
         tokens = self.name.split("-")
         if not 1 < len(tokens) <= 4:
-            raise ValueError(
-                f"Incorrect file name {self.path}"
-            )
+            raise ValueError(format_error.format(self.path))
         if not tokens[-1].endswith(".spacy"):
-            raise ValueError(
-                f"Incorrect file name {self.path}"
-            )
+            raise ValueError(format_error.format(self.path))
         last = tokens[-1].split(".")[0]
         if last in {"seen", "unseen"}:
             self.seen = last
@@ -51,7 +51,7 @@ class SplitInfo:
         if self.split not in {"train", "dev", "test"}:
             raise ValueError(
                 "Splits has to be either 'train', 'dev' or 'test', "
-                f"but found {self.split}"
+                f"but found {self.split} in file name {self.path}"
             )
         if len(tokens) == 3:
             source = tokens[1]
@@ -86,7 +86,7 @@ class DatasetInfo:
         else:
             self.lang = self.train.lang
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> SplitInfo:
         return self.__dict__[key]
 
     def load(self) -> Tuple[DocBin, DocBin, DocBin]:
@@ -96,7 +96,7 @@ class DatasetInfo:
         return train, dev, test
 
 
-def info(model: str, *, home: str = "corpus"):
+def info(model: str, *, home: str = "corpus") -> Dict[str, DatasetInfo]:
     """
     Provides convenient wrapper to avoid
     parsing the filenames. It's also useful to
@@ -115,7 +115,7 @@ def info(model: str, *, home: str = "corpus"):
         path = os.path.join(home, name)
         split = SplitInfo(path)
         splits.append(split)
-    datasets = defaultdict(dict)
+    datasets: Dict[str, Dict[str, SplitInfo]] = defaultdict(dict)
     for split in splits:
         datasets[split.source][split.split] = split
     out = {}

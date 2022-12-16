@@ -6,6 +6,7 @@ import spacy
 import typer
 import pandas as pd
 
+from wasabi import msg
 from spacy.tokens import Doc, DocBin
 from typing import Sequence, List, Union, Dict
 from _util import SplitInfo
@@ -40,16 +41,15 @@ def per_ent_stats(docs: Sequence[Doc]) -> List[Dict]:
     return spans
 
 
-def datastats(data: Sequence[Dict]):
-    df = pd.DataFrame.from_dict(data)
+def datastats(df: pd.DataFrame):
     doc_group = df.groupby(["doc_id"])
-    print(f"Num docs {len(doc_group)}")
-    print(f"Number of classes {df['label'].nunique()}")
-    print(f"Average doc-length: {doc_group['doc_length'].mean().mean()}")
-    print(f"Average number of entities: {doc_group['num_ents'].mean().mean()}")
-    print(f"Average document length: {doc_group['doc_length'].mean().mean()}")
-    print(f"Average entity length: {df['length'].mean()}")
-    print(f"Total number of entities: {len(df[df['label'].notnull()])}")
+    msg.info(f"Num docs {len(doc_group)}")
+    msg.info(f"Number of classes {df['label'].nunique()}")
+    msg.info(f"Average doc-length: {doc_group['doc_length'].mean().mean()}")
+    msg.info(f"Average number of entities: {doc_group['num_ents'].mean().mean()}")
+    msg.info(f"Average document length: {doc_group['doc_length'].mean().mean()}")
+    msg.info(f"Average entity length: {df['length'].mean()}")
+    msg.info(f"Total number of entities: {len(df[df['label'].notnull()])}")
 
 
 def analyze(
@@ -71,7 +71,8 @@ def analyze(
     )
     splitinfo = SplitInfo(docbin_path)
     span_stats = per_ent_stats(docs)
-    datastats(span_stats)
+    df = pd.DataFrame.from_dict(span_stats)
+    datastats(df)
     vocabulary = set()
     norms = set()
     prefixes = set()
@@ -87,30 +88,33 @@ def analyze(
             shapes.add(token.shape_)
             num_tokens += 1
     vec_vocabulary = {nlp.vocab.strings[k] for k in nlp.vocab.vectors.keys()}
-    print(f"Vocabulary size: {len(vocabulary)}")
-    print(f"Unknown words: {len(vocabulary - vec_vocabulary)}")
-    print(f"Number of norms: {len(norms)}")
-    print(f"Number of prefixes: {len(prefixes)}")
-    print(f"Number of suffixes: {len(suffixes)}")
-    print(f"Number of shapes: {len(shapes)}")
-    print(f"Number of tokens: {num_tokens}")
-    prefix = (f"{splitinfo.dataset}-{splitinfo.split}"
-              f"-{splitinfo.seen}")
-    span_stats_path = os.path.join(output_dir, f"{prefix}.csv")
-    vocabulary_path = os.path.join(output_dir, f"{prefix}.vocab")
-    with open(span_stats_path, "w", encoding="utf-8") as csvfile:
-        fieldnames = [
-            "doc_id", "text", "label", "length", "doc_length", "num_ents"
-        ]
-        writer = csv.DictWriter(
-            csvfile, fieldnames=fieldnames, delimiter="\t"
-        )
-        writer.writeheader()
-        for record in span_stats:
-            writer.writerow(record)
+    msg.info(f"Vocabulary size: {len(vocabulary)}")
+    msg.info(f"Unknown words: {len(vocabulary - vec_vocabulary)}")
+    msg.info(f"Number of norms: {len(norms)}")
+    msg.info(f"Number of prefixes: {len(prefixes)}")
+    msg.info(f"Number of suffixes: {len(suffixes)}")
+    msg.info(f"Number of shapes: {len(shapes)}")
+    msg.info(f"Number of tokens: {num_tokens}")
+    f_prefix = (f"{splitinfo.dataset}-{splitinfo.split}")
+    if splitinfo.seen != "":
+        f_prefix += f"-{splitinfo.seen}"
+    span_stats_path = os.path.join(output_dir, f"{f_prefix}.csv")
+    vocabulary_path = os.path.join(output_dir, f"{f_prefix}.vocab")
+    norm_path = os.path.join(output_dir, f"{f_prefix}.norm")
+    prefix_path = os.path.join(output_dir, f"{f_prefix}.prefix")
+    suffix_path = os.path.join(output_dir, f"{f_prefix}.suffix")
+    shape_path = os.path.join(output_dir, f"{f_prefix}.shape")
+    df.to_csv(span_stats_path)
     with open(vocabulary_path, "w", encoding="utf-8") as vocabfile:
-        vocab_str = "\n".join(vocabulary)
-        vocabfile.write(vocab_str)
+        vocabfile.write("\n".join(vocabulary))
+    with open(norm_path, "w", encoding="utf-8") as normfile:
+        normfile.write("\n".join(norms))
+    with open(prefix_path, "w", encoding="utf-8") as prefixfile:
+        prefixfile.write("\n".join(prefixes))
+    with open(suffix_path, "w", encoding="utf-8") as suffixfile:
+        suffixfile.write("\n".join(suffixes))
+    with open(shape_path, "w", encoding="utf-8") as shapefile:
+        shapefile.write("\n".join(shapes))
 
 
 if __name__ == "__main__":
