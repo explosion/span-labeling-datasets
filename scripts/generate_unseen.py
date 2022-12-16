@@ -11,7 +11,7 @@ from _util import info
 
 
 def _mark_as_missing(
-    docs: Sequence[Doc], seen: Set[str], mark_seen: True, *, total: Optional[int] = None
+    docs: Sequence[Doc], seen: Set[str], mark_seen: bool = True, *, total: Optional[int] = None
 ) -> DocBin:
     """
     Marks some of the ents in the input Docs as missing.
