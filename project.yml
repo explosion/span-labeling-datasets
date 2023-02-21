@@ -761,9 +761,6 @@ commands:
         python -m spacy debug data configs/spancat_default.cfg 
         --paths.train corpus/spancat/anem-train.spacy 
         --paths.dev corpus/spancat/anem-dev.spacy
-      - python scripts/analyze.py anem en_core_web_sm train
-      - python scripts/analyze.py anem en_core_web_sm dev
-      - python scripts/analyze.py anem en_core_web_sm test
   
   - name: "unpack-finer"
     help: "Prepare the FiNER dataset."
